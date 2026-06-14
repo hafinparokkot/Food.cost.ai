@@ -41,7 +41,7 @@ function fcIsFirstVisit() {
 }
 
 /* ══════════════ MONEY FORMATTER ══════════════ */
-var Fmt = {
+var FcFmt = {
   money: function(n, dp) {
     dp = dp !== undefined ? dp : 2;
     var s = fcGetSettings();
@@ -271,7 +271,7 @@ function fcWireModal() {
     isFirstVisit: fcIsFirstVisit,
     getDefaults: function(){ return {code:'INR',symbol:'₹',name:'Indian Rupee',locale:'en-IN',taxLabel:'GST',taxRates:[0,5,12,18,28],defaultTaxRate:5}; }
   };
-  window.FC.Fmt = Fmt;
+  window.FC.Fmt = FcFmt;
   window.FC.Tax = Tax;
   window.FC.GST = Tax;
   window.FC.SetupModal = { open: fcOpenModal, close: fcCloseModal };
