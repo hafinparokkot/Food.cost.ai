@@ -41,16 +41,18 @@ document.addEventListener('DOMContentLoaded', () => {
     const profitMargin = ((factoryRealizationPerKg - totalCostPerKg) / factoryRealizationPerKg) * 100;
 
     // Update UI
+    const sym = (window.FC && window.FC.Fmt) ? window.FC.Fmt.symbol() : '₹';
+    const locale = (window.FC && window.FC.CurrencySettings) ? window.FC.CurrencySettings.get().locale : 'en-IN';
     if (finishedEl) {
       finishedEl.textContent = finishedKg.toFixed(1) + ' kg';
       animateValue(finishedEl);
     }
     if (costPerKgEl) {
-      costPerKgEl.textContent = '₹' + rawMatCostPerKg.toFixed(0) + ' (raw mat only)';
+      costPerKgEl.textContent = sym + rawMatCostPerKg.toFixed(0) + ' (raw mat only)';
       animateValue(costPerKgEl);
     }
     if (revenueEl) {
-      revenueEl.textContent = '₹' + totalRevenue.toLocaleString('en-IN', {maximumFractionDigits: 0});
+      revenueEl.textContent = sym + totalRevenue.toLocaleString(locale, {maximumFractionDigits: 0});
       animateValue(revenueEl);
     }
     if (profitEl) {
@@ -88,6 +90,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const pct = ((val - min) / (max - min)) * 100;
     yieldEl.style.background = `linear-gradient(to right, #10b981 0%, #10b981 ${pct}%, #e2e8f0 ${pct}%)`;
   }
+
+  // Re-run when locale/currency changes
+  document.addEventListener('fc:locale-changed', calculate);
 
   // Initial calculation
   calculate();

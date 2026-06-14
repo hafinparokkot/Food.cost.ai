@@ -159,8 +159,11 @@ const Tooltips = {
 // ============================================================
 const Format = {
   currency(value, decimals = 2) {
-    if (isNaN(value) || !isFinite(value)) return '₹0';
-    return '₹' + Math.abs(value).toLocaleString('en-IN', {
+    const fmt = (window.FC && window.FC.Fmt) ? window.FC.Fmt : null;
+    if (isNaN(value) || !isFinite(value)) return (fmt ? fmt.symbol() : '$') + '0';
+    const sym = fmt ? fmt.symbol() : '$';
+    const locale = (window.FC && window.FC.CurrencySettings) ? window.FC.CurrencySettings.get().locale : 'en-US';
+    return sym + Math.abs(value).toLocaleString(locale, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals
     });
@@ -168,7 +171,8 @@ const Format = {
 
   number(value, decimals = 2) {
     if (isNaN(value) || !isFinite(value)) return '0';
-    return value.toLocaleString('en-IN', {
+    const locale = (window.FC && window.FC.CurrencySettings) ? window.FC.CurrencySettings.get().locale : 'en-US';
+    return value.toLocaleString(locale, {
       minimumFractionDigits: decimals,
       maximumFractionDigits: decimals
     });
@@ -283,7 +287,8 @@ const ChartUtils = {
               label: (ctx) => {
                 const total = ctx.dataset.data.reduce((a, b) => a + b, 0);
                 const pct = total > 0 ? ((ctx.parsed / total) * 100).toFixed(1) : 0;
-                return ` ${ctx.label}: ₹${ctx.parsed.toFixed(2)} (${pct}%)`;
+                const sym = (window.FC && window.FC.Fmt) ? window.FC.Fmt.symbol() : '$';
+                return ` ${ctx.label}: ${sym}${ctx.parsed.toFixed(2)} (${pct}%)`;
               }
             }
           },
@@ -312,7 +317,10 @@ const ChartUtils = {
           },
           tooltip: {
             callbacks: {
-              label: (ctx) => ` ${ctx.dataset.label}: ₹${ctx.parsed.y.toFixed(2)}`
+              label: (ctx) => {
+                const sym = (window.FC && window.FC.Fmt) ? window.FC.Fmt.symbol() : '$';
+                return ` ${ctx.dataset.label}: ${sym}${ctx.parsed.y.toFixed(2)}`;
+              }
             }
           },
           ...options.plugins
@@ -327,7 +335,7 @@ const ChartUtils = {
             ticks: {
               color: textColor,
               font: { family: 'Inter', size: 11 },
-              callback: val => '₹' + val.toLocaleString('en-IN')
+              callback: val => { const sym = (window.FC && window.FC.Fmt) ? window.FC.Fmt.symbol() : '$'; return sym + val.toLocaleString(); }
             }
           }
         },
@@ -359,7 +367,7 @@ const ChartUtils = {
             grid: { color: gridColor },
             ticks: {
               color: textColor,
-              callback: val => '₹' + val.toLocaleString('en-IN')
+              callback: val => { const sym = (window.FC && window.FC.Fmt) ? window.FC.Fmt.symbol() : '$'; return sym + val.toLocaleString(); }
             }
           }
         },

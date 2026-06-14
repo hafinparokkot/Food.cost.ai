@@ -119,17 +119,19 @@ const Units = {
 /* ══════════════ FORMAT (fallback — overridden by currency.js) ══════════════ */
 // currency.js sets window.FC.Fmt; this is a fallback if currency.js isn't loaded.
 const Fmt = {
+  _sym() { return (window.FC && window.FC.CurrencySettings) ? window.FC.CurrencySettings.get().symbol : '₹'; },
+  _locale() { return (window.FC && window.FC.CurrencySettings) ? window.FC.CurrencySettings.get().locale : 'en-IN'; },
   money(n, dp = 2) {
-    if (!isFinite(n)) return '₹0';
-    return '₹' + Math.abs(n).toLocaleString('en-IN', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+    if (!isFinite(n)) return this._sym() + '0';
+    return this._sym() + Math.abs(n).toLocaleString(this._locale(), { minimumFractionDigits: dp, maximumFractionDigits: dp });
   },
   inr(n, dp = 2) { return this.money(n, dp); },
   num(n, dp = 2) {
     if (!isFinite(n)) return '0';
-    return n.toLocaleString('en-IN', { minimumFractionDigits: dp, maximumFractionDigits: dp });
+    return n.toLocaleString(this._locale(), { minimumFractionDigits: dp, maximumFractionDigits: dp });
   },
   pct(n, dp = 1) { return isFinite(n) ? n.toFixed(dp) + '%' : '0%'; },
-  symbol() { return '₹'; }
+  symbol() { return this._sym(); }
 };
 
 /* ══════════════ TAX (fallback — overridden by currency.js) ══════════════ */
