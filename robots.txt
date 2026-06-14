@@ -1,0 +1,8 @@
+User-agent: *
+Allow: /
+
+# Disallow private/legal pages from being indexed (optional — they're still accessible)
+# Disallow: /privacy.html
+# Disallow: /terms.html
+
+Sitemap: https://hafinparokkot.github.io/Food.cost.ai/sitemap.xml
