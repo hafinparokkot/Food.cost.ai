@@ -100,8 +100,7 @@ function fcApplyLocale() {
 function fcBuildModalHTML() {
   var s = fcGetSettings();
   var opts = CURRENCY_PRESETS.map(function(p){
-    return '<option value="'+p.code+'"'+(p.code===s.code?' selected':'')+'>'
-      +(p.symbol?p.symbol+' — ':'')+p.name+' ('+p.code+')</option>';
+    return '<option value="'+p.code+'"'+(p.code===s.code?' selected':'')+' style="background:#1a2235;color:#e2e8f0;">'+(p.symbol?p.symbol+' — ':'')+p.name+' ('+p.code+')</option>';
   }).join('');
   return '<div id="fc-modal" style="display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;padding:16px;">'
     +'<div id="fc-backdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(5px);"></div>'
@@ -113,12 +112,12 @@ function fcBuildModalHTML() {
       +'</div>'
       +'<div style="padding:22px 28px;display:flex;flex-direction:column;gap:16px;">'
         +'<div><label style="display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px;">Currency</label>'
-        +'<select id="fc-currency-sel" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;">'+opts+'</select></div>'
+        +'<select id="fc-currency-sel" style="width:100%;padding:10px 14px;background:#0e1826;border:1.5px solid rgba(255,255,255,0.18);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;">'+opts+'</select></div>'
         +'<div style="display:flex;gap:12px;">'
           +'<div style="flex:1;"><label style="display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px;">Tax Label</label>'
           +'<input id="fc-tax-label" type="text" maxlength="20" value="'+s.taxLabel+'" placeholder="GST / VAT / Sales Tax" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;"/></div>'
           +'<div style="flex:1;"><label style="display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px;">Default Rate</label>'
-          +'<select id="fc-default-rate" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;"></select></div>'
+          +'<select id="fc-default-rate" style="width:100%;padding:10px 14px;background:#0e1826;border:1.5px solid rgba(255,255,255,0.18);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;"></select></div>'
         +'</div>'
         +'<div><label style="display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px;">Tax Rates (%) <span style="font-weight:400;text-transform:none;font-size:11px;color:#64748b;">comma-separated</span></label>'
         +'<input id="fc-tax-rates" type="text" value="'+s.taxRates.join(', ')+'" placeholder="0, 5, 12, 18, 28" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;"/></div>'
@@ -149,7 +148,7 @@ function fcBuildDefaultRateSelect() {
   var rates = ratesInput ? fcParseRates(ratesInput.value) : fcGetSettings().taxRates;
   var current = fcGetSettings().defaultTaxRate;
   sel.innerHTML = rates.map(function(r){
-    return '<option value="'+r+'"'+(r===current?' selected':'')+'>'+r+'%</option>';
+    return '<option value="'+r+'"'+(r===current?' selected':'')+' style="background:#0e1826;color:#e2e8f0;">'+r+'%</option>';
   }).join('');
 }
 
