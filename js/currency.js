@@ -554,10 +554,27 @@ const SetupModal = (() => {
   return { open, close };
 })();
 
+/* ══════════════ GLOBAL EXPORTS ══════════════ */
+// Must be set BEFORE boot so onclick="window.FC.SetupModal.open()" works immediately.
+window.FC = window.FC || {};
+window.FC.CurrencySettings = CurrencySettings;
+window.FC.Fmt = Fmt;
+window.FC.Tax  = Tax;
+window.FC.GST  = Tax;
+window.FC.SetupModal = SetupModal;
+window.FC.applyLocaleToPage = applyLocaleToPage;
+window.FC.CURRENCY_PRESETS = CURRENCY_PRESETS;
+
 /* ══════════════ BOOT ══════════════ */
 function bootCurrency() {
   CurrencySettings.load();
   applyLocaleToPage();
+
+  // Wire the settings button click (belt-and-suspenders alongside onclick attr)
+  const settingsBtn = document.getElementById('localeSettingsBtn');
+  if (settingsBtn) {
+    settingsBtn.onclick = () => SetupModal.open(false);
+  }
 
   // Show modal on first visit
   if (CurrencySettings.isFirstVisit()) {
@@ -573,12 +590,3 @@ if (document.readyState === 'loading') {
   bootCurrency();
 }
 
-/* ══════════════ GLOBAL EXPORTS ══════════════ */
-window.FC = window.FC || {};
-window.FC.CurrencySettings = CurrencySettings;
-window.FC.Fmt = Fmt;          // override old Fmt
-window.FC.Tax  = Tax;         // override old GST
-window.FC.GST  = Tax;         // alias for backward compat
-window.FC.SetupModal = SetupModal;
-window.FC.applyLocaleToPage = applyLocaleToPage;
-window.FC.CURRENCY_PRESETS = CURRENCY_PRESETS;
