@@ -577,7 +577,7 @@ function injectSettingsButton() {
 }
 
 /* ══════════════ BOOT ══════════════ */
-document.addEventListener('DOMContentLoaded', () => {
+function bootCurrency() {
   CurrencySettings.load();
   injectSettingsButton();
   applyLocaleToPage();
@@ -586,7 +586,15 @@ document.addEventListener('DOMContentLoaded', () => {
   if (CurrencySettings.isFirstVisit()) {
     setTimeout(() => SetupModal.open(true), 400);
   }
-});
+}
+
+// When script is at the bottom of <body>, DOMContentLoaded has already fired.
+// Check readyState so we run immediately in that case.
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', bootCurrency);
+} else {
+  bootCurrency();
+}
 
 /* ══════════════ GLOBAL EXPORTS ══════════════ */
 window.FC = window.FC || {};
