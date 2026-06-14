@@ -116,41 +116,31 @@ const Units = {
   }
 };
 
-/* ══════════════ FORMAT (delegates to currency.js Fmt) ══════════════ */
-// The currency.js module provides window.FC.Fmt — we expose it here too
-// for pages that include only core.js. Fallback if currency.js not loaded yet.
+/* ══════════════ FORMAT (fallback — overridden by currency.js) ══════════════ */
+// currency.js sets window.FC.Fmt; this is a fallback if currency.js isn't loaded.
 const Fmt = {
   money(n, dp = 2) {
-    if (window.FC && window.FC.Fmt && window.FC.Fmt !== this) return window.FC.Fmt.money(n, dp);
     if (!isFinite(n)) return '₹0';
     return '₹' + Math.abs(n).toLocaleString('en-IN', { minimumFractionDigits: dp, maximumFractionDigits: dp });
   },
-  // Alias kept for any legacy calls
   inr(n, dp = 2) { return this.money(n, dp); },
   num(n, dp = 2) {
-    if (window.FC && window.FC.Fmt && window.FC.Fmt !== this) return window.FC.Fmt.num(n, dp);
     if (!isFinite(n)) return '0';
     return n.toLocaleString('en-IN', { minimumFractionDigits: dp, maximumFractionDigits: dp });
   },
-  pct(n, dp = 1) { return isFinite(n) ? n.toFixed(dp) + '%' : '0%'; }
+  pct(n, dp = 1) { return isFinite(n) ? n.toFixed(dp) + '%' : '0%'; },
+  symbol() { return '₹'; }
 };
 
-/* ══════════════ TAX (delegates to currency.js Tax) ══════════════ */
-// Acts as a generic tax engine. currency.js overrides window.FC.GST with Tax.
+/* ══════════════ TAX (fallback — overridden by currency.js) ══════════════ */
+// currency.js sets window.FC.GST to its Tax object; this is a fallback.
 const GST = {
   add(base, rate) { return base * (1 + rate / 100); },
   remove(total, rate) { return total / (1 + rate / 100); },
   amount(base, rate) { return base * rate / 100; },
-  get RATES() {
-    return (window.FC && window.FC.CurrencySettings)
-      ? window.FC.CurrencySettings.get().taxRates
-      : [0, 5, 12, 18, 28];
-  },
-  get LABEL() {
-    return (window.FC && window.FC.CurrencySettings)
-      ? window.FC.CurrencySettings.get().taxLabel
-      : 'GST';
-  }
+  RATES: [0, 5, 12, 18, 28],
+  LABEL: 'GST',
+  DEFAULT_RATE: 5
 };
 
 /* ══════════════ DISTRIBUTION CHAIN ══════════════ */
@@ -259,4 +249,12 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 
 /* ── GLOBAL EXPORTS ── */
-window.FC = Object.assign(window.FC || {}, { Theme, Nav, Reveal, Toast, Units, Fmt, GST, Chain, Charts, FAQ, overheadToggle });
+// Always export core utilities. Only set Fmt/GST if currency.js hasn't already
+// installed its richer versions (detected by presence of CurrencySettings).
+const _existingFC = window.FC || {};
+window.FC = Object.assign(_existingFC, { Theme, Nav, Reveal, Toast, Units, Chain, Charts, FAQ, overheadToggle });
+if (!_existingFC.CurrencySettings) {
+  // currency.js not loaded — use our fallback Fmt and GST
+  window.FC.Fmt = Fmt;
+  window.FC.GST = GST;
+}
