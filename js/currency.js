@@ -9,6 +9,7 @@ var CURRENCY_PRESETS = [
   { code:'USD',  symbol:'$',   name:'US Dollar',           locale:'en-US', taxLabel:'Sales Tax',taxRates:[0,6,8,10],     defaultTaxRate:8  },
   { code:'EUR',  symbol:'€',   name:'Euro',                locale:'de-DE', taxLabel:'VAT',      taxRates:[0,7,19],       defaultTaxRate:19 },
   { code:'GBP',  symbol:'£',   name:'British Pound',       locale:'en-GB', taxLabel:'VAT',      taxRates:[0,5,20],       defaultTaxRate:20 },
+  { code:'CNY',  symbol:'¥',   name:'Chinese Yuan',        locale:'zh-CN', taxLabel:'VAT',      taxRates:[0,9,13],       defaultTaxRate:13 },
   { code:'AED',  symbol:'AED', name:'UAE Dirham',          locale:'en-AE', taxLabel:'VAT',      taxRates:[0,5],          defaultTaxRate:5  },
   { code:'SGD',  symbol:'S$',  name:'Singapore Dollar',    locale:'en-SG', taxLabel:'GST',      taxRates:[0,9],          defaultTaxRate:9  },
   { code:'AUD',  symbol:'A$',  name:'Australian Dollar',   locale:'en-AU', taxLabel:'GST',      taxRates:[0,10],         defaultTaxRate:10 },
