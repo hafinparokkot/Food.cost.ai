@@ -150,6 +150,19 @@ input,select,textarea{font-family:inherit;color:inherit}
   font-size:15px;transition:all var(--fast);
 }
 .nav__theme:hover{background:var(--surface-3);transform:scale(1.06)}
+.nav__settings{
+  width:36px;height:36px;border-radius:var(--r-sm);
+  display:flex;align-items:center;justify-content:center;
+  background:var(--surface-2);border:1px solid var(--border);
+  font-size:15px;transition:all var(--fast);cursor:pointer;
+  color:var(--tx-2);position:relative;
+}
+.nav__settings:hover{background:var(--surface-3);transform:rotate(20deg)}
+.nav__settings-badge{
+  position:absolute;top:1px;right:1px;
+  width:7px;height:7px;border-radius:50%;
+  background:#00c896;border:2px solid var(--bg,#0e1624);
+}
 .nav__burger{
   display:none;flex-direction:column;gap:4.5px;
   width:36px;height:36px;align-items:center;justify-content:center;

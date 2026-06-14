@@ -554,32 +554,9 @@ const SetupModal = (() => {
   return { open, close };
 })();
 
-/* ══════════════ NAVBAR SETTINGS BUTTON ══════════════ */
-function injectSettingsButton() {
-  const actions = document.querySelector('.nav__actions');
-  if (!actions || document.getElementById('localeSettingsBtn')) return;
-
-  const btn = document.createElement('button');
-  btn.id = 'localeSettingsBtn';
-  btn.className = 'nav__settings';
-  btn.setAttribute('aria-label', 'Currency & Tax Settings');
-  btn.title = 'Currency & Tax Settings';
-  btn.innerHTML = `⚙️<span class="nav__settings-badge"></span>`;
-  btn.addEventListener('click', () => SetupModal.open(false));
-
-  // Insert before the burger button
-  const burger = actions.querySelector('.nav__burger');
-  if (burger) {
-    actions.insertBefore(btn, burger);
-  } else {
-    actions.appendChild(btn);
-  }
-}
-
 /* ══════════════ BOOT ══════════════ */
 function bootCurrency() {
   CurrencySettings.load();
-  injectSettingsButton();
   applyLocaleToPage();
 
   // Show modal on first visit
