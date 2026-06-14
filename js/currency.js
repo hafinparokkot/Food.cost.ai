@@ -1,592 +1,286 @@
 /* ─────────────────────────────────────────────────────────────
-   FOODCOST AI — currency.js
+   FOODCOST AI — currency.js  (rewritten for reliability)
    Global Currency & Tax Engine
-   Provides: CurrencySettings, Fmt.money(), Tax object,
-   first-visit setup modal, navbar settings button.
 ───────────────────────────────────────────────────────────── */
-'use strict';
 
 /* ══════════════ CURRENCY PRESETS ══════════════ */
-const CURRENCY_PRESETS = [
-  {
-    code: 'INR', symbol: '₹', name: 'Indian Rupee', locale: 'en-IN',
-    taxLabel: 'GST', taxRates: [0, 5, 12, 18, 28], defaultTaxRate: 5
-  },
-  {
-    code: 'USD', symbol: '$', name: 'US Dollar', locale: 'en-US',
-    taxLabel: 'Sales Tax', taxRates: [0, 6, 8, 10], defaultTaxRate: 8
-  },
-  {
-    code: 'EUR', symbol: '€', name: 'Euro', locale: 'de-DE',
-    taxLabel: 'VAT', taxRates: [0, 7, 19], defaultTaxRate: 19
-  },
-  {
-    code: 'GBP', symbol: '£', name: 'British Pound', locale: 'en-GB',
-    taxLabel: 'VAT', taxRates: [0, 5, 20], defaultTaxRate: 20
-  },
-  {
-    code: 'AED', symbol: 'AED', name: 'UAE Dirham', locale: 'en-AE',
-    taxLabel: 'VAT', taxRates: [0, 5], defaultTaxRate: 5
-  },
-  {
-    code: 'SGD', symbol: 'S$', name: 'Singapore Dollar', locale: 'en-SG',
-    taxLabel: 'GST', taxRates: [0, 9], defaultTaxRate: 9
-  },
-  {
-    code: 'AUD', symbol: 'A$', name: 'Australian Dollar', locale: 'en-AU',
-    taxLabel: 'GST', taxRates: [0, 10], defaultTaxRate: 10
-  },
-  {
-    code: 'CAD', symbol: 'C$', name: 'Canadian Dollar', locale: 'en-CA',
-    taxLabel: 'HST/GST', taxRates: [0, 5, 13, 15], defaultTaxRate: 5
-  },
-  {
-    code: 'SAR', symbol: 'SAR', name: 'Saudi Riyal', locale: 'en-SA',
-    taxLabel: 'VAT', taxRates: [0, 15], defaultTaxRate: 15
-  },
-  {
-    code: 'CUSTOM', symbol: '', name: 'Custom Currency', locale: 'en-US',
-    taxLabel: 'Tax', taxRates: [0, 10], defaultTaxRate: 10
-  }
+var CURRENCY_PRESETS = [
+  { code:'INR',  symbol:'₹',   name:'Indian Rupee',        locale:'en-IN', taxLabel:'GST',     taxRates:[0,5,12,18,28], defaultTaxRate:5  },
+  { code:'USD',  symbol:'$',   name:'US Dollar',           locale:'en-US', taxLabel:'Sales Tax',taxRates:[0,6,8,10],     defaultTaxRate:8  },
+  { code:'EUR',  symbol:'€',   name:'Euro',                locale:'de-DE', taxLabel:'VAT',      taxRates:[0,7,19],       defaultTaxRate:19 },
+  { code:'GBP',  symbol:'£',   name:'British Pound',       locale:'en-GB', taxLabel:'VAT',      taxRates:[0,5,20],       defaultTaxRate:20 },
+  { code:'AED',  symbol:'AED', name:'UAE Dirham',          locale:'en-AE', taxLabel:'VAT',      taxRates:[0,5],          defaultTaxRate:5  },
+  { code:'SGD',  symbol:'S$',  name:'Singapore Dollar',    locale:'en-SG', taxLabel:'GST',      taxRates:[0,9],          defaultTaxRate:9  },
+  { code:'AUD',  symbol:'A$',  name:'Australian Dollar',   locale:'en-AU', taxLabel:'GST',      taxRates:[0,10],         defaultTaxRate:10 },
+  { code:'CAD',  symbol:'C$',  name:'Canadian Dollar',     locale:'en-CA', taxLabel:'HST/GST',  taxRates:[0,5,13,15],   defaultTaxRate:5  },
+  { code:'SAR',  symbol:'SAR', name:'Saudi Riyal',         locale:'en-SA', taxLabel:'VAT',      taxRates:[0,15],         defaultTaxRate:15 },
+  { code:'CUSTOM',symbol:'',   name:'Custom Currency',     locale:'en-US', taxLabel:'Tax',      taxRates:[0,10],         defaultTaxRate:10 }
 ];
 
-/* ══════════════ CURRENCY SETTINGS ══════════════ */
-const CurrencySettings = (() => {
-  const KEY = 'fc-locale';
-  const SETUP_DONE_KEY = 'fc-setup-done';
+/* ══════════════ STORAGE ══════════════ */
+var FC_KEY       = 'fc-locale';
+var FC_DONE_KEY  = 'fc-setup-done';
 
-  let current = null;
+function fcGetSettings() {
+  try {
+    var raw = localStorage.getItem(FC_KEY);
+    if (raw) return JSON.parse(raw);
+  } catch(e){}
+  return { code:'INR', symbol:'₹', name:'Indian Rupee', locale:'en-IN', taxLabel:'GST', taxRates:[0,5,12,18,28], defaultTaxRate:5 };
+}
 
-  function getDefaults() {
-    return {
-      code: 'INR',
-      symbol: '₹',
-      name: 'Indian Rupee',
-      locale: 'en-IN',
-      taxLabel: 'GST',
-      taxRates: [0, 5, 12, 18, 28],
-      defaultTaxRate: 5
-    };
-  }
+function fcSaveSettings(s) {
+  try {
+    localStorage.setItem(FC_KEY, JSON.stringify(s));
+    localStorage.setItem(FC_DONE_KEY, '1');
+  } catch(e){}
+}
 
-  function load() {
-    try {
-      const raw = localStorage.getItem(KEY);
-      if (raw) {
-        current = JSON.parse(raw);
-      } else {
-        current = getDefaults();
-      }
-    } catch (e) {
-      current = getDefaults();
-    }
-    return current;
-  }
-
-  function save(settings) {
-    current = settings;
-    try {
-      localStorage.setItem(KEY, JSON.stringify(settings));
-      localStorage.setItem(SETUP_DONE_KEY, '1');
-    } catch (e) {}
-  }
-
-  function get() {
-    if (!current) load();
-    return current;
-  }
-
-  function isFirstVisit() {
-    return !localStorage.getItem(SETUP_DONE_KEY);
-  }
-
-  function markSetupDone() {
-    localStorage.setItem(SETUP_DONE_KEY, '1');
-  }
-
-  return { load, save, get, getDefaults, isFirstVisit, markSetupDone };
-})();
+function fcIsFirstVisit() {
+  return !localStorage.getItem(FC_DONE_KEY);
+}
 
 /* ══════════════ MONEY FORMATTER ══════════════ */
-const Fmt = (() => {
-  function money(n, dp = 2) {
-    if (!isFinite(n)) return CurrencySettings.get().symbol + '0';
-    const s = CurrencySettings.get();
-    const abs = Math.abs(n);
-    let formatted;
-    try {
-      formatted = abs.toLocaleString(s.locale, {
-        minimumFractionDigits: dp,
-        maximumFractionDigits: dp
-      });
-    } catch (e) {
-      formatted = abs.toFixed(dp);
-    }
-    return s.symbol + formatted;
-  }
-
-  function num(n, dp = 2) {
+var Fmt = {
+  money: function(n, dp) {
+    dp = dp !== undefined ? dp : 2;
+    var s = fcGetSettings();
+    if (!isFinite(n)) return s.symbol + '0';
+    try { return s.symbol + Math.abs(n).toLocaleString(s.locale, {minimumFractionDigits:dp, maximumFractionDigits:dp}); }
+    catch(e) { return s.symbol + Math.abs(n).toFixed(dp); }
+  },
+  num: function(n, dp) {
+    dp = dp !== undefined ? dp : 2;
+    var s = fcGetSettings();
     if (!isFinite(n)) return '0';
-    const s = CurrencySettings.get();
-    try {
-      return n.toLocaleString(s.locale, {
-        minimumFractionDigits: dp,
-        maximumFractionDigits: dp
-      });
-    } catch (e) {
-      return n.toFixed(dp);
-    }
-  }
+    try { return n.toLocaleString(s.locale, {minimumFractionDigits:dp, maximumFractionDigits:dp}); }
+    catch(e) { return n.toFixed(dp); }
+  },
+  pct: function(n, dp) { dp = dp !== undefined ? dp : 1; return isFinite(n) ? n.toFixed(dp)+'%' : '0%'; },
+  symbol: function() { return fcGetSettings().symbol; },
+  inr: function(n, dp) { return this.money(n, dp); }
+};
 
-  function pct(n, dp = 1) {
-    return isFinite(n) ? n.toFixed(dp) + '%' : '0%';
-  }
-
-  function symbol() {
-    return CurrencySettings.get().symbol;
-  }
-
-  return { money, num, pct, symbol };
-})();
-
-/* ══════════════ TAX ENGINE (replaces GST) ══════════════ */
-const Tax = {
-  add(base, rate) { return base * (1 + rate / 100); },
-  remove(total, rate) { return total / (1 + rate / 100); },
-  amount(base, rate) { return base * rate / 100; },
-  get RATES() { return CurrencySettings.get().taxRates; },
-  get LABEL() { return CurrencySettings.get().taxLabel; },
-  get DEFAULT_RATE() { return CurrencySettings.get().defaultTaxRate; },
-
-  /* Build <option> elements for any tax rate select */
-  buildOptions(selectEl, selectedRate) {
+/* ══════════════ TAX ENGINE ══════════════ */
+var Tax = {
+  add:    function(base, rate) { return base * (1 + rate/100); },
+  remove: function(total, rate){ return total / (1 + rate/100); },
+  amount: function(base, rate) { return base * rate/100; },
+  get RATES()        { return fcGetSettings().taxRates; },
+  get LABEL()        { return fcGetSettings().taxLabel; },
+  get DEFAULT_RATE() { return fcGetSettings().defaultTaxRate; },
+  buildOptions: function(selectEl, selectedRate) {
     if (!selectEl) return;
-    const rates = this.RATES;
-    const label = this.LABEL;
-    const chosen = selectedRate !== undefined ? selectedRate : this.DEFAULT_RATE;
-    selectEl.innerHTML = rates.map(r => {
-      const sel = r === chosen ? ' selected' : '';
-      return `<option value="${r}"${sel}>${r}% ${r === 0 ? '— Exempt' : '— ' + label}</option>`;
+    var s = fcGetSettings();
+    var chosen = selectedRate !== undefined ? selectedRate : s.defaultTaxRate;
+    selectEl.innerHTML = s.taxRates.map(function(r){
+      return '<option value="'+r+'"'+(r===chosen?' selected':'')+'>'
+        + r+'% '+(r===0?'— Exempt':'— '+s.taxLabel)+'</option>';
     }).join('');
   }
 };
 
-/* ══════════════ APPLY SETTINGS SITE-WIDE ══════════════ */
-function applyLocaleToPage() {
-  const s = CurrencySettings.get();
-  // Update any static currency symbol spans
-  document.querySelectorAll('[data-currency-symbol]').forEach(el => {
-    el.textContent = s.symbol;
+/* ══════════════ APPLY TO PAGE ══════════════ */
+function fcApplyLocale() {
+  var s = fcGetSettings();
+  document.querySelectorAll('[data-currency-symbol]').forEach(function(el){ el.textContent = s.symbol; });
+  document.querySelectorAll('[data-tax-label]').forEach(function(el){ el.textContent = s.taxLabel; });
+  document.querySelectorAll('[data-tax-select]').forEach(function(sel){
+    var cur = parseFloat(sel.value) || s.defaultTaxRate;
+    Tax.buildOptions(sel, cur);
   });
-  // Update tax label spans
-  document.querySelectorAll('[data-tax-label]').forEach(el => {
-    el.textContent = s.taxLabel;
+  document.querySelectorAll('[data-currency-label]').forEach(function(el){
+    var tmpl = el.getAttribute('data-currency-label');
+    el.textContent = tmpl.replace('{sym}', s.symbol).replace('{tax}', s.taxLabel);
   });
-  // Rebuild tax rate selects
-  document.querySelectorAll('[data-tax-select]').forEach(sel => {
-    const currentVal = parseFloat(sel.value) || s.defaultTaxRate;
-    Tax.buildOptions(sel, currentVal);
-  });
-  // Update any labels that contain the old rupee symbol in placeholder text
-  document.querySelectorAll('[data-currency-label]').forEach(el => {
-    const template = el.getAttribute('data-currency-label');
-    el.textContent = template.replace('{sym}', s.symbol).replace('{tax}', s.taxLabel);
-  });
-  // Dispatch event so calculators can re-render
-  document.dispatchEvent(new CustomEvent('fc:locale-changed', { detail: s }));
+  try { document.dispatchEvent(new CustomEvent('fc:locale-changed', {detail: s})); } catch(e){}
 }
 
-/* ══════════════ SETUP MODAL ══════════════ */
-const SetupModal = (() => {
-  let modalEl = null;
+/* ══════════════ MODAL ══════════════ */
+function fcBuildModalHTML() {
+  var s = fcGetSettings();
+  var opts = CURRENCY_PRESETS.map(function(p){
+    return '<option value="'+p.code+'"'+(p.code===s.code?' selected':'')+'>'
+      +(p.symbol?p.symbol+' — ':'')+p.name+' ('+p.code+')</option>';
+  }).join('');
+  return '<div id="fc-modal" style="display:none;position:fixed;inset:0;z-index:99999;align-items:center;justify-content:center;padding:16px;">'
+    +'<div id="fc-backdrop" style="position:absolute;inset:0;background:rgba(0,0,0,0.65);backdrop-filter:blur(5px);"></div>'
+    +'<div id="fc-box" style="position:relative;z-index:1;background:#1a2235;border:1px solid rgba(255,255,255,0.1);border-radius:20px;width:100%;max-width:500px;overflow:hidden;box-shadow:0 24px 80px rgba(0,0,0,0.5);">'
+      +'<div style="padding:24px 28px 18px;background:linear-gradient(135deg,rgba(0,200,150,0.07),rgba(99,102,241,0.07));border-bottom:1px solid rgba(255,255,255,0.07);display:flex;align-items:center;gap:14px;">'
+        +'<div style="font-size:30px;width:50px;height:50px;border-radius:12px;background:linear-gradient(135deg,#00c896,#6366f1);display:flex;align-items:center;justify-content:center;flex-shrink:0;">🌍</div>'
+        +'<div><h2 style="font-family:Outfit,sans-serif;font-size:1.2rem;font-weight:800;color:#e2e8f0;margin:0 0 4px;">Currency &amp; Tax Settings</h2>'
+        +'<p style="font-size:13px;color:#94a3b8;margin:0;">Customize for your market. Changes apply instantly.</p></div>'
+      +'</div>'
+      +'<div style="padding:22px 28px;display:flex;flex-direction:column;gap:16px;">'
+        +'<div><label style="display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px;">Currency</label>'
+        +'<select id="fc-currency-sel" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;">'+opts+'</select></div>'
+        +'<div style="display:flex;gap:12px;">'
+          +'<div style="flex:1;"><label style="display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px;">Tax Label</label>'
+          +'<input id="fc-tax-label" type="text" maxlength="20" value="'+s.taxLabel+'" placeholder="GST / VAT / Sales Tax" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;"/></div>'
+          +'<div style="flex:1;"><label style="display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px;">Default Rate</label>'
+          +'<select id="fc-default-rate" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;"></select></div>'
+        +'</div>'
+        +'<div><label style="display:block;font-size:12px;font-weight:600;color:#cbd5e1;text-transform:uppercase;letter-spacing:.04em;margin-bottom:7px;">Tax Rates (%) <span style="font-weight:400;text-transform:none;font-size:11px;color:#64748b;">comma-separated</span></label>'
+        +'<input id="fc-tax-rates" type="text" value="'+s.taxRates.join(', ')+'" placeholder="0, 5, 12, 18, 28" style="width:100%;padding:10px 14px;background:rgba(255,255,255,0.05);border:1.5px solid rgba(255,255,255,0.12);border-radius:10px;color:#e2e8f0;font-size:14px;outline:none;box-sizing:border-box;"/></div>'
+        +'<div id="fc-preview" style="background:rgba(0,200,150,0.08);border:1px solid rgba(0,200,150,0.2);border-radius:10px;padding:11px 16px;display:flex;justify-content:space-between;align-items:center;">'
+          +'<span style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:#94a3b8;">Preview</span>'
+          +'<span id="fc-preview-val" style="font-size:15px;font-weight:700;color:#00c896;font-family:Outfit,sans-serif;"></span>'
+        +'</div>'
+      +'</div>'
+      +'<div style="padding:14px 28px 22px;border-top:1px solid rgba(255,255,255,0.07);display:flex;justify-content:flex-end;gap:10px;">'
+        +'<button id="fc-cancel-btn" style="padding:10px 18px;background:transparent;color:#94a3b8;border:1.5px solid rgba(255,255,255,0.1);border-radius:10px;font-size:14px;font-weight:600;cursor:pointer;">Cancel</button>'
+        +'<button id="fc-save-btn" style="padding:10px 22px;background:linear-gradient(135deg,#00c896,#059669);color:#fff;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;">Save &amp; Apply</button>'
+      +'</div>'
+    +'</div>'
+  +'</div>';
+}
 
-  function buildModal(isFirstVisit) {
-    const s = CurrencySettings.get();
-    const currencyOptions = CURRENCY_PRESETS.map(p =>
-      `<option value="${p.code}" ${p.code === s.code ? 'selected' : ''}>${p.symbol ? p.symbol + ' — ' : ''}${p.name} (${p.code})</option>`
-    ).join('');
+function fcParseRates(str) {
+  return str.split(',').map(function(s){ return parseFloat(s.trim()); })
+    .filter(function(n){ return isFinite(n) && n>=0 && n<=100; })
+    .sort(function(a,b){ return a-b; })
+    .filter(function(v,i,arr){ return arr.indexOf(v)===i; });
+}
 
-    const modal = document.createElement('div');
-    modal.id = 'fc-setup-modal';
-    modal.setAttribute('role', 'dialog');
-    modal.setAttribute('aria-modal', 'true');
-    modal.setAttribute('aria-label', 'Currency and Tax Setup');
-    modal.innerHTML = `
-      <div class="fc-modal-backdrop"></div>
-      <div class="fc-modal-box">
-        <div class="fc-modal-header">
-          <div class="fc-modal-icon">🌍</div>
-          <div>
-            <h2 class="fc-modal-title">Set Your Currency & Tax</h2>
-            <p class="fc-modal-sub">Customize FoodCost AI for your market. You can change this anytime via the ⚙️ button.</p>
-          </div>
-        </div>
+function fcBuildDefaultRateSelect() {
+  var sel = document.getElementById('fc-default-rate');
+  if (!sel) return;
+  var ratesInput = document.getElementById('fc-tax-rates');
+  var rates = ratesInput ? fcParseRates(ratesInput.value) : fcGetSettings().taxRates;
+  var current = fcGetSettings().defaultTaxRate;
+  sel.innerHTML = rates.map(function(r){
+    return '<option value="'+r+'"'+(r===current?' selected':'')+'>'+r+'%</option>';
+  }).join('');
+}
 
-        <div class="fc-modal-body">
-          <!-- Currency -->
-          <div class="fc-field-group">
-            <label class="fc-label" for="setup-currency">Currency</label>
-            <select id="setup-currency" class="fc-select">
-              ${currencyOptions}
-            </select>
-          </div>
+function fcUpdatePreview() {
+  var codeSel = document.getElementById('fc-currency-sel');
+  var labelEl = document.getElementById('fc-tax-label');
+  var prevEl  = document.getElementById('fc-preview-val');
+  if (!prevEl) return;
+  var code    = codeSel ? codeSel.value : 'INR';
+  var preset  = CURRENCY_PRESETS.filter(function(p){ return p.code===code; })[0];
+  var sym     = preset ? preset.symbol : '';
+  var label   = labelEl ? labelEl.value : 'Tax';
+  try {
+    var n = (1234.5).toLocaleString(preset ? preset.locale : 'en-US', {minimumFractionDigits:2, maximumFractionDigits:2});
+    prevEl.textContent = sym + n + ' · ' + label;
+  } catch(e) { prevEl.textContent = sym + '1,234.50 · ' + label; }
+}
 
-          <div class="fc-field-row">
-            <!-- Tax Label -->
-            <div class="fc-field-group">
-              <label class="fc-label" for="setup-tax-label">Tax / VAT Label</label>
-              <input id="setup-tax-label" class="fc-input" type="text" value="${s.taxLabel}" placeholder="e.g. GST, VAT, Sales Tax" maxlength="20"/>
-            </div>
+function fcOpenModal() {
+  var modal = document.getElementById('fc-modal');
+  if (!modal) return;
+  // Refresh values from current settings
+  var s = fcGetSettings();
+  var codeSel = document.getElementById('fc-currency-sel');
+  if (codeSel) codeSel.value = s.code;
+  var labelEl = document.getElementById('fc-tax-label');
+  if (labelEl) labelEl.value = s.taxLabel;
+  var ratesEl = document.getElementById('fc-tax-rates');
+  if (ratesEl) ratesEl.value = s.taxRates.join(', ');
+  fcBuildDefaultRateSelect();
+  fcUpdatePreview();
+  modal.style.display = 'flex';
+}
 
-            <!-- Default Tax Rate -->
-            <div class="fc-field-group">
-              <label class="fc-label" for="setup-default-rate">Default Rate</label>
-              <select id="setup-default-rate" class="fc-select"></select>
-            </div>
-          </div>
+function fcCloseModal() {
+  var modal = document.getElementById('fc-modal');
+  if (modal) modal.style.display = 'none';
+}
 
-          <!-- Tax Rates -->
-          <div class="fc-field-group">
-            <label class="fc-label" for="setup-tax-rates">
-              Available Tax Rates (%)
-              <span class="fc-label-hint">comma-separated, e.g. 0, 5, 12, 18</span>
-            </label>
-            <input id="setup-tax-rates" class="fc-input" type="text" value="${s.taxRates.join(', ')}" placeholder="0, 5, 12, 18, 28"/>
-          </div>
+function fcSaveModal() {
+  var codeSel  = document.getElementById('fc-currency-sel');
+  var labelEl  = document.getElementById('fc-tax-label');
+  var ratesEl  = document.getElementById('fc-tax-rates');
+  var defRateEl= document.getElementById('fc-default-rate');
 
-          <!-- Preview -->
-          <div class="fc-preview" id="setup-preview">
-            <span class="fc-preview-label">Preview</span>
-            <span class="fc-preview-val" id="setup-preview-val"></span>
-          </div>
-        </div>
+  var code    = codeSel  ? codeSel.value  : 'INR';
+  var preset  = CURRENCY_PRESETS.filter(function(p){ return p.code===code; })[0] || CURRENCY_PRESETS[0];
+  var taxLabel= (labelEl && labelEl.value.trim()) ? labelEl.value.trim() : preset.taxLabel;
+  var rates   = ratesEl ? fcParseRates(ratesEl.value) : preset.taxRates;
+  if (!rates.length) rates = preset.taxRates;
+  var defRate = defRateEl ? parseFloat(defRateEl.value) : rates[0] || 0;
 
-        <div class="fc-modal-footer">
-          ${!isFirstVisit ? `<button class="fc-btn-secondary" id="setup-cancel">Cancel</button>` : ''}
-          <button class="fc-btn-primary" id="setup-save">
-            Save & Continue
-            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
-          </button>
-        </div>
-      </div>
-    `;
-    return modal;
-  }
+  var sym = preset.symbol;
+  if (code === 'CUSTOM') { sym = prompt('Enter your currency symbol (e.g. ฿, ₩, Rp):') || '$'; }
 
-  function buildDefaultRateSelect(rates, defaultRate) {
-    const sel = document.getElementById('setup-default-rate');
-    if (!sel) return;
-    sel.innerHTML = rates.map(r =>
-      `<option value="${r}" ${r === defaultRate ? 'selected' : ''}>${r}%</option>`
-    ).join('');
-  }
+  var settings = { code:code, symbol:sym, name:preset.name, locale:preset.locale, taxLabel:taxLabel, taxRates:rates, defaultTaxRate:defRate };
+  fcSaveSettings(settings);
+  fcCloseModal();
+  fcApplyLocale();
+}
 
-  function updatePreview() {
-    const sym = document.getElementById('setup-currency');
-    const preset = CURRENCY_PRESETS.find(p => p.code === sym?.value);
-    const symbol = preset ? preset.symbol : (sym?.value || '');
-    const taxLabel = document.getElementById('setup-tax-label')?.value || 'Tax';
-    const preview = document.getElementById('setup-preview-val');
-    if (preview) {
-      const sampleNum = (1234.5).toLocaleString(preset?.locale || 'en-US', {
-        minimumFractionDigits: 2, maximumFractionDigits: 2
-      });
-      preview.textContent = `${symbol}${sampleNum} · ${taxLabel}`;
+function fcWireModal() {
+  // Settings button (all pages have id="localeSettingsBtn")
+  var btn = document.getElementById('localeSettingsBtn');
+  if (btn) { btn.onclick = function(){ fcOpenModal(); }; }
+
+  // Modal controls
+  var saveBtn   = document.getElementById('fc-save-btn');
+  var cancelBtn = document.getElementById('fc-cancel-btn');
+  var backdrop  = document.getElementById('fc-backdrop');
+  var codeSel   = document.getElementById('fc-currency-sel');
+  var labelEl   = document.getElementById('fc-tax-label');
+  var ratesEl   = document.getElementById('fc-tax-rates');
+
+  if (saveBtn)   saveBtn.onclick   = fcSaveModal;
+  if (cancelBtn) cancelBtn.onclick = fcCloseModal;
+  if (backdrop)  backdrop.onclick  = fcCloseModal;
+
+  if (codeSel) codeSel.onchange = function() {
+    var preset = CURRENCY_PRESETS.filter(function(p){ return p.code===codeSel.value; })[0];
+    if (preset && preset.code !== 'CUSTOM') {
+      if (labelEl) labelEl.value = preset.taxLabel;
+      if (ratesEl) ratesEl.value = preset.taxRates.join(', ');
+      fcBuildDefaultRateSelect();
     }
+    fcUpdatePreview();
+  };
+  if (labelEl) labelEl.oninput = fcUpdatePreview;
+  if (ratesEl) ratesEl.oninput = function(){ fcBuildDefaultRateSelect(); fcUpdatePreview(); };
+}
+
+/* ══════════════ BOOT — runs immediately ══════════════ */
+(function() {
+  // 1. Load settings from storage
+  fcGetSettings();
+
+  // 2. Inject modal HTML into body
+  var div = document.createElement('div');
+  div.innerHTML = fcBuildModalHTML();
+  document.body.appendChild(div.firstChild);
+
+  // 3. Wire all click handlers
+  fcWireModal();
+
+  // 4. Apply currency symbols to page
+  fcApplyLocale();
+
+  // 5. Show on first visit (after short delay so page is visible)
+  if (fcIsFirstVisit()) {
+    setTimeout(fcOpenModal, 600);
   }
 
-  function open(forceFirstVisit = false) {
-    if (document.getElementById('fc-setup-modal')) return;
+  // 6. Export globals
+  window.FC = window.FC || {};
+  window.FC.CurrencySettings = {
+    get: fcGetSettings,
+    load: fcGetSettings,
+    save: fcSaveSettings,
+    isFirstVisit: fcIsFirstVisit,
+    getDefaults: function(){ return {code:'INR',symbol:'₹',name:'Indian Rupee',locale:'en-IN',taxLabel:'GST',taxRates:[0,5,12,18,28],defaultTaxRate:5}; }
+  };
+  window.FC.Fmt = Fmt;
+  window.FC.Tax = Tax;
+  window.FC.GST = Tax;
+  window.FC.SetupModal = { open: fcOpenModal, close: fcCloseModal };
+  window.FC.applyLocaleToPage = fcApplyLocale;
+  window.FC.CURRENCY_PRESETS = CURRENCY_PRESETS;
 
-    const isFirst = forceFirstVisit || CurrencySettings.isFirstVisit();
-    modalEl = buildModal(isFirst);
-    document.body.appendChild(modalEl);
-    injectModalStyles();
-
-    const s = CurrencySettings.get();
-    buildDefaultRateSelect(s.taxRates, s.defaultTaxRate);
-    updatePreview();
-
-    // Wire currency change → auto-fill tax fields
-    document.getElementById('setup-currency')?.addEventListener('change', (e) => {
-      const preset = CURRENCY_PRESETS.find(p => p.code === e.target.value);
-      if (preset && preset.code !== 'CUSTOM') {
-        document.getElementById('setup-tax-label').value = preset.taxLabel;
-        document.getElementById('setup-tax-rates').value = preset.taxRates.join(', ');
-        buildDefaultRateSelect(preset.taxRates, preset.defaultTaxRate);
-      }
-      updatePreview();
-    });
-
-    document.getElementById('setup-tax-label')?.addEventListener('input', updatePreview);
-
-    document.getElementById('setup-tax-rates')?.addEventListener('input', () => {
-      const rawRates = parseRates(document.getElementById('setup-tax-rates').value);
-      const cur = parseFloat(document.getElementById('setup-default-rate')?.value) || rawRates[0] || 0;
-      buildDefaultRateSelect(rawRates, cur);
-      updatePreview();
-    });
-
-    document.getElementById('setup-save')?.addEventListener('click', saveAndClose);
-    document.getElementById('setup-cancel')?.addEventListener('click', close);
-
-    // Backdrop close only for non-first-visit
-    if (!isFirst) {
-      modalEl.querySelector('.fc-modal-backdrop')?.addEventListener('click', close);
-    }
-
-    requestAnimationFrame(() => {
-      modalEl?.querySelector('.fc-modal-box')?.classList.add('fc-modal-visible');
-    });
-  }
-
-  function saveAndClose() {
-    const code = document.getElementById('setup-currency')?.value || 'INR';
-    const preset = CURRENCY_PRESETS.find(p => p.code === code) || CURRENCY_PRESETS[0];
-    const taxLabel = document.getElementById('setup-tax-label')?.value?.trim() || preset.taxLabel;
-    const rawRates = parseRates(document.getElementById('setup-tax-rates')?.value);
-    const taxRates = rawRates.length ? rawRates : preset.taxRates;
-    const defaultTaxRate = parseFloat(document.getElementById('setup-default-rate')?.value) || taxRates[0] || 0;
-
-    // Handle custom currency symbol
-    let symbol = preset.symbol;
-    if (code === 'CUSTOM') {
-      symbol = prompt('Enter your currency symbol (e.g. ฿, ₩, Rp):') || '$';
-    }
-
-    const settings = {
-      code,
-      symbol,
-      name: preset.name,
-      locale: preset.locale,
-      taxLabel,
-      taxRates,
-      defaultTaxRate
-    };
-
-    CurrencySettings.save(settings);
-    close();
-    applyLocaleToPage();
-
-    // Show confirmation toast
-    if (window.FC?.Toast) {
-      window.FC.Toast.show(`Currency set to ${symbol} · ${taxLabel}`, 'success');
-    }
-  }
-
-  function close() {
-    if (!modalEl) return;
-    const box = modalEl.querySelector('.fc-modal-box');
-    if (box) {
-      box.style.transform = 'scale(0.95)';
-      box.style.opacity = '0';
-    }
-    setTimeout(() => {
-      modalEl?.remove();
-      modalEl = null;
-    }, 220);
-  }
-
-  function parseRates(str) {
-    return str
-      .split(',')
-      .map(s => parseFloat(s.trim()))
-      .filter(n => isFinite(n) && n >= 0 && n <= 100)
-      .sort((a, b) => a - b)
-      .filter((v, i, arr) => arr.indexOf(v) === i); // dedupe
-  }
-
-  function injectModalStyles() {
-    if (document.getElementById('fc-modal-styles')) return;
-    const style = document.createElement('style');
-    style.id = 'fc-modal-styles';
-    style.textContent = `
-      #fc-setup-modal {
-        position: fixed; inset: 0; z-index: 99999;
-        display: flex; align-items: center; justify-content: center;
-        padding: 16px;
-      }
-      .fc-modal-backdrop {
-        position: absolute; inset: 0;
-        background: rgba(0,0,0,0.6);
-        backdrop-filter: blur(6px);
-      }
-      .fc-modal-box {
-        position: relative; z-index: 1;
-        background: var(--bg-card, #1a2235);
-        border: 1px solid var(--border-light, rgba(255,255,255,0.08));
-        border-radius: 20px;
-        padding: 0;
-        width: 100%; max-width: 520px;
-        box-shadow: 0 24px 80px rgba(0,0,0,0.45), 0 0 0 1px rgba(255,255,255,0.05);
-        transform: scale(0.92); opacity: 0;
-        transition: transform 0.25s cubic-bezier(.34,1.36,.64,1), opacity 0.2s ease;
-        overflow: hidden;
-      }
-      .fc-modal-box.fc-modal-visible {
-        transform: scale(1); opacity: 1;
-      }
-      .fc-modal-header {
-        display: flex; align-items: flex-start; gap: 16px;
-        padding: 28px 28px 20px;
-        border-bottom: 1px solid var(--border-light, rgba(255,255,255,0.07));
-        background: linear-gradient(135deg, rgba(0,200,150,0.06), rgba(99,102,241,0.06));
-      }
-      .fc-modal-icon {
-        font-size: 36px; line-height: 1; flex-shrink: 0;
-        background: linear-gradient(135deg,#00c896,#6366f1);
-        border-radius: 12px; width: 52px; height: 52px;
-        display: flex; align-items: center; justify-content: center;
-      }
-      .fc-modal-title {
-        font-family: Outfit, sans-serif;
-        font-size: 1.3rem; font-weight: 800;
-        color: var(--tx-1, #e2e8f0); margin: 0 0 4px;
-      }
-      .fc-modal-sub {
-        font-size: 13px; color: var(--tx-3, #94a3b8);
-        margin: 0; line-height: 1.5;
-      }
-      .fc-modal-body {
-        padding: 24px 28px;
-        display: flex; flex-direction: column; gap: 18px;
-      }
-      .fc-field-group {
-        display: flex; flex-direction: column; gap: 7px;
-        flex: 1;
-      }
-      .fc-field-row {
-        display: flex; gap: 14px;
-      }
-      .fc-label {
-        font-size: 12.5px; font-weight: 600;
-        color: var(--tx-2, #cbd5e1);
-        letter-spacing: 0.03em;
-        text-transform: uppercase;
-        display: flex; align-items: center; gap: 8px;
-      }
-      .fc-label-hint {
-        font-size: 11px; font-weight: 400; text-transform: none;
-        color: var(--tx-4, #64748b); letter-spacing: 0;
-      }
-      .fc-select, .fc-input {
-        width: 100%; padding: 11px 14px;
-        background: var(--bg-input, rgba(255,255,255,0.04));
-        border: 1.5px solid var(--border-light, rgba(255,255,255,0.1));
-        border-radius: 10px;
-        color: var(--tx-1, #e2e8f0);
-        font-family: Inter, sans-serif; font-size: 14px;
-        outline: none; transition: border-color 0.2s;
-        box-sizing: border-box;
-      }
-      .fc-select:focus, .fc-input:focus {
-        border-color: #00c896;
-        box-shadow: 0 0 0 3px rgba(0,200,150,0.15);
-      }
-      .fc-select option { background: #1a2235; }
-      .fc-preview {
-        background: linear-gradient(135deg, rgba(0,200,150,0.08), rgba(99,102,241,0.08));
-        border: 1px solid rgba(0,200,150,0.2);
-        border-radius: 10px; padding: 12px 16px;
-        display: flex; align-items: center; justify-content: space-between;
-      }
-      .fc-preview-label {
-        font-size: 11px; font-weight: 700; text-transform: uppercase;
-        letter-spacing: 0.06em; color: var(--tx-3, #94a3b8);
-      }
-      .fc-preview-val {
-        font-size: 15px; font-weight: 700;
-        color: #00c896; font-family: Outfit, sans-serif;
-      }
-      .fc-modal-footer {
-        padding: 16px 28px 24px;
-        display: flex; gap: 10px; justify-content: flex-end;
-        border-top: 1px solid var(--border-light, rgba(255,255,255,0.07));
-      }
-      .fc-btn-primary {
-        display: flex; align-items: center; gap: 8px;
-        padding: 12px 24px;
-        background: linear-gradient(135deg, #00c896, #059669);
-        color: #fff; border: none; border-radius: 10px;
-        font-family: Inter, sans-serif; font-size: 14px; font-weight: 700;
-        cursor: pointer; transition: opacity 0.2s, transform 0.15s;
-      }
-      .fc-btn-primary:hover { opacity: 0.9; transform: translateY(-1px); }
-      .fc-btn-secondary {
-        padding: 12px 20px;
-        background: transparent;
-        color: var(--tx-3, #94a3b8);
-        border: 1.5px solid var(--border-light, rgba(255,255,255,0.1));
-        border-radius: 10px;
-        font-family: Inter, sans-serif; font-size: 14px; font-weight: 600;
-        cursor: pointer; transition: background 0.2s;
-      }
-      .fc-btn-secondary:hover { background: rgba(255,255,255,0.05); }
-
-      /* Settings button in navbar */
-      .nav__settings {
-        background: none; border: none;
-        cursor: pointer; font-size: 17px;
-        padding: 6px; border-radius: 8px;
-        color: var(--tx-2, #cbd5e1);
-        transition: background 0.2s, transform 0.2s;
-        display: flex; align-items: center; gap: 5px;
-        position: relative;
-      }
-      .nav__settings:hover { background: rgba(255,255,255,0.07); transform: rotate(20deg); }
-      .nav__settings-badge {
-        position: absolute; top: 0; right: 0;
-        width: 8px; height: 8px; border-radius: 50%;
-        background: #00c896;
-        font-size: 0; border: 2px solid var(--bg-nav, #0e1624);
-      }
-
-      @media (max-width: 520px) {
-        .fc-modal-header { flex-direction: column; padding: 20px 20px 16px; }
-        .fc-modal-body { padding: 18px 20px; }
-        .fc-modal-footer { padding: 14px 20px 20px; }
-        .fc-field-row { flex-direction: column; }
-      }
-    `;
-    document.head.appendChild(style);
-  }
-
-  return { open, close };
+  // 7. Re-run on locale change (e.g. for chart labels)
+  document.addEventListener('fc:locale-changed', function(){
+    var sym = fcGetSettings().symbol;
+    document.querySelectorAll('.demo-sym').forEach(function(el){ el.textContent = sym; });
+  });
 })();
-
-/* ══════════════ GLOBAL EXPORTS ══════════════ */
-// Must be set BEFORE boot so onclick="window.FC.SetupModal.open()" works immediately.
-window.FC = window.FC || {};
-window.FC.CurrencySettings = CurrencySettings;
-window.FC.Fmt = Fmt;
-window.FC.Tax  = Tax;
-window.FC.GST  = Tax;
-window.FC.SetupModal = SetupModal;
-window.FC.applyLocaleToPage = applyLocaleToPage;
-window.FC.CURRENCY_PRESETS = CURRENCY_PRESETS;
-
-/* ══════════════ BOOT ══════════════ */
-function bootCurrency() {
-  CurrencySettings.load();
-  applyLocaleToPage();
-
-  // Wire the settings button click (belt-and-suspenders alongside onclick attr)
-  const settingsBtn = document.getElementById('localeSettingsBtn');
-  if (settingsBtn) {
-    settingsBtn.onclick = () => SetupModal.open(false);
-  }
-
-  // Show modal on first visit
-  if (CurrencySettings.isFirstVisit()) {
-    setTimeout(() => SetupModal.open(true), 400);
-  }
-}
-
-// When script is at the bottom of <body>, DOMContentLoaded has already fired.
-// Check readyState so we run immediately in that case.
-if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', bootCurrency);
-} else {
-  bootCurrency();
-}
-
