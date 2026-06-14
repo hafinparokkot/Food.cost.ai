@@ -1,0 +1,445 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>What-If Simulator – FoodCost AI | Food Cost Scenario Simulator India</title>
+<meta name="description" content="Simulate how raw material price changes, packaging cost spikes, and market fluctuations affect your food product's profitability in real-time. Interactive sliders for instant scenario analysis."/>
+<meta name="keywords" content="food cost simulator, what if analysis food, raw material price impact, food profitability scenario India"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+<script src="js/currency.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="nav" id="mainNav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__logo"><div class="nav__logo-mark">🍃</div><span class="nav__logo-text">FoodCost <em>AI</em></span></a>
+    <div class="nav__links" id="navLinks">
+      <a href="recipe-calculator.html" class="nav__link">Recipe Cost</a>
+      <a href="yield-calculator.html" class="nav__link">Yield Loss</a>
+      <a href="price-calculator.html" class="nav__link">Selling Price</a>
+      <a href="simulator.html" class="nav__link">What-If Simulator</a>
+      <a href="blog.html" class="nav__link">Resources</a>
+    </div>
+    <div class="nav__actions">
+      <button class="nav__theme" id="themeBtn" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span></button>
+      <button class="nav__burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="calc-page">
+  <div class="calc-hero">
+    <div class="wrap">
+      <div class="s-tag s-tag--rose" style="margin-bottom:14px">⚡ What-If Simulator</div>
+      <h1>Simulate Market Changes. Protect Your Margins.</h1>
+      <p>Banana prices spike 40%. Oil costs surge. Packaging doubles. Before any of that hurts your business, simulate it here in real-time — and know exactly what to do.</p>
+    </div>
+  </div>
+
+  <div class="calc-body">
+    <div class="wrap">
+
+      <!-- Scenario presets -->
+      <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:28px;align-items:center">
+        <span style="font-size:12.5px;font-weight:600;color:var(--tx-3)">Presets:</span>
+        <button class="btn btn-surface btn-sm" data-preset="banana">🍌 Banana Chips Business</button>
+        <button class="btn btn-surface btn-sm" data-preset="bakery">🍞 Bakery</button>
+        <button class="btn btn-surface btn-sm" data-preset="cloud">☁️ Cloud Kitchen</button>
+        <button class="btn btn-surface btn-sm" data-preset="snack">🍿 Snack Manufacturer</button>
+      </div>
+
+      <div class="calc-layout">
+        <!-- ── LEFT: INPUTS ── -->
+        <div>
+
+          <!-- Base Costs -->
+          <div class="card">
+            <div class="card__head">
+              <div class="card__title">📦 Current Base Costs (per unit)</div>
+              <button class="btn btn-surface btn-sm" id="resetBtn">↺ Reset</button>
+            </div>
+            <div class="callout callout--info" style="margin-bottom:16px">
+              <span>ℹ️</span>
+              <span>Enter your <strong>current</strong> costs per unit. Then use the sliders below to simulate price changes and see the impact instantly.</span>
+            </div>
+            <div id="baseInputs" style="display:grid;grid-template-columns:1fr 1fr;gap:14px"></div>
+          </div>
+
+          <!-- Current Pricing -->
+          <div class="card">
+            <div class="card__head">
+              <div class="card__title">💰 Current Pricing</div>
+            </div>
+            <div class="inp-grid inp-grid--2">
+              <div class="fg">
+                <label>Current Selling Price / MRP (<span data-currency-symbol>₹</span>) <i class="tt" title="Your current factory selling price per unit">?</i></label>
+                <input type="number" id="simSP" class="inp" value="25" min="0.01" step="0.5"/>
+              </div>
+              <div class="fg">
+                <label>Monthly Units Produced <i class="tt" title="How many units do you produce per month?">?</i></label>
+                <input type="number" id="simUnits" class="inp" value="10000" min="1" step="100"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- SLIDERS -->
+          <div class="card">
+            <div class="card__head">
+              <div class="card__title">🎚️ Adjust Costs — Drag Sliders to Simulate</div>
+            </div>
+            <div id="sliderArea"></div>
+          </div>
+
+          <!-- Sensitivity Chart -->
+          <div class="card">
+            <div class="card__title" style="margin-bottom:14px">📈 Price Sensitivity Analysis</div>
+            <p style="font-size:12.5px;color:var(--tx-3);margin-bottom:14px">How your profit margin changes as raw material cost varies ±50%</p>
+            <div class="chart-box" style="height:220px"><canvas id="sensitivityChart"></canvas></div>
+          </div>
+
+        </div>
+
+        <!-- ── RIGHT: IMPACT ── -->
+        <div>
+          <div class="res-panel">
+            <div class="card__title" style="margin-bottom:18px">⚡ Impact Analysis</div>
+
+            <!-- Before / After -->
+            <div style="background:var(--surface-2);border-radius:var(--r-md);padding:14px 16px;margin-bottom:16px">
+              <div style="display:grid;grid-template-columns:1fr auto 1fr;gap:8px;align-items:center">
+                <div style="text-align:center">
+                  <div style="font-size:11px;color:var(--tx-4);font-weight:700;text-transform:uppercase;margin-bottom:5px">Before</div>
+                  <div style="font-size:22px;font-weight:900;font-family:Outfit,sans-serif;color:var(--tx-1)" id="siBeforeCost">₹0</div>
+                  <div style="font-size:11px;color:var(--tx-3)" id="siBeforeMargin">0% margin</div>
+                </div>
+                <div style="font-size:20px;color:var(--tx-4)">→</div>
+                <div style="text-align:center">
+                  <div style="font-size:11px;color:var(--tx-4);font-weight:700;text-transform:uppercase;margin-bottom:5px">After</div>
+                  <div style="font-size:22px;font-weight:900;font-family:Outfit,sans-serif" id="siAfterCost">₹0</div>
+                  <div style="font-size:11px;color:var(--tx-3)" id="siAfterMargin">0% margin</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="impact-grid">
+              <div class="impact-card" id="ic_margin">
+                <div class="impact-card__label">New Profit Margin</div>
+                <div class="impact-card__val" id="ic_margin_val">0%</div>
+                <div class="impact-card__delta" id="ic_margin_delta"></div>
+              </div>
+              <div class="impact-card" id="ic_profit">
+                <div class="impact-card__label">Monthly Profit</div>
+                <div class="impact-card__val" id="ic_profit_val">₹0</div>
+                <div class="impact-card__delta" id="ic_profit_delta"></div>
+              </div>
+              <div class="impact-card" id="ic_cost">
+                <div class="impact-card__label">New Cost / Unit</div>
+                <div class="impact-card__val" id="ic_cost_val">₹0</div>
+                <div class="impact-card__delta" id="ic_cost_delta"></div>
+              </div>
+              <div class="impact-card" id="ic_mrp">
+                <div class="impact-card__label">Min. MRP Needed</div>
+                <div class="impact-card__val" id="ic_mrp_val">₹0</div>
+                <div class="impact-card__delta" id="ic_mrp_delta"></div>
+              </div>
+            </div>
+
+            <div class="insight" id="simInsight" style="margin-top:16px">
+              <strong>💡 Analysis</strong>
+              <p id="simInsightTxt">Adjust sliders to see the impact on your margins.</p>
+            </div>
+
+            <div class="divider">Profit Meter</div>
+            <div class="profit-bar-wrap">
+              <div class="profit-bar-track"><div id="simProfitBar" class="profit-bar-fill profit-good" style="width:0%"></div></div>
+              <div class="profit-bar-labels"><span>0%</span><span>25%</span><span>50%+</span></div>
+            </div>
+
+            <div class="divider">Recommended Actions</div>
+            <div id="recommendations" style="font-size:12.5px;color:var(--tx-3);line-height:1.8"></div>
+
+            <div style="display:flex;flex-direction:column;gap:9px;margin-top:20px">
+              <a href="price-calculator.html" class="btn btn-primary" style="justify-content:center">Recalculate Your MRP →</a>
+              <button onclick="window.print()" class="btn btn-ghost" style="justify-content:center">🖨️ Print Scenario Report</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<footer class="footer"><div class="wrap"><div class="footer__bottom">
+  <p>© 2026 FoodCost AI | <a href="index.html" style="color:var(--green)">Home</a> | <a href="recipe-calculator.html" style="color:var(--green)">Recipe Cost</a> | <a href="price-calculator.html" style="color:var(--green)">Price Calculator</a></p>
+</div></div></footer>
+
+<script src="js/core.js"></script>
+<script>
+'use strict';
+const SIM = {
+  chart: null,
+  sliders: [],
+
+  PRESETS: {
+    banana: {
+      sp: 25, units: 10000,
+      costs: [
+        { id:'raw',   label:'🍌 Raw Banana (raw mat.)', base:8.75, min:0, max:30, unit:'₹/unit' },
+        { id:'oil',   label:'🫙 Oil Cost',               base:2.50, min:0, max:15, unit:'₹/unit' },
+        { id:'pack',  label:'📦 Packaging',               base:1.80, min:0, max:10, unit:'₹/unit' },
+        { id:'labor', label:'👷 Labor',                   base:1.00, min:0, max:8,  unit:'₹/unit' },
+        { id:'elec',  label:'🔌 Electricity/Gas',         base:0.50, min:0, max:5,  unit:'₹/unit' },
+        { id:'misc',  label:'📝 Misc / Transport',        base:0.45, min:0, max:5,  unit:'₹/unit' },
+      ]
+    },
+    bakery: {
+      sp: 35, units: 5000,
+      costs: [
+        { id:'flour', label:'🌾 Flour',                  base:6.00, min:0, max:20, unit:'₹/unit' },
+        { id:'butter',label:'🧈 Butter / Oil',           base:4.00, min:0, max:20, unit:'₹/unit' },
+        { id:'sugar', label:'🍬 Sugar',                  base:1.50, min:0, max:10, unit:'₹/unit' },
+        { id:'pack',  label:'📦 Packaging / Box',        base:3.00, min:0, max:15, unit:'₹/unit' },
+        { id:'labor', label:'👷 Baker Labor',            base:3.50, min:0, max:15, unit:'₹/unit' },
+        { id:'rent',  label:'🏭 Rent / Overhead',        base:2.00, min:0, max:10, unit:'₹/unit' },
+      ]
+    },
+    cloud: {
+      sp: 220, units: 800,
+      costs: [
+        { id:'raw',   label:'🥘 Raw Ingredients',        base:60,  min:0, max:200, unit:'₹/order' },
+        { id:'pack',  label:'📦 Packaging (box+bag)',    base:18,  min:0, max:50,  unit:'₹/order' },
+        { id:'labor', label:'👷 Kitchen Labor',          base:25,  min:0, max:80,  unit:'₹/order' },
+        { id:'rent',  label:'🏭 Kitchen Rent/Util.',     base:20,  min:0, max:60,  unit:'₹/order' },
+        { id:'plat',  label:'📱 Platform Commission',    base:44,  min:0, max:80,  unit:'₹/order' },
+        { id:'misc',  label:'📝 Misc/Wastage',           base:10,  min:0, max:30,  unit:'₹/order' },
+      ]
+    },
+    snack: {
+      sp: 18, units: 50000,
+      costs: [
+        { id:'raw',   label:'🌽 Raw Materials',          base:5.0,  min:0, max:15, unit:'₹/unit' },
+        { id:'oil',   label:'🫙 Frying Oil',              base:1.5,  min:0, max:8,  unit:'₹/unit' },
+        { id:'season',label:'🧂 Seasoning/Spices',        base:0.8,  min:0, max:5,  unit:'₹/unit' },
+        { id:'pack',  label:'📦 Packaging',               base:1.2,  min:0, max:6,  unit:'₹/unit' },
+        { id:'labor', label:'👷 Labor',                   base:0.7,  min:0, max:4,  unit:'₹/unit' },
+        { id:'elec',  label:'🔌 Electricity',             base:0.3,  min:0, max:3,  unit:'₹/unit' },
+      ]
+    }
+  },
+
+  current: null,
+  sliderVals: {},
+
+  init() {
+    document.querySelectorAll('[data-preset]').forEach(b => b.addEventListener('click', () => this.load(b.dataset.preset)));
+    document.getElementById('resetBtn')?.addEventListener('click', () => this.reset());
+    document.getElementById('simSP')?.addEventListener('input', () => this.calc());
+    document.getElementById('simUnits')?.addEventListener('input', () => this.calc());
+    this.load('banana');
+  },
+
+  load(key) {
+    const p = this.PRESETS[key]; if(!p) return;
+    this.current = p;
+    document.getElementById('simSP').value = p.sp;
+    document.getElementById('simUnits').value = p.units;
+
+    // Build base inputs
+    const bi = document.getElementById('baseInputs');
+    bi.innerHTML = p.costs.map(c => `
+      <div class="fg" style="margin:0">
+        <label>${c.label}</label>
+        <input type="number" class="inp" id="base_${c.id}" value="${c.base}" min="0" step="0.01" data-baseid="${c.id}"/>
+      </div>
+    `).join('');
+    bi.querySelectorAll('input').forEach(el => el.addEventListener('input', () => this.reset()));
+
+    this.reset();
+    FC.Toast.show('Loaded preset: '+key, 'success');
+  },
+
+  reset() {
+    if(!this.current) return;
+    this.current.costs.forEach(c => { this.sliderVals[c.id] = 0; });
+    this.buildSliders();
+    this.calc();
+  },
+
+  buildSliders() {
+    const area = document.getElementById('sliderArea');
+    area.innerHTML = '';
+    this.current.costs.forEach(c => {
+      const base = parseFloat(document.getElementById('base_'+c.id)?.value) || c.base;
+      const div = document.createElement('div');
+      div.className = 'sim-slider';
+      div.innerHTML = `
+        <div class="sim-slider__head">
+          <span class="sim-slider__name">${c.label}</span>
+          <div class="sim-slider__vals">
+            <span class="sim-slider__base" id="sbas_${c.id}">${FC.Fmt.money(base)}</span>
+            <span class="sim-slider__new" id="snew_${c.id}">${FC.Fmt.money(base)}</span>
+          </div>
+        </div>
+        <input type="range" class="sim-range" id="sld_${c.id}" 
+               min="-50" max="100" value="0" step="1"
+               title="Drag to simulate price change"/>
+        <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--tx-4);margin-top:4px">
+          <span>−50%</span><span>0% (current)</span><span>+100%</span>
+        </div>
+      `;
+      area.appendChild(div);
+      const sld = document.getElementById('sld_'+c.id);
+      sld?.addEventListener('input', () => {
+        this.sliderVals[c.id] = parseInt(sld.value);
+        const newVal = base * (1 + this.sliderVals[c.id]/100);
+        const newEl = document.getElementById('snew_'+c.id);
+        if(newEl){
+          newEl.textContent = FC.Fmt.money(newVal);
+          newEl.className = 'sim-slider__new'+(this.sliderVals[c.id]>0?' up':'');
+        }
+        // Update range fill
+        const pct = (this.sliderVals[c.id]+50)/150*100;
+        sld.style.background = `linear-gradient(to right, ${this.sliderVals[c.id]<0?'#f43f5e':'#00c896'} ${pct}%, var(--border-2) ${pct}%)`;
+        sld.className = 'sim-range'+(this.sliderVals[c.id]<0?' neg':'');
+        this.calc();
+      });
+    });
+  },
+
+  getBaseCost() {
+    return this.current.costs.reduce((s,c) => s + (parseFloat(document.getElementById('base_'+c.id)?.value)||c.base), 0);
+  },
+
+  getNewCost() {
+    return this.current.costs.reduce((s,c) => {
+      const base = parseFloat(document.getElementById('base_'+c.id)?.value)||c.base;
+      const pct = this.sliderVals[c.id]||0;
+      return s + base * (1 + pct/100);
+    }, 0);
+  },
+
+  calc() {
+    if(!this.current) return;
+    const sp = parseFloat(document.getElementById('simSP')?.value)||25;
+    const units = parseFloat(document.getElementById('simUnits')?.value)||10000;
+    const baseCost = this.getBaseCost();
+    const newCost = this.getNewCost();
+    const baseMargin = (sp-baseCost)/sp*100;
+    const newMargin = (sp-newCost)/sp*100;
+    const baseMonthlyProfit = (sp-baseCost)*units;
+    const newMonthlyProfit = (sp-newCost)*units;
+    const minMRP = newCost / (1-0.25) * 1.05; // need 25% margin + basic dist
+
+    // Before/after
+    const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    s('siBeforeCost', FC.Fmt.money(baseCost));
+    s('siBeforeMargin', FC.Fmt.pct(baseMargin)+' margin');
+    s('siAfterCost', FC.Fmt.money(newCost));
+    s('siAfterMargin', FC.Fmt.pct(newMargin)+' margin');
+    document.getElementById('siAfterCost').style.color = newCost>baseCost?'#f43f5e':newCost<baseCost?'#00c896':'inherit';
+
+    // Impact cards
+    const marginDiff = newMargin-baseMargin;
+    const profitDiff = newMonthlyProfit-baseMonthlyProfit;
+    const costDiff = newCost-baseCost;
+
+    function setCard(id, val, delta, cls) {
+      const el = document.getElementById(id);
+      if(el){ el.className='impact-card '+cls; }
+      s(id+'_val', val);
+      const del = document.getElementById(id+'_delta');
+      if(del){ del.textContent=delta; del.style.color=cls==='good'?'#00c896':'#f43f5e'; }
+    }
+    setCard('ic_margin', FC.Fmt.pct(newMargin), (marginDiff>=0?'+':'')+FC.Fmt.pct(marginDiff)+' vs base', newMargin>=20?'good':'bad');
+    setCard('ic_profit', FC.Fmt.money(newMonthlyProfit,0), (profitDiff>=0?'+':'')+FC.Fmt.money(Math.abs(profitDiff),0)+'/mo', newMonthlyProfit>0?'good':'bad');
+    setCard('ic_cost', FC.Fmt.money(newCost), (costDiff>=0?'+':'')+FC.Fmt.money(Math.abs(costDiff))+' vs base', newCost<=baseCost?'good':'neutral');
+    setCard('ic_mrp', FC.Fmt.money(minMRP), 'to maintain 25% margin', 'neutral');
+
+    // Profit bar
+    const bar = document.getElementById('simProfitBar');
+    if(bar){
+      bar.style.width=Math.max(0,Math.min(100,newMargin*2))+'%';
+      bar.className='profit-bar-fill '+(newMargin>=25?'profit-good':newMargin>=10?'profit-ok':'profit-bad');
+    }
+
+    // Insight
+    const costChange = ((newCost-baseCost)/baseCost*100);
+    const ins = document.getElementById('simInsightTxt');
+    if(ins){
+      if(Math.abs(costChange) < 1) {
+        ins.textContent = 'No significant cost changes. Your current margins are maintained.';
+      } else if(costChange > 0) {
+        ins.textContent = `Your total cost per unit increased by ${FC.Fmt.pct(costChange)}. New margin is ${FC.Fmt.pct(newMargin)}. Monthly profit changes by ${profitDiff>=0?'+':''}${FC.Fmt.money(profitDiff,0)}. ${newMargin < 15 ? 'This is critical — consider raising your price or reducing costs.' : newMargin < 25 ? 'Margins are getting tight. Review your cost reduction options.' : 'Margins are still healthy.'}`;
+      } else {
+        ins.textContent = `Cost reduction of ${FC.Fmt.pct(Math.abs(costChange))}! New margin improves to ${FC.Fmt.pct(newMargin)}. Monthly profit increases by ${FC.Fmt.money(Math.abs(profitDiff),0)}.`;
+      }
+    }
+
+    // Recommendations
+    const rec = document.getElementById('recommendations');
+    if(rec){
+      const items = [];
+      if(newMargin < 10) items.push('\ud83d\udea8 <strong>Critical:</strong> Margins below 10% — immediate price increase required');
+      if(newMargin < 20) items.push('\u26a0\ufe0f Consider raising price by '+ FC.Fmt.money(Math.ceil(Math.max(0,(newCost/(1-0.25)-sp))))+ ' to restore healthy margins');
+      if(costChange > 20) items.push('\ud83d\udca1 Explore bulk purchasing agreements to reduce input costs');
+      if(costChange > 10) items.push('\ud83d\udd0d Review which cost line drove the biggest increase');
+      if(newMargin > 35) items.push('\u2705 Margins are healthy — consider reinvesting in quality');
+      if(!items.length) items.push('\u2705 Your margins look stable with these cost changes.');
+      rec.innerHTML = items.map(i=>`<div style="margin-bottom:7px">${i}</div>`).join('');
+    }
+
+    this.updateSensitivity(sp, baseCost);
+  },
+
+  updateSensitivity(sp, baseCost) {
+    const ctx = document.getElementById('sensitivityChart')?.getContext('2d');
+    if(!ctx) return;
+    if(this.chart){this.chart.destroy();this.chart=null;}
+    const pcts = [-50,-40,-30,-20,-10,0,10,20,30,40,50];
+    const labels = pcts.map(p=>p+'%');
+    // Assume raw material is ~55% of total cost
+    const rawShare = 0.55;
+    const data = pcts.map(p => {
+      const newRaw = baseCost*rawShare*(1+p/100);
+      const newTotal = baseCost*(1-rawShare) + newRaw;
+      return parseFloat(((sp-newTotal)/sp*100).toFixed(1));
+    });
+    this.chart = new Chart(ctx, {
+      type:'line',
+      data:{labels,datasets:[{
+        label:'Profit Margin %',
+        data,
+        borderColor:'#00c896',
+        backgroundColor:'rgba(0,200,150,.08)',
+        fill:true,
+        tension:.35,
+        pointBackgroundColor: data.map(v=>v<0?'#f43f5e':v<15?'#f59e0b':'#00c896'),
+        pointRadius:4,
+      }]},
+      options:{
+        responsive:true,maintainAspectRatio:false,
+        plugins:{
+          legend:{display:false},
+          annotation:{},
+          tooltip:{callbacks:{label:c=>` Margin: ${c.parsed.y.toFixed(1)}%`}}
+        },
+        scales:{
+          x:{grid:{display:false},ticks:{color:FC.Charts.tx(),font:{family:'Inter',size:10}}},
+          y:{
+            grid:{color:FC.Charts.grid()},
+            ticks:{color:FC.Charts.tx(),font:{family:'Inter',size:10},callback:v=>v+'%'},
+            title:{display:true,text:'Profit Margin %',color:FC.Charts.tx(),font:{size:11}}
+          }
+        }
+      }
+    });
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => SIM.init());
+document.addEventListener('fc:locale-changed', () => { SIM.buildSliders(); SIM.calc(); });
+</script>
+</body>
+</html>

@@ -1,0 +1,579 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Advertise on FoodCost AI – Reach India's Food Industry</title>
+<meta name="description" content="Advertise on FoodCost AI and reach highly targeted food manufacturers, bakeries, cloud kitchens, and food startups in India. Intent-driven, niche audience."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+/* ── ADVERTISE PAGE EXTRAS ── */
+.adv-stat-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.adv-stat{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:28px 22px;text-align:center;
+  transition:all var(--base);position:relative;overflow:hidden;
+}
+.adv-stat::after{
+  content:'';position:absolute;bottom:0;left:0;right:0;height:3px;
+  transition:height var(--base);
+}
+.adv-stat--green::after{background:var(--green)}
+.adv-stat--amber::after{background:var(--amber)}
+.adv-stat--indigo::after{background:var(--indigo)}
+.adv-stat--rose::after{background:var(--rose)}
+.adv-stat:hover{transform:translateY(-5px);box-shadow:var(--sh-xl)}
+.adv-stat:hover::after{height:4px}
+.adv-stat__num{
+  font-family:var(--font-d);font-size:2.6rem;font-weight:900;
+  line-height:1;margin-bottom:8px;
+}
+.adv-stat--green .adv-stat__num{color:var(--green)}
+.adv-stat--amber .adv-stat__num{color:var(--amber)}
+.adv-stat--indigo .adv-stat__num{color:var(--indigo)}
+.adv-stat--rose .adv-stat__num{color:var(--rose)}
+.adv-stat__label{font-size:13px;color:var(--tx-3);line-height:1.5}
+.adv-stat__sub{font-size:11px;color:var(--tx-4);margin-top:4px}
+
+/* Ad option cards */
+.adv-options-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:22px}
+.adv-option{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:32px;
+  display:flex;flex-direction:column;gap:16px;
+  transition:all var(--base);position:relative;overflow:hidden;
+}
+.adv-option:hover{transform:translateY(-5px);box-shadow:var(--sh-xl)}
+.adv-option--featured{
+  border-color:rgba(0,200,150,.35);
+  background:linear-gradient(145deg,rgba(0,200,150,.04),var(--surface));
+}
+.adv-option__badge{
+  position:absolute;top:20px;right:20px;
+  padding:3px 11px;border-radius:var(--r-full);
+  font-size:10.5px;font-weight:700;letter-spacing:.04em;
+  background:linear-gradient(135deg,var(--green),var(--green-dim));
+  color:#fff;
+}
+.adv-option__icon{
+  width:56px;height:56px;border-radius:var(--r-lg);
+  display:flex;align-items:center;justify-content:center;
+  font-size:26px;flex-shrink:0;
+}
+.adv-option__icon--green{background:var(--green-pale);border:1px solid rgba(0,200,150,.22)}
+.adv-option__icon--amber{background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.22)}
+.adv-option__icon--indigo{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.22)}
+.adv-option__icon--rose{background:rgba(244,63,94,.08);border:1px solid rgba(244,63,94,.2)}
+.adv-option h3{font-size:1.15rem;margin-bottom:2px}
+.adv-option__status{
+  display:inline-flex;align-items:center;gap:5px;
+  font-size:11.5px;font-weight:700;margin-top:-6px;
+}
+.adv-option__status--live{color:var(--green)}
+.adv-option__status--coming{color:var(--tx-4)}
+.adv-option__status--dot{width:6px;height:6px;border-radius:50%;background:currentColor}
+.adv-option p{font-size:.9rem;color:var(--tx-3);line-height:1.72;flex:1}
+.adv-option__features{display:flex;flex-direction:column;gap:7px}
+.adv-option__features li{font-size:.84rem;color:var(--tx-3);display:flex;align-items:center;gap:7px}
+.adv-option__features li::before{content:'✓';color:var(--green);font-weight:700;flex-shrink:0}
+.adv-option__price{
+  background:var(--surface-2);border:1px solid var(--border);
+  border-radius:var(--r-md);padding:12px 16px;
+  display:flex;align-items:center;justify-content:space-between;
+}
+.adv-option__price-label{font-size:11.5px;color:var(--tx-4);font-weight:600;text-transform:uppercase;letter-spacing:.05em}
+.adv-option__price-val{font-size:14px;font-weight:700;color:var(--tx-2)}
+
+/* Why cards */
+.why-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.why-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:28px;
+  transition:all var(--base);
+}
+.why-card:hover{transform:translateY(-4px);box-shadow:var(--sh-lg);border-color:rgba(0,200,150,.25)}
+.why-card__emoji{font-size:2.4rem;margin-bottom:14px;display:block}
+.why-card h3{font-size:1rem;margin-bottom:10px}
+.why-card p{font-size:.875rem;color:var(--tx-3);line-height:1.65}
+
+/* Audience tags */
+.audience-grid{display:flex;flex-wrap:wrap;gap:12px;justify-content:center}
+.audience-tag{
+  display:flex;align-items:center;gap:8px;
+  padding:10px 18px;border-radius:var(--r-full);
+  background:var(--surface);border:1px solid var(--border);
+  font-size:13.5px;font-weight:500;color:var(--tx-2);
+  transition:all var(--base);cursor:default;
+}
+.audience-tag:hover{border-color:var(--green);color:var(--tx-1);background:var(--green-pale);transform:translateY(-2px)}
+.audience-tag__emoji{font-size:18px}
+
+/* Contact form */
+.adv-form-card{
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-2xl);padding:48px;
+  max-width:700px;margin:0 auto;position:relative;overflow:hidden;
+}
+.adv-form-card::before{
+  content:'';display:block;height:3px;
+  background:linear-gradient(90deg,var(--green),var(--amber),var(--indigo));
+  margin:-48px -48px 40px;
+}
+.adv-form-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px}
+.fg textarea{
+  padding:11px 15px;border-radius:var(--r-md);
+  border:1.5px solid var(--border);background:var(--surface-2);
+  color:var(--tx-1);font-size:15px;font-family:var(--font);
+  transition:border-color var(--fast),box-shadow var(--fast),background var(--fast);
+  width:100%;resize:vertical;min-height:120px;line-height:1.6;
+}
+.fg textarea:focus{
+  outline:none;border-color:var(--green);
+  box-shadow:var(--sh-green);background:var(--surface);
+}
+.fg textarea::placeholder{color:var(--tx-4)}
+
+/* Process timeline */
+.process-steps{display:grid;grid-template-columns:repeat(4,1fr);gap:0;position:relative}
+.process-steps::before{
+  content:'';position:absolute;top:28px;left:calc(12.5% + 14px);right:calc(12.5% + 14px);
+  height:2px;background:linear-gradient(90deg,var(--green),var(--amber));z-index:0;
+}
+.process-step{text-align:center;padding:0 12px;position:relative;z-index:1}
+.process-step__num{
+  width:56px;height:56px;border-radius:50%;
+  background:linear-gradient(135deg,var(--green),var(--green-dim));
+  color:#fff;font-weight:800;font-size:18px;font-family:var(--font-d);
+  display:flex;align-items:center;justify-content:center;
+  margin:0 auto 16px;box-shadow:0 4px 16px rgba(0,200,150,.35);
+  border:3px solid var(--bg);
+}
+.process-step__num--amber{background:linear-gradient(135deg,var(--amber),var(--amber-dim));box-shadow:0 4px 16px rgba(245,158,11,.35)}
+.process-step__num--indigo{background:linear-gradient(135deg,var(--indigo),#4f46e5);box-shadow:0 4px 16px rgba(99,102,241,.35)}
+.process-step__num--rose{background:linear-gradient(135deg,var(--rose),#e11d48);box-shadow:0 4px 16px rgba(244,63,94,.35)}
+.process-step h4{font-size:.92rem;margin-bottom:7px}
+.process-step p{font-size:.8rem;color:var(--tx-3);line-height:1.55}
+
+@media(max-width:1000px){.adv-stat-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:800px){.adv-options-grid{grid-template-columns:1fr}.why-grid{grid-template-columns:1fr 1fr}.process-steps{grid-template-columns:1fr 1fr;gap:20px}.process-steps::before{display:none}}
+@media(max-width:600px){.adv-stat-grid{grid-template-columns:1fr 1fr}.adv-form-grid{grid-template-columns:1fr}.adv-form-card{padding:28px}.adv-form-card::before{margin:-28px -28px 28px}.why-grid{grid-template-columns:1fr}}
+</style>
+</head>
+<body>
+<nav class='nav' id='mainNav'><div class='nav__inner'><a href='index.html' class='nav__logo'><div class='nav__logo-mark'>🍃</div><span class='nav__logo-text'>FoodCost <em>AI</em></span></a><div class='nav__links' id='navLinks'><a href='recipe-calculator.html' class='nav__link'>Recipe Cost</a><a href='yield-calculator.html' class='nav__link'>Yield Loss</a><a href='price-calculator.html' class='nav__link'>Selling Price</a><a href='simulator.html' class='nav__link'>What-If Simulator</a><a href='blog.html' class='nav__link'>Resources</a></div><div class='nav__actions'><button class='nav__theme' id='themeBtn' aria-label='Toggle dark mode'><span id='themeIcon'>🌙</span></button><button class='nav__burger' id='navBurger' aria-label='Menu'><span></span><span></span><span></span></button></div></div></nav>
+
+<div style="padding-top:calc(var(--nav-h) + 0px)">
+
+  <!-- Hero -->
+  <div style="background:linear-gradient(135deg,var(--surface-2) 0%,var(--surface) 60%,var(--surface-2) 100%);padding:96px 0 80px;border-bottom:1px solid var(--border);position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0">
+      <div style="position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,200,150,.12) 0%,transparent 65%)"></div>
+      <div style="position:absolute;width:400px;height:400px;border-radius:50%;background:rgba(99,102,241,.06);filter:blur(80px);top:-80px;right:-60px"></div>
+      <div style="position:absolute;width:300px;height:300px;border-radius:50%;background:rgba(245,158,11,.05);filter:blur(70px);bottom:0;left:10%"></div>
+    </div>
+    <div class="wrap" style="position:relative;z-index:1;text-align:center;max-width:760px;margin:0 auto">
+      <div class="s-tag" style="margin-bottom:20px">Advertising &amp; Partnerships</div>
+      <h1 style="font-size:clamp(2.2rem,6vw,4rem);letter-spacing:-2px;margin-bottom:20px;line-height:1.05">
+        Advertise on<br>
+        <span style="background:linear-gradient(135deg,var(--green) 0%,#00e8a8 40%,var(--sky) 100%);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">FoodCost AI</span>
+      </h1>
+      <p style="font-size:1.15rem;color:var(--tx-3);line-height:1.8;margin-bottom:36px;max-width:620px;margin-left:auto;margin-right:auto">Reach India's most intent-driven food industry audience. Our users are <strong style="color:var(--tx-2)">actively researching costs</strong> — they are food manufacturers, bakers, cloud kitchen founders, and food entrepreneurs who are ready to make purchasing decisions.</p>
+      <div style="display:flex;align-items:center;justify-content:center;gap:14px;flex-wrap:wrap">
+        <a href="#enquire" class="btn btn-primary btn-xl">Get Advertising Rates →</a>
+        <a href="#options" class="btn btn-ghost btn-lg">See Ad Options</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Audience Stats -->
+  <section class="section section--alt">
+    <div class="wrap">
+      <div class="s-head">
+        <div class="s-tag">Our Audience</div>
+        <h2>You're Reaching India's Food Industry</h2>
+        <p>FoodCost AI attracts food professionals who are in active decision-making mode — researching, planning, and buying.</p>
+      </div>
+      <div class="adv-stat-grid" style="margin-bottom:56px">
+        <div class="adv-stat adv-stat--green" data-reveal>
+          <div class="adv-stat__num">85%</div>
+          <div class="adv-stat__label">India-based visitors</div>
+          <div class="adv-stat__sub">Primary market focus</div>
+        </div>
+        <div class="adv-stat adv-stat--amber" data-reveal>
+          <div class="adv-stat__num">4+</div>
+          <div class="adv-stat__label">Avg. pages per session</div>
+          <div class="adv-stat__sub">High engagement depth</div>
+        </div>
+        <div class="adv-stat adv-stat--indigo" data-reveal>
+          <div class="adv-stat__num">3min</div>
+          <div class="adv-stat__label">Average session duration</div>
+          <div class="adv-stat__sub">Active, not passive visitors</div>
+        </div>
+        <div class="adv-stat adv-stat--rose" data-reveal>
+          <div class="adv-stat__num">B2B</div>
+          <div class="adv-stat__label">Decision-maker audience</div>
+          <div class="adv-stat__sub">Founders, buyers, operators</div>
+        </div>
+      </div>
+
+      <!-- Who visits us -->
+      <div class="s-head" style="margin-bottom:28px">
+        <div class="s-tag s-tag--amber">Visitor Segments</div>
+        <h2 style="font-size:1.5rem">Who Visits FoodCost AI</h2>
+      </div>
+      <div class="audience-grid">
+        <div class="audience-tag"><span class="audience-tag__emoji">🏭</span> Food Manufacturers</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">🥐</span> Bakeries &amp; Confectioneries</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">☁️</span> Cloud Kitchens</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">🚀</span> Food Startups</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">🍫</span> Snack &amp; FMCG Brands</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">🌾</span> Ingredient Distributors</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">📦</span> Packaging Buyers</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">🏪</span> Small Food Businesses</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">👩‍🍳</span> Home-Based Food Entrepreneurs</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">🎓</span> Food Technology Students</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">🏬</span> Retail Buyers</div>
+        <div class="audience-tag"><span class="audience-tag__emoji">🤝</span> Food Brokers &amp; Consultants</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Why Advertise Here -->
+  <section class="section">
+    <div class="wrap">
+      <div class="s-head">
+        <div class="s-tag">Why Advertise Here</div>
+        <h2>The Advantage of a Niche, Intent-Driven Platform</h2>
+        <p>Generic advertising on mass platforms costs more and converts less. Our audience is surgically targeted — food industry professionals in India.</p>
+      </div>
+      <div class="why-grid">
+        <div class="why-card" data-reveal>
+          <span class="why-card__emoji">🎯</span>
+          <h3>Hyper-Targeted Audience</h3>
+          <p>Every visitor arrived because they searched for something like "food cost calculator India" or "how to calculate yield loss in manufacturing." These are buyers, not browsers.</p>
+        </div>
+        <div class="why-card" data-reveal>
+          <span class="why-card__emoji">💡</span>
+          <h3>Intent-Driven Traffic</h3>
+          <p>Our users are actively researching costs, suppliers, ingredients, and pricing. They're in the middle of a business decision — the ideal moment to reach them with relevant offers.</p>
+        </div>
+        <div class="why-card" data-reveal>
+          <span class="why-card__emoji">🇮🇳</span>
+          <h3>India-First Focus</h3>
+          <p>The platform is built specifically for the Indian food industry. Your ad appears in front of Indian food entrepreneurs, manufacturers, and procurement professionals — not a global generic audience.</p>
+        </div>
+        <div class="why-card" data-reveal>
+          <span class="why-card__emoji">⚡</span>
+          <h3>High Engagement</h3>
+          <p>Calculator users are deeply engaged — they're entering numbers, reading results, and making decisions. Display time per session is far above industry averages for food industry content.</p>
+        </div>
+        <div class="why-card" data-reveal>
+          <span class="why-card__emoji">💰</span>
+          <h3>Cost-Effective</h3>
+          <p>Reaching a niche B2B food industry audience on mass platforms is expensive and imprecise. FoodCost AI offers affordable, direct access to a pre-qualified food business audience.</p>
+        </div>
+        <div class="why-card" data-reveal>
+          <span class="why-card__emoji">📈</span>
+          <h3>Growing Platform</h3>
+          <p>FoodCost AI is growing rapidly as Indian food entrepreneurship expands. Early advertising partners benefit from preferred rates and prominent placements as the audience scales.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Ad Options -->
+  <section class="section section--alt" id="options">
+    <div class="wrap">
+      <div class="s-head">
+        <div class="s-tag">Advertising Options</div>
+        <h2>Choose the Right Format for Your Goals</h2>
+        <p>From sponsored placements to display advertising, we offer formats that integrate naturally with our food professional audience.</p>
+      </div>
+      <div class="adv-options-grid">
+
+        <!-- Sponsored Listings -->
+        <div class="adv-option adv-option--featured" data-reveal>
+          <span class="adv-option__badge">Most Popular</span>
+          <div class="adv-option__icon adv-option__icon--green">🏪</div>
+          <div>
+            <h3>Sponsored Listings</h3>
+            <div class="adv-option__status adv-option__status--live">
+              <span class="adv-option__status--dot"></span> Available Now
+            </div>
+          </div>
+          <p>Get your brand featured prominently on calculator pages — exactly where food manufacturers are actively researching ingredient costs, packaging, and equipment. Perfect for suppliers, equipment manufacturers, and ingredient distributors.</p>
+          <ul class="adv-option__features">
+            <li>Featured placement on recipe &amp; yield calculator pages</li>
+            <li>Company name, logo, and short description</li>
+            <li>Direct link to your website or product page</li>
+            <li>Clearly labelled as "Sponsored" for transparency</li>
+            <li>Monthly analytics report on impressions &amp; clicks</li>
+          </ul>
+          <div class="adv-option__price">
+            <span class="adv-option__price-label">Pricing</span>
+            <span class="adv-option__price-val">Contact for rates</span>
+          </div>
+          <a href="#enquire" class="btn btn-primary btn-sm" style="align-self:flex-start">Enquire About This →</a>
+        </div>
+
+        <!-- Display Ads -->
+        <div class="adv-option" data-reveal>
+          <div class="adv-option__icon adv-option__icon--amber">📢</div>
+          <div>
+            <h3>Display Advertising</h3>
+            <div class="adv-option__status adv-option__status--live">
+              <span class="adv-option__status--dot"></span> Available Now
+            </div>
+          </div>
+          <p>Standard display ad formats served alongside our calculator tools and blog content. Our audience is focused and engaged — ideal for brand awareness among food industry decision-makers.</p>
+          <ul class="adv-option__features">
+            <li>Leaderboard (728×90) and sidebar (300×250) formats</li>
+            <li>Served via Google AdSense or direct booking</li>
+            <li>Desktop and mobile optimised placements</li>
+            <li>Frequency capping available for direct bookings</li>
+          </ul>
+          <div class="adv-option__price">
+            <span class="adv-option__price-label">Pricing</span>
+            <span class="adv-option__price-val">Contact for rates</span>
+          </div>
+          <a href="#enquire" class="btn btn-ghost btn-sm" style="align-self:flex-start">Enquire About This →</a>
+        </div>
+
+        <!-- Content Sponsorship -->
+        <div class="adv-option" data-reveal>
+          <div class="adv-option__icon adv-option__icon--indigo">📝</div>
+          <div>
+            <h3>Content Sponsorship</h3>
+            <div class="adv-option__status adv-option__status--live">
+              <span class="adv-option__status--dot"></span> Available Now
+            </div>
+          </div>
+          <p>Sponsor our blog articles and resource guides on food costing topics. Your brand is featured as the sponsor of high-quality, India-specific content read by food professionals and entrepreneurs.</p>
+          <ul class="adv-option__features">
+            <li>Brand mention and logo on sponsored articles</li>
+            <li>Option to contribute expert insights or quotes</li>
+            <li>SEO benefit — your brand linked from high-quality content</li>
+            <li>Evergreen content — long-term visibility</li>
+          </ul>
+          <div class="adv-option__price">
+            <span class="adv-option__price-label">Pricing</span>
+            <span class="adv-option__price-val">Contact for rates</span>
+          </div>
+          <a href="#enquire" class="btn btn-ghost btn-sm" style="align-self:flex-start">Enquire About This →</a>
+        </div>
+
+        <!-- Newsletter Sponsorship -->
+        <div class="adv-option" data-reveal>
+          <div class="adv-option__icon adv-option__icon--rose">📨</div>
+          <div>
+            <h3>Newsletter Sponsorship</h3>
+            <div class="adv-option__status adv-option__status--coming">
+              <span class="adv-option__status--dot"></span> Coming Soon
+            </div>
+          </div>
+          <p>When we launch our newsletter, sponsorship slots will be limited and reserved for partners who enquire early. Join the waitlist to secure preferential rates for this high-value placement.</p>
+          <ul class="adv-option__features">
+            <li>Direct-to-inbox reach to food business subscribers</li>
+            <li>Limited sponsorship slots per issue</li>
+            <li>Curated readership — no mass email fatigue</li>
+            <li>Early enquiry secures preferred rates</li>
+          </ul>
+          <div class="adv-option__price">
+            <span class="adv-option__price-label">Status</span>
+            <span class="adv-option__price-val" style="color:var(--tx-4)">Waitlist open</span>
+          </div>
+          <a href="#enquire" class="btn btn-ghost btn-sm" style="align-self:flex-start">Join Waitlist →</a>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- How It Works -->
+  <section class="section">
+    <div class="wrap">
+      <div class="s-head">
+        <div class="s-tag">Process</div>
+        <h2>Getting Started Is Simple</h2>
+        <p>From first contact to your ad going live — we keep it fast and transparent.</p>
+      </div>
+      <div class="process-steps">
+        <div class="process-step" data-reveal>
+          <div class="process-step__num">1</div>
+          <h4>Send Enquiry</h4>
+          <p>Fill in the enquiry form below with your company details and advertising goals</p>
+        </div>
+        <div class="process-step" data-reveal>
+          <div class="process-step__num process-step__num--amber">2</div>
+          <h4>Proposal &amp; Rates</h4>
+          <p>We respond within 24 hours with a tailored proposal and transparent pricing</p>
+        </div>
+        <div class="process-step" data-reveal>
+          <div class="process-step__num process-step__num--indigo">3</div>
+          <h4>Creative &amp; Setup</h4>
+          <p>Submit your ad creative or listing copy — we'll handle the technical integration</p>
+        </div>
+        <div class="process-step" data-reveal>
+          <div class="process-step__num process-step__num--rose">4</div>
+          <h4>Go Live &amp; Report</h4>
+          <p>Your ad launches and you receive monthly analytics on reach and engagement</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Enquiry Form -->
+  <section class="section section--alt" id="enquire">
+    <div class="wrap">
+      <div class="s-head">
+        <div class="s-tag">Get In Touch</div>
+        <h2>Request Advertising Rates</h2>
+        <p>Tell us about your brand and goals and we'll come back with the right options for you.</p>
+      </div>
+
+      <div class="adv-form-card" data-reveal>
+        <form id="advForm" novalidate>
+          <div class="adv-form-grid">
+            <div class="fg">
+              <label for="advName">Your Name</label>
+              <input class="inp" type="text" id="advName" name="name" placeholder="Priya Menon" required/>
+            </div>
+            <div class="fg">
+              <label for="advEmail">Business Email</label>
+              <input class="inp" type="email" id="advEmail" name="email" placeholder="priya@company.com" required/>
+            </div>
+            <div class="fg">
+              <label for="advCompany">Company / Brand Name</label>
+              <input class="inp" type="text" id="advCompany" name="company" placeholder="Your Company Ltd" required/>
+            </div>
+            <div class="fg">
+              <label for="advWebsite">Website</label>
+              <input class="inp" type="url" id="advWebsite" name="website" placeholder="https://yourwebsite.com"/>
+            </div>
+          </div>
+
+          <div class="fg" style="margin-top:4px">
+            <label for="advAdType">Advertising Format</label>
+            <select class="sel" id="advAdType" name="adtype" required>
+              <option value="">— Select a format —</option>
+              <option value="Sponsored Listing">Sponsored Listing on Calculator Pages</option>
+              <option value="Display Ads">Display Advertising (Banner Ads)</option>
+              <option value="Content Sponsorship">Content / Blog Sponsorship</option>
+              <option value="Newsletter">Newsletter Sponsorship (Waitlist)</option>
+              <option value="Multiple">Multiple Formats / Full Package</option>
+              <option value="Other">Other / Not Sure Yet</option>
+            </select>
+          </div>
+
+          <div class="fg" style="margin-top:4px">
+            <label for="advAudience">Your Target Audience</label>
+            <input class="inp" type="text" id="advAudience" name="audience" placeholder="e.g. bakeries and food manufacturers in India" required/>
+          </div>
+
+          <div class="fg" style="margin-top:4px">
+            <label for="advMessage">Additional Information</label>
+            <textarea id="advMessage" name="message" placeholder="Tell us about your campaign goals, budget range, and anything else that helps us prepare the right proposal for you…"></textarea>
+          </div>
+
+          <!-- Callout -->
+          <div style="background:linear-gradient(135deg,rgba(0,200,150,.07),rgba(0,200,150,.02));border:1px solid rgba(0,200,150,.2);border-radius:var(--r-lg);padding:16px;display:flex;gap:10px;align-items:flex-start;margin-bottom:22px">
+            <span style="font-size:18px;flex-shrink:0">💬</span>
+            <div style="font-size:13px;color:var(--tx-3);line-height:1.65">
+              <strong style="color:var(--tx-2)">Include your target audience details</strong> — e.g. "ingredient suppliers targeting bakeries" or "packaging company for food manufacturers" — so we can match you to the right placement and audience segment.
+            </div>
+          </div>
+
+          <button type="submit" class="btn btn-primary btn-xl" style="width:100%;justify-content:center" id="advSubmitBtn">
+            <span id="advSubmitText">Send Enquiry →</span>
+          </button>
+          <p style="font-size:12px;color:var(--tx-4);text-align:center;margin-top:12px">We'll respond with rates and a proposal within 24 hours · No commitment required</p>
+        </form>
+
+        <!-- Success -->
+        <div id="advFormSuccess" style="display:none;text-align:center;padding:48px 0">
+          <div style="font-size:3.5rem;margin-bottom:16px">🎉</div>
+          <h3 style="font-size:1.4rem;margin-bottom:10px">Enquiry Received!</h3>
+          <p style="color:var(--tx-3);font-size:.95rem;line-height:1.7;max-width:420px;margin:0 auto">Thanks for your interest in advertising on FoodCost AI. We'll review your details and get back to you with rates and options within 24 hours.</p>
+          <button onclick="resetAdvForm()" class="btn btn-ghost" style="margin-top:24px">Send Another Enquiry</button>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Bottom CTA -->
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band">
+        <div class="cta-band__inner">
+          <h2>Start Reaching India's Food Entrepreneurs</h2>
+          <p>Join the businesses that are already in front of the most targeted food industry audience in India.</p>
+          <div class="cta-band__btns">
+            <a href="#enquire" class="btn btn-white btn-xl">Request Advertising Rates →</a>
+            <a href="contact.html" class="btn btn-outline-white btn-xl">Send a Direct Message</a>
+          </div>
+          <div class="cta-band__note">No long-term contracts required · Transparent pricing · Cancel anytime</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer" style="border-top:1px solid var(--border);background:var(--surface-2);padding:28px 0">
+  <div class="wrap">
+    <div class="footer__bottom" style="border-top:none;padding-top:0">
+      <p>© 2026 FoodCost AI. All rights reserved. Built for 🇮🇳 India. &nbsp;·&nbsp; <a href="privacy.html" style="color:var(--tx-3);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-3)'">Privacy</a> &nbsp;·&nbsp; <a href="terms.html" style="color:var(--tx-3);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-3)'">Terms</a> &nbsp;·&nbsp; <a href="contact.html" style="color:var(--tx-3);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-3)'">Contact</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Advertising enquiry form
+const advForm = document.getElementById('advForm');
+const advSuccess = document.getElementById('advFormSuccess');
+const advSubmitBtn = document.getElementById('advSubmitBtn');
+const advSubmitText = document.getElementById('advSubmitText');
+
+advForm.addEventListener('submit', function(e) {
+  e.preventDefault();
+  const requiredFields = [
+    document.getElementById('advName'),
+    document.getElementById('advEmail'),
+    document.getElementById('advCompany'),
+    document.getElementById('advAdType'),
+    document.getElementById('advAudience'),
+  ];
+  let valid = true;
+  requiredFields.forEach(el => {
+    if (!el.value.trim()) {
+      valid = false;
+      el.style.borderColor = 'var(--rose)';
+      el.style.boxShadow = '0 0 0 3px rgba(244,63,94,.15)';
+      setTimeout(() => { el.style.borderColor = ''; el.style.boxShadow = ''; }, 2200);
+    }
+  });
+  if (!valid) return;
+
+  advSubmitBtn.disabled = true;
+  advSubmitText.textContent = 'Sending…';
+  advSubmitBtn.style.opacity = '.7';
+
+  setTimeout(() => {
+    advForm.style.display = 'none';
+    advSuccess.style.display = 'block';
+  }, 1400);
+});
+
+function resetAdvForm() {
+  advForm.reset();
+  advForm.style.display = 'block';
+  advSuccess.style.display = 'none';
+  advSubmitBtn.disabled = false;
+  advSubmitText.textContent = 'Send Enquiry →';
+  advSubmitBtn.style.opacity = '1';
+}
+</script>
+<script src="js/core.js"></script>
+</body>
+</html>

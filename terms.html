@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Terms of Service – FoodCost AI</title>
+<meta name="description" content="Terms of Service for FoodCost AI. Free food cost calculators for guidance only. All calculation tools are provided as-is for informational purposes."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+/* ── LEGAL PAGE LAYOUT (shared with privacy.html) ── */
+.legal-layout{display:grid;grid-template-columns:240px 1fr;gap:48px;align-items:start;padding:60px 0 100px}
+.legal-toc{
+  position:sticky;top:calc(var(--nav-h) + 24px);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:22px;
+}
+.legal-toc__title{font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:.08em;color:var(--tx-4);margin-bottom:14px}
+.legal-toc__list{display:flex;flex-direction:column;gap:4px}
+.legal-toc__link{display:block;padding:7px 10px;border-radius:var(--r-sm);font-size:13px;color:var(--tx-3);transition:color var(--fast),background var(--fast);line-height:1.4}
+.legal-toc__link:hover{color:var(--green);background:var(--green-pale)}
+.legal-toc__link.active{color:var(--green);background:var(--green-pale);font-weight:600}
+.legal-content{max-width:740px}
+.legal-section{padding:40px 0;border-bottom:1px solid var(--border)}
+.legal-section:last-child{border-bottom:none;padding-bottom:0}
+.legal-section h2{font-size:1.3rem;letter-spacing:-.3px;margin-bottom:16px;display:flex;align-items:center;gap:10px}
+.legal-section h2 .legal-num{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:rgba(245,158,11,.08);border:1px solid rgba(245,158,11,.22);
+  color:var(--amber-dim);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.legal-section p{font-size:.95rem;color:var(--tx-3);line-height:1.82;margin-bottom:14px}
+.legal-section p:last-child{margin-bottom:0}
+.legal-section ul{display:flex;flex-direction:column;gap:9px;margin:14px 0;padding-left:4px}
+.legal-section ul li{font-size:.93rem;color:var(--tx-3);line-height:1.7;display:flex;align-items:flex-start;gap:10px;padding-left:4px}
+.legal-section ul li::before{content:'·';color:var(--amber);font-weight:900;font-size:1.2rem;line-height:1.4;flex-shrink:0}
+.legal-warn{
+  background:rgba(245,158,11,.07);border:1px solid rgba(245,158,11,.22);
+  border-radius:var(--r-lg);padding:18px 20px;
+  display:flex;gap:12px;align-items:flex-start;margin:20px 0;
+}
+.legal-warn p{font-size:.9rem;color:var(--tx-2);margin-bottom:0 !important;line-height:1.7}
+.legal-warn p strong{color:var(--amber-dim)}
+@media(max-width:900px){.legal-layout{grid-template-columns:1fr}.legal-toc{display:none}}
+</style>
+</head>
+<body>
+<nav class='nav' id='mainNav'><div class='nav__inner'><a href='index.html' class='nav__logo'><div class='nav__logo-mark'>🍃</div><span class='nav__logo-text'>FoodCost <em>AI</em></span></a><div class='nav__links' id='navLinks'><a href='recipe-calculator.html' class='nav__link'>Recipe Cost</a><a href='yield-calculator.html' class='nav__link'>Yield Loss</a><a href='price-calculator.html' class='nav__link'>Selling Price</a><a href='simulator.html' class='nav__link'>What-If Simulator</a><a href='blog.html' class='nav__link'>Resources</a></div><div class='nav__actions'><button class='nav__theme' id='themeBtn' aria-label='Toggle dark mode'><span id='themeIcon'>🌙</span></button><button class='nav__burger' id='navBurger' aria-label='Menu'><span></span><span></span><span></span></button></div></div></nav>
+
+<div style="padding-top:var(--nav-h)">
+
+  <!-- Hero -->
+  <div style="background:linear-gradient(135deg,var(--surface-2) 0%,var(--surface) 100%);padding:60px 0 44px;border-bottom:1px solid var(--border);position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 50% 0%,rgba(245,158,11,.07) 0%,transparent 60%)"></div>
+    <div class="wrap" style="position:relative;z-index:1">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <a href="index.html" style="font-size:13px;color:var(--tx-4);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-4)'">Home</a>
+        <span style="color:var(--tx-4)">/</span>
+        <span style="font-size:13px;color:var(--tx-3)">Terms of Service</span>
+      </div>
+      <div class="s-tag s-tag--amber" style="margin-bottom:14px">Legal</div>
+      <h1 style="font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-1px;margin-bottom:12px">Terms of Service</h1>
+      <p style="font-size:.95rem;color:var(--tx-3)">Effective date: <strong style="color:var(--tx-2)">June 1, 2026</strong> &nbsp;·&nbsp; Governing Law: <strong style="color:var(--tx-2)">India 🇮🇳</strong></p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="wrap">
+    <div class="legal-layout">
+
+      <!-- Table of Contents -->
+      <nav class="legal-toc" aria-label="Table of contents">
+        <div class="legal-toc__title">On this page</div>
+        <div class="legal-toc__list">
+          <a href="#acceptance" class="legal-toc__link">Acceptance of Terms</a>
+          <a href="#use-of-service" class="legal-toc__link">Use of Service</a>
+          <a href="#intellectual-property" class="legal-toc__link">Intellectual Property</a>
+          <a href="#disclaimer" class="legal-toc__link">Disclaimer</a>
+          <a href="#liability" class="legal-toc__link">Limitation of Liability</a>
+          <a href="#third-party" class="legal-toc__link">Third-Party Links</a>
+          <a href="#termination" class="legal-toc__link">Termination</a>
+          <a href="#governing-law" class="legal-toc__link">Governing Law</a>
+          <a href="#changes" class="legal-toc__link">Changes to Terms</a>
+          <a href="#contact" class="legal-toc__link">Contact</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="legal-content">
+
+        <!-- Intro -->
+        <div class="legal-section" id="acceptance">
+          <div class="legal-warn">
+            <span style="font-size:22px;flex-shrink:0">📋</span>
+            <p>Please read these Terms of Service carefully before using FoodCost AI. By accessing or using our website and tools, you agree to be bound by these terms. <strong>If you do not agree with any part of these terms, please do not use our services.</strong></p>
+          </div>
+
+          <h2><span class="legal-num">1</span> Acceptance of Terms</h2>
+          <p>These Terms of Service ("Terms") constitute a legally binding agreement between you ("User", "you") and FoodCost AI ("we", "us", "our") regarding your use of the website located at <strong>foodcostai.com</strong> and all associated tools, calculators, content, and services (collectively, the "Service").</p>
+          <p>By accessing the Site or using any of our calculators, you confirm that:</p>
+          <ul>
+            <li>You have read, understood, and agree to be bound by these Terms</li>
+            <li>You are at least 18 years of age, or accessing the Service with parental consent</li>
+            <li>You will use the Service only for lawful purposes and in accordance with these Terms</li>
+          </ul>
+        </div>
+
+        <!-- 2. Use of Service -->
+        <div class="legal-section" id="use-of-service">
+          <h2><span class="legal-num">2</span> Use of Service</h2>
+          <p>FoodCost AI provides free food cost calculator tools designed to help food businesses in India estimate ingredient costs, yield losses, selling prices, and profitability scenarios. These tools are provided free of charge with no registration required.</p>
+
+          <p><strong style="color:var(--tx-2)">Permitted Uses</strong></p>
+          <ul>
+            <li>Using the calculators for personal or business food costing purposes</li>
+            <li>Sharing results or screenshots for educational or business planning purposes</li>
+            <li>Referencing our content with appropriate attribution</li>
+            <li>Linking to our pages from your own website or content</li>
+          </ul>
+
+          <p><strong style="color:var(--tx-2)">Prohibited Uses</strong></p>
+          <ul>
+            <li>Reproducing, selling, or commercialising our calculator tools or underlying code without permission</li>
+            <li>Scraping, crawling, or automated bulk access to our services beyond normal browsing</li>
+            <li>Attempting to reverse-engineer, decompile, or extract our source code</li>
+            <li>Using the Service to spread misinformation about food pricing</li>
+            <li>Impersonating FoodCost AI or its representatives</li>
+            <li>Any activity that disrupts, damages, or overburdens our servers or infrastructure</li>
+          </ul>
+
+          <p>We reserve the right to suspend or terminate access for any user who violates these terms, without prior notice.</p>
+        </div>
+
+        <!-- 3. Intellectual Property -->
+        <div class="legal-section" id="intellectual-property">
+          <h2><span class="legal-num">3</span> Intellectual Property</h2>
+          <p>All content, design, code, text, graphics, logos, and functionality on FoodCost AI — including but not limited to the calculator algorithms, user interface design, blog content, and branding — is owned by or licensed to FoodCost AI and is protected under applicable Indian intellectual property laws.</p>
+          <ul>
+            <li>The "FoodCost AI" name, logo (🍃), and associated branding are our proprietary marks</li>
+            <li>The design system, colour palette, and visual identity are original creations</li>
+            <li>Calculator logic and formulas are our proprietary implementations</li>
+            <li>Blog articles and resource content are original works protected by copyright</li>
+          </ul>
+          <p>You may not copy, modify, distribute, sell, or create derivative works based on our content without explicit written permission. Requests for licensing or partnership can be sent to <a href="mailto:hello@foodcostai.com" style="color:var(--green)">hello@foodcostai.com</a>.</p>
+        </div>
+
+        <!-- 4. Disclaimer -->
+        <div class="legal-section" id="disclaimer">
+          <h2><span class="legal-num">4</span> Disclaimer of Warranties</h2>
+
+          <div class="legal-warn" style="margin-bottom:20px">
+            <span style="font-size:22px;flex-shrink:0">⚠️</span>
+            <p><strong>Important:</strong> FoodCost AI calculators are provided for <strong>guidance and estimation purposes only</strong>. Results are not professional financial, accounting, or business advice. Always consult a qualified professional before making significant pricing or business decisions.</p>
+          </div>
+
+          <p>The calculations provided by FoodCost AI are based on the values you enter and standard mathematical formulas. We make no representation that:</p>
+          <ul>
+            <li>Calculator results will be accurate for your specific business context, local market prices, or supply chain</li>
+            <li>The Service will be uninterrupted, error-free, or free from bugs or inaccuracies</li>
+            <li>Results constitute professional financial, legal, or business advice</li>
+            <li>The information on this Site is complete, current, or appropriate for your particular situation</li>
+          </ul>
+          <p>The Service is provided on an "as is" and "as available" basis, without warranties of any kind, either express or implied, including but not limited to implied warranties of merchantability, fitness for a particular purpose, or non-infringement.</p>
+          <p>Ingredient prices, market rates, GST slabs, and distribution margins used in examples are illustrative only and may not reflect current market conditions.</p>
+        </div>
+
+        <!-- 5. Limitation of Liability -->
+        <div class="legal-section" id="liability">
+          <h2><span class="legal-num">5</span> Limitation of Liability</h2>
+          <p>To the maximum extent permitted under applicable Indian law, FoodCost AI, its founders, employees, and contributors shall not be liable for:</p>
+          <ul>
+            <li>Any direct, indirect, incidental, consequential, or punitive damages arising from your use of the Service</li>
+            <li>Business losses, lost profits, or lost revenue resulting from reliance on calculator outputs</li>
+            <li>Errors or inaccuracies in calculation results</li>
+            <li>Decisions made based on information from this Site</li>
+            <li>Interruptions, downtime, or data loss related to the Service</li>
+          </ul>
+          <p>In all cases, our total liability to you for any claim arising from use of the Service shall not exceed the amount you paid to use the Service — which, as FoodCost AI is free, is zero (₹0).</p>
+          <p>Some jurisdictions do not allow exclusion of certain warranties or limitation of liability, so the above may not apply to you in full. In such cases, our liability is limited to the fullest extent permitted by applicable law.</p>
+        </div>
+
+        <!-- 6. Third-Party Links -->
+        <div class="legal-section" id="third-party">
+          <h2><span class="legal-num">6</span> Third-Party Links &amp; Services</h2>
+          <p>Our Site may contain links to third-party websites, tools, or services (such as packaging suppliers, ingredient databases, or educational resources). These links are provided for your convenience only.</p>
+          <ul>
+            <li>We do not endorse, control, or take responsibility for third-party content</li>
+            <li>Third-party sites operate under their own terms and privacy policies</li>
+            <li>Visiting linked sites is at your own risk</li>
+          </ul>
+          <p>Advertisements displayed through Google AdSense are served by third parties. We are not responsible for the content, accuracy, or practices of advertisers.</p>
+        </div>
+
+        <!-- 7. Termination -->
+        <div class="legal-section" id="termination">
+          <h2><span class="legal-num">7</span> Termination</h2>
+          <p>We reserve the right to discontinue, suspend, or terminate the Service at any time, with or without notice, for any reason. We may also restrict access to any user who violates these Terms.</p>
+          <p>As FoodCost AI is a free service, termination does not entitle you to any compensation or refund. We will endeavour to provide advance notice of any material changes that affect existing users.</p>
+        </div>
+
+        <!-- 8. Governing Law -->
+        <div class="legal-section" id="governing-law">
+          <h2><span class="legal-num">8</span> Governing Law</h2>
+          <p>These Terms of Service shall be governed by and construed in accordance with the laws of <strong style="color:var(--tx-2)">India</strong>, without regard to conflict of law provisions. The Information Technology Act, 2000 and its amendments apply where relevant.</p>
+          <p>Any disputes arising from these Terms or your use of the Service shall be subject to the exclusive jurisdiction of the competent courts located in <strong style="color:var(--tx-2)">India</strong>. You agree to submit to the personal jurisdiction of such courts and waive any objection to venue.</p>
+          <p>Before initiating any legal proceedings, we strongly encourage you to contact us at <a href="mailto:hello@foodcostai.com" style="color:var(--green)">hello@foodcostai.com</a> to resolve disputes informally. Most concerns can be addressed quickly and amicably.</p>
+        </div>
+
+        <!-- 9. Changes to Terms -->
+        <div class="legal-section" id="changes">
+          <h2><span class="legal-num">9</span> Changes to Terms</h2>
+          <p>We may revise these Terms at any time. When we do, we will update the effective date at the top of this page. Material changes may be announced via a notice on the Site.</p>
+          <p>Your continued use of the Service after any changes constitutes acceptance of the new Terms. It is your responsibility to review these Terms periodically.</p>
+        </div>
+
+        <!-- 10. Contact -->
+        <div class="legal-section" id="contact">
+          <h2><span class="legal-num">10</span> Contact Us</h2>
+          <p>If you have questions, concerns, or feedback about these Terms of Service, please contact us:</p>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;display:flex;flex-direction:column;gap:12px;margin-top:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:18px">📧</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-4);margin-bottom:2px">Email</div>
+                <a href="mailto:hello@foodcostai.com" style="font-size:15px;font-weight:600;color:var(--green)">hello@foodcostai.com</a>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:18px">📋</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-4);margin-bottom:2px">Contact Form</div>
+                <a href="contact.html" style="font-size:15px;font-weight:600;color:var(--green)">Use our contact form →</a>
+              </div>
+            </div>
+          </div>
+          <p style="margin-top:16px;font-size:.88rem">FoodCost AI operates from India. All communications will be conducted in English or Hindi as appropriate.</p>
+        </div>
+
+      </div><!-- /.legal-content -->
+    </div><!-- /.legal-layout -->
+  </div><!-- /.wrap -->
+
+</div>
+
+<footer class="footer" style="border-top:1px solid var(--border);background:var(--surface-2);padding:28px 0">
+  <div class="wrap">
+    <div class="footer__bottom" style="border-top:none;padding-top:0">
+      <p>© 2026 FoodCost AI. All rights reserved. Built for 🇮🇳 India. &nbsp;·&nbsp; <a href="privacy.html" style="color:var(--tx-3);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-3)'">Privacy</a> &nbsp;·&nbsp; <a href="terms.html" style="color:var(--green)">Terms</a> &nbsp;·&nbsp; <a href="contact.html" style="color:var(--tx-3);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-3)'">Contact</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Table of contents active link tracking
+const sections = document.querySelectorAll('.legal-section');
+const tocLinks = document.querySelectorAll('.legal-toc__link');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      tocLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => { if (s.id) observer.observe(s); });
+</script>
+<script src="js/core.js"></script>
+</body>
+</html>

@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>FoodCost AI – Know the True Cost & Profitability of Every Food Product</title>
+<meta name="description" content="FoodCost AI helps food manufacturers, bakeries, cloud kitchens and food startups calculate real product costs, yield losses, selling prices and profitability. Free online calculators for any market worldwide."/>
+<meta name="keywords" content="food cost calculator, recipe cost calculator, yield loss calculator, selling price calculator, food manufacturing cost, food profitability, food business tools"/>
+<meta property="og:title" content="FoodCost AI – Know the True Cost & Profitability of Every Food Product"/>
+<meta property="og:description" content="Calculate real product costs, yield losses, selling prices and profitability for your food business."/>
+<meta property="og:type" content="website"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+<script src="js/currency.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+<!-- ═══ NAVBAR ═══ -->
+<nav class="nav" id="mainNav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__logo">
+      <div class="nav__logo-mark">🍃</div>
+      <span class="nav__logo-text">FoodCost <em>AI</em></span>
+    </a>
+    <div class="nav__links" id="navLinks">
+      <a href="recipe-calculator.html" class="nav__link">Recipe Cost</a>
+      <a href="yield-calculator.html" class="nav__link">Yield Loss</a>
+      <a href="price-calculator.html" class="nav__link">Selling Price</a>
+      <a href="simulator.html" class="nav__link">What-If Simulator</a>
+      <a href="blog.html" class="nav__link">Resources</a>
+      <a href="about.html" class="nav__link">About</a>
+    </div>
+    <div class="nav__actions">
+      <button class="nav__theme" id="themeBtn" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span></button>
+      <a href="recipe-calculator.html" class="btn btn-primary btn-sm">Try Free →</a>
+      <button class="nav__burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══ HERO ═══ -->
+<section class="hero">
+  <div class="hero__bg">
+    <div class="hero__radial"></div>
+    <div class="hero__orb hero__orb--1"></div>
+    <div class="hero__orb hero__orb--2"></div>
+    <div class="hero__orb hero__orb--3"></div>
+  </div>
+  <div class="wrap hero__inner">
+    <div class="hero__badge">
+      <span class="hero__badge-dot"></span>
+      Built for Food Businesses Worldwide · Free to Use Now
+    </div>
+    <h1 class="hero__h1">
+      Know the <span class="grad">True Cost</span><br/>of Every Food Product
+    </h1>
+    <p class="hero__sub">
+      Most food businesses only calculate ingredient costs — and lose money without understanding why. FoodCost AI reveals the complete picture: yield losses, packaging, labor, distribution margins, tax, and true profitability.
+    </p>
+    <div class="hero__cta">
+      <a href="recipe-calculator.html" class="btn btn-primary btn-xl" id="hero-cta">
+        Start Calculating
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+      </a>
+      <a href="#features" class="btn btn-ghost btn-xl">See How It Works</a>
+    </div>
+    <div class="hero__proof">
+      <div class="proof__avatars">
+        <div class="proof__av" style="background:#f59e0b">🏭</div>
+        <div class="proof__av" style="background:#10b981">🍌</div>
+        <div class="proof__av" style="background:#6366f1">🍞</div>
+        <div class="proof__av" style="background:#f43f5e">☁️</div>
+      </div>
+      <span>Trusted by food manufacturers, bakeries &amp; cloud kitchens worldwide</span>
+    </div>
+  </div>
+
+  <!-- Live Demo Card -->
+  <div class="hero__demo" id="demo">
+    <div class="wrap">
+      <div class="demo-card">
+        <div class="demo-card__head">
+          <span class="demo-card__title">⚡ Live Demo — Banana Chips Profitability Calculator</span>
+          <span class="demo-card__live">● LIVE</span>
+        </div>
+        <div class="demo-grid">
+          <div class="demo-inputs">
+            <div class="demo-ig">
+              <label id="d_rawLbl">Raw Material Cost (<span class="demo-sym">₹</span>/kg)</label>
+              <input type="number" id="d_rawCost" value="40" min="1" max="500"/>
+            </div>
+            <div class="demo-ig">
+              <label>Batch Size (kg raw material)</label>
+              <input type="number" id="d_batch" value="100" min="1" max="10000"/>
+            </div>
+            <div class="demo-ig">
+              <label>Yield After Processing (%)</label>
+              <input type="range" id="d_yield" min="10" max="60" value="32"/>
+              <span class="demo-ig__range-val" id="d_yieldLbl">32% yield</span>
+            </div>
+            <div class="demo-ig">
+              <label id="d_mrpLbl">Target Retail Price (<span class="demo-sym">₹</span> per 100g pack)</label>
+              <input type="number" id="d_mrp" value="40" min="5" max="500"/>
+            </div>
+          </div>
+          <div class="demo-results">
+            <div class="dr dr--hl">
+              <span class="dr__label">Finished Product (chips)</span>
+              <span class="dr__val" id="d_r1">32 kg</span>
+            </div>
+            <div class="dr">
+              <span class="dr__label">Raw Mat. Cost / kg chips</span>
+              <span class="dr__val" id="d_r2">₹125</span>
+            </div>
+            <div class="dr">
+              <span class="dr__label">Est. Factory Revenue</span>
+              <span class="dr__val" id="d_r3">₹7,680</span>
+            </div>
+            <div class="dr dr--profit">
+              <span class="dr__label">Est. Gross Margin</span>
+              <span class="dr__val" id="d_r4">~38%</span>
+            </div>
+          </div>
+        </div>
+        <div class="demo-footer">
+          <a href="recipe-calculator.html" class="btn btn-primary">Get Full Analysis with Every Cost →</a>
+          <p class="demo-footer__note">* Simplified demo. Full calculator includes packaging, labor, utilities, tax, distributor &amp; retailer margins and more.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ PROBLEM ═══ -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="s-head">
+      <div class="s-tag">The Hidden Problem</div>
+      <h2>Why Food Businesses Lose Money Without Knowing It</h2>
+      <p>You calculated ingredient costs. You priced your product. You thought you'd profit. Then you didn't. Here's the hidden math most food businesses miss.</p>
+    </div>
+    <div class="problem-grid">
+      <div class="p-card" data-reveal>
+        <span class="p-card__icon">⚖️</span>
+        <h3>Yield Loss Is Ignored</h3>
+        <p>100 kg of raw banana becomes just 30–35 kg of chips. That 65–70% loss triples your effective raw material cost — yet most businesses price based on what they bought, not what they made.</p>
+      </div>
+      <div class="p-card" data-reveal>
+        <span class="p-card__icon">📦</span>
+        <h3>Packaging Costs Overlooked</h3>
+        <p>Premium packaging runs ₹8–18 per unit. Across a 10,000 unit/month operation, that's ₹80,000–₹1.8L monthly — rarely factored into product pricing.</p>
+      </div>
+      <div class="p-card" data-reveal>
+        <span class="p-card__icon">🔌</span>
+        <h3>Utility Costs Untracked</h3>
+        <p>Electricity, LPG, and water for frying and drying typically adds 8–12% to manufacturing cost. Most businesses estimate this wildly or ignore it entirely.</p>
+      </div>
+      <div class="p-card" data-reveal>
+        <span class="p-card__icon">🚚</span>
+        <h3>Distribution Stack Miscalculated</h3>
+        <p>Distributor (10–15%) + Retailer (20–30%) + Tax (varies) = your retail price must be 45–65% above factory price just to break even. Most manufacturers underestimate this.</p>
+      </div>
+      <div class="p-card" data-reveal>
+        <span class="p-card__icon">👷</span>
+        <h3>Labor Cost Hidden</h3>
+        <p>Manual peeling, sorting, and packaging labor is the #1 hidden cost in small food businesses. ₹5,000–₹25,000/month in labor never appears in ingredient cost calculations.</p>
+      </div>
+      <div class="p-card" data-reveal>
+        <span class="p-card__icon">📊</span>
+        <h3>No Profitability Visibility</h3>
+        <p>Without a complete cost model, a 20% raw material price spike can silently destroy margins — and you won't realize it until you see the bank account at month end.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FEATURES ═══ -->
+<section class="section" id="features">
+  <div class="wrap">
+    <div class="s-head">
+      <div class="s-tag">The FoodCost AI Solution</div>
+      <h2>Four Powerful Tools. One Complete Picture.</h2>
+      <p>Purpose-built for food manufacturers, bakeries, cloud kitchens and food startups worldwide. No accounting knowledge needed. Results in under 3 minutes.</p>
+    </div>
+    <div class="feat-grid">
+
+      <div class="feat-card" data-reveal>
+        <div class="feat-card__icon" style="background:linear-gradient(135deg,#10b981,#059669)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"/></svg>
+        </div>
+        <span class="feat-card__tag">Feature 1</span>
+        <h3>Recipe Cost Calculator</h3>
+        <p>Add every ingredient with purchase quantity and usage quantity. Get exact cost per batch, per kg, per unit — with visual breakdown of your biggest cost drivers.</p>
+        <ul class="feat-card__list">
+          <li>Unit conversion — kg↔g, L↔ml, piece, dozen</li>
+          <li>Overhead costs — electricity, packaging, labor</li>
+          <li>Cost % contribution per ingredient</li>
+          <li>Instant profit check vs. selling price</li>
+        </ul>
+        <a href="recipe-calculator.html" class="btn-feat">Open Calculator →</a>
+      </div>
+
+      <div class="feat-card feat-card--flagship" data-reveal>
+        <div class="feat-card__ribbon">🏆 Flagship Feature</div>
+        <div class="feat-card__icon" style="background:linear-gradient(135deg,#f59e0b,#d97706)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M13 2L3 14h9l-1 8 10-12h-9l1-8z"/></svg>
+        </div>
+        <span class="feat-card__tag">Feature 2</span>
+        <h3>Yield Loss Calculator</h3>
+        <p>The most ignored cost factor in food manufacturing. Track weight loss through every processing stage — peeling, cutting, cooking, drying, frying — and see true cost per kg of finished product.</p>
+        <ul class="feat-card__list">
+          <li>Multi-stage processing flow visualization</li>
+          <li>Yield % and cost impact at each stage</li>
+          <li>Effective cost/kg (finished product)</li>
+          <li>Industry benchmarks for 10+ food categories</li>
+        </ul>
+        <a href="yield-calculator.html" class="btn-feat">Open Calculator →</a>
+      </div>
+
+      <div class="feat-card" data-reveal>
+        <div class="feat-card__icon" style="background:linear-gradient(135deg,#6366f1,#4f46e5)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><path d="M12 2v20M17 5H9.5a3.5 3.5 0 000 7h5a3.5 3.5 0 010 7H6"/></svg>
+        </div>
+        <span class="feat-card__tag">Feature 3</span>
+        <h3>Selling Price Calculator</h3>
+        <p>Build your complete pricing stack from factory to retail price. Includes tax, distributor margins, retailer margins, and reverse pricing (given target retail price, find max allowable cost).</p>
+        <ul class="feat-card__list">
+          <li>Factory → C&amp;F → Distributor → Retailer → MRP</li>
+          <li>Tax-inclusive and tax-exclusive modes</li>
+          <li>Reverse retail price calculator</li>
+          <li>Visual price stack waterfall</li>
+        </ul>
+        <a href="price-calculator.html" class="btn-feat">Open Calculator →</a>
+      </div>
+
+      <div class="feat-card" data-reveal>
+        <div class="feat-card__icon" style="background:linear-gradient(135deg,#f43f5e,#e11d48)">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2"><polyline points="22 7 13.5 15.5 8.5 10.5 2 17"/><polyline points="16 7 22 7 22 13"/></svg>
+        </div>
+        <span class="feat-card__tag">Feature 4</span>
+        <h3>What-If Simulator</h3>
+        <p>Banana prices rise 40%. Oil spikes 25%. Packaging costs double. Simulate any market scenario in real-time before it destroys your margins. The ultimate business resilience tool.</p>
+        <ul class="feat-card__list">
+          <li>Drag sliders to adjust any input cost</li>
+          <li>Instant margin and MRP recalculation</li>
+          <li>Before vs. after visual comparison</li>
+          <li>Price sensitivity analysis chart</li>
+        </ul>
+        <a href="simulator.html" class="btn-feat">Open Simulator →</a>
+      </div>
+
+    </div>
+  </div>
+</section>
+
+<!-- ═══ HOW IT WORKS ═══ -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="s-head">
+      <div class="s-tag">How It Works</div>
+      <h2>From Zero to Full Cost Clarity in 3 Minutes</h2>
+    </div>
+    <div class="steps-row">
+      <div class="step" data-reveal>
+        <div class="step__num">01</div>
+        <h3>Enter Your Recipe</h3>
+        <p>Add ingredients, quantities, and purchase costs. We handle all unit conversions — kg, g, L, ml, pieces, dozens.</p>
+      </div>
+      <div class="step__connector">→</div>
+      <div class="step" data-reveal>
+        <div class="step__num">02</div>
+        <h3>Add Processing Stages</h3>
+        <p>Enter your yield at each processing stage. See how much your costs multiply through peeling, frying, and drying.</p>
+      </div>
+      <div class="step__connector">→</div>
+      <div class="step" data-reveal>
+        <div class="step__num">03</div>
+        <h3>Add All Overheads</h3>
+        <p>Include packaging, labor, electricity, rent. Everything that should go into your true product cost does.</p>
+      </div>
+      <div class="step__connector">→</div>
+      <div class="step" data-reveal>
+        <div class="step__num">04</div>
+        <h3>Get Your Price</h3>
+        <p>Set your target margin. We calculate factory price, distributor price, retailer price, and MRP automatically.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ USE CASES ═══ -->
+<section class="section">
+  <div class="wrap">
+    <div class="s-head">
+      <div class="s-tag">Industry Use Cases</div>
+      <h2>Built for Every Food Business</h2>
+    </div>
+    <div class="uc-grid">
+      <a href="yield-calculator.html" class="uc-card" id="uc-banana">
+        <div class="uc-card__emoji">🍌</div>
+        <h3>Banana Chips</h3>
+        <p>Track raw→peeled→fried yield (30–35%). Calculate true ₹/kg of finished chips and optimal MRP.</p>
+        <span class="uc-card__link">Calculate now →</span>
+      </a>
+      <a href="yield-calculator.html" class="uc-card" id="uc-jackfruit">
+        <div class="uc-card__emoji">🌿</div>
+        <h3>Jackfruit Chips</h3>
+        <p>Multi-stage yield with seed removal, peeling, slicing, and frying losses at each step.</p>
+        <span class="uc-card__link">Calculate now →</span>
+      </a>
+      <a href="recipe-calculator.html" class="uc-card" id="uc-bakery">
+        <div class="uc-card__emoji">🍞</div>
+        <h3>Bakeries</h3>
+        <p>Recipe costing for breads, cakes, cookies. Per unit cost, per batch, per kg — all automatic.</p>
+        <span class="uc-card__link">Calculate now →</span>
+      </a>
+      <a href="recipe-calculator.html" class="uc-card" id="uc-cloud">
+        <div class="uc-card__emoji">☁️</div>
+        <h3>Cloud Kitchens</h3>
+        <p>Dish-level food cost %, packaging, and delivery platform margin calculation.</p>
+        <span class="uc-card__link">Calculate now →</span>
+      </a>
+      <a href="price-calculator.html" class="uc-card" id="uc-startup">
+        <div class="uc-card__emoji">🚀</div>
+        <h3>Food Startups</h3>
+        <p>Validate product viability before launch. Know if your MRP can support your margins at scale.</p>
+        <span class="uc-card__link">Calculate now →</span>
+      </a>
+      <a href="recipe-calculator.html" class="uc-card" id="uc-home">
+        <div class="uc-card__emoji">🏠</div>
+        <h3>Home Food Business</h3>
+        <p>Price your homemade products correctly. Stop undercharging and start making real profit.</p>
+        <span class="uc-card__link">Calculate now →</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ COMPARISON TABLE ═══ -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="s-head">
+      <div class="s-tag">Why FoodCost AI</div>
+      <h2>Built for Manufacturers, Not Just Restaurants</h2>
+      <p>Every other food cost tool is designed for restaurateurs. FoodCost AI is the first built specifically for food manufacturing businesses — for any market worldwide.</p>
+    </div>
+    <div class="cmp-wrap">
+      <table class="cmp-table">
+        <thead>
+          <tr>
+            <th>Feature</th>
+            <th class="hl">FoodCost AI</th>
+            <th>Excel Spreadsheet</th>
+            <th>Restaurant Tools</th>
+            <th>ERP Systems</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Recipe Cost Calculator</td><td class="hl">✅ Built-in, visual</td><td>⚠️ Manual formulas</td><td>✅ Basic</td><td>✅ Complex setup</td></tr>
+          <tr><td>Multi-Stage Yield Tracking</td><td class="hl">✅ Visual flow</td><td>❌ None</td><td>❌ None</td><td>⚠️ Hard to configure</td></tr>
+          <tr><td>Tax / VAT Calculator</td><td class="hl">✅ Configurable for any market</td><td>⚠️ Manual</td><td>❌ Generic</td><td>✅ But expensive</td></tr>
+          <tr><td>Full Distribution Chain</td><td class="hl">✅ Distributor+Retailer+MRP</td><td>❌ None</td><td>❌ None</td><td>⚠️ Partial</td></tr>
+          <tr><td>What-If Scenario Simulator</td><td class="hl">✅ Real-time sliders</td><td>❌ None</td><td>❌ None</td><td>❌ None</td></tr>
+          <tr><td>Reverse Price Calculator</td><td class="hl">✅ MRP → max cost</td><td>❌ None</td><td>❌ None</td><td>❌ None</td></tr>
+          <tr><td>Cost to Start Using</td><td class="hl">✅ Free to use now</td><td>✅ Free</td><td>⚠️ Freemium</td><td>❌ $600+/year</td></tr>
+          <tr><td>Setup Time</td><td class="hl">✅ 0 minutes</td><td>⚠️ Hours of setup</td><td>✅ Minutes</td><td>❌ Weeks/months</td></tr>
+          <tr><td>Mobile Friendly</td><td class="hl">✅ Fully responsive</td><td>❌ Poor mobile UX</td><td>⚠️ Partial</td><td>❌ Desktop only</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FAQ ═══ -->
+<section class="section" id="faq">
+  <div class="wrap">
+    <div class="s-head">
+      <div class="s-tag">FAQ</div>
+      <h2>Common Questions</h2>
+    </div>
+    <div class="faq-list">
+      <div class="faq-item" id="fq1">
+        <button class="faq-q" aria-expanded="false">What is yield loss and why does it matter so much? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Yield loss is the difference between what you buy raw and what you actually get after processing. For banana chips: 100 kg of raw banana yields just 30–35 kg of finished chips. This 65–70% loss means every cost — oil, electricity, labor, packaging — must be calculated against only 32 kg of output, not 100 kg of input. Most businesses who price based on raw material cost end up 2–3× underestimating their actual cost per unit.</p></div>
+      </div>
+      <div class="faq-item" id="fq2">
+        <button class="faq-q" aria-expanded="false">Is FoodCost AI designed for a specific country? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>FoodCost AI works for any market worldwide. On your first visit, you can set your currency (USD, EUR, GBP, INR, AED, SGD, AUD and more), tax label (GST, VAT, Sales Tax), and tax rates. You can change these at any time using the ⚙️ settings button in the navigation bar. The default examples use Indian food products (banana chips, bakery items) but the math works for any food business globally.</p></div>
+      </div>
+      <div class="faq-item" id="fq3">
+        <button class="faq-q" aria-expanded="false">Do I need accounting or finance knowledge? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Absolutely not. FoodCost AI is designed so that a home baker with zero finance background can use it productively. Every field has a plain-English label, every result is explained, and every calculation shows its logic step by step. If you can use a calculator, you can use FoodCost AI.</p></div>
+      </div>
+      <div class="faq-item" id="fq4">
+        <button class="faq-q" aria-expanded="false">Can restaurants and cloud kitchens use this? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Yes! While FoodCost AI is optimized for food manufacturers, the Recipe Cost Calculator and Selling Price Calculator work perfectly for restaurants, cloud kitchens, bakeries, and catering businesses that want to know their dish-level food cost percentage and ideal menu pricing.</p></div>
+      </div>
+      <div class="faq-item" id="fq5">
+        <button class="faq-q" aria-expanded="false">Is FoodCost AI free to use? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>Yes — all four core calculators are free to use right now, with no signup or credit card required. We may introduce optional premium features (like saved calculations, PDF exports, and team dashboards) in the future. The goal is always to keep the core costing tools accessible. Any changes to pricing will be communicated in advance.</p></div>
+      </div>
+      <div class="faq-item" id="fq6">
+        <button class="faq-q" aria-expanded="false">How accurate are the calculations? <span class="faq-icon">+</span></button>
+        <div class="faq-a"><p>The formulas are industry-standard, verified by food technologists. Accuracy depends entirely on your input data. We recommend measuring your actual batch yield over 3–5 production runs and using the average. The more precise your inputs, the more precise your cost model. We also provide industry benchmark yield ranges to help you sanity-check your numbers.</p></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ CTA ═══ -->
+<section class="section section--alt">
+  <div class="wrap">
+    <div class="cta-band">
+      <div class="cta-band__inner">
+        <h2>Stop Guessing. Start Knowing.</h2>
+        <p>Join food businesses worldwide who use FoodCost AI to price correctly, avoid losses, and build profitable products.</p>
+        <div class="cta-band__btns">
+          <a href="recipe-calculator.html" class="btn btn-white btn-xl" id="cta-recipe">Calculate Recipe Cost →</a>
+          <a href="yield-calculator.html" class="btn btn-outline-white btn-xl" id="cta-yield">Calculate Yield Loss →</a>
+        </div>
+        <p class="cta-band__note">No signup required · No credit card · Works on mobile</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ═══ FOOTER ═══ -->
+<footer class="footer">
+  <div class="wrap">
+    <div class="footer__grid">
+      <div class="footer__brand">
+        <a href="index.html" class="nav__logo" style="text-decoration:none">
+          <div class="nav__logo-mark">🍃</div>
+          <span class="nav__logo-text">FoodCost <em>AI</em></span>
+        </a>
+        <p>The most complete food profitability platform for food businesses worldwide. Know the true cost of every product you make.</p>
+        <div class="footer__brand-tag">Built for food entrepreneurs everywhere 🌍</div>
+      </div>
+      <div class="footer__col">
+        <h4>Calculators</h4>
+        <ul>
+          <li><a href="recipe-calculator.html">Recipe Cost Calculator</a></li>
+          <li><a href="yield-calculator.html">Yield Loss Calculator</a></li>
+          <li><a href="price-calculator.html">Selling Price Calculator</a></li>
+          <li><a href="simulator.html">What-If Simulator</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Use Cases</h4>
+        <ul>
+          <li><a href="yield-calculator.html">Banana Chips Cost</a></li>
+          <li><a href="yield-calculator.html">Jackfruit Chips Cost</a></li>
+          <li><a href="recipe-calculator.html">Bakery Cost Calculator</a></li>
+          <li><a href="price-calculator.html">Selling Price Calculator</a></li>
+          <li><a href="recipe-calculator.html">Food Startup Calculator</a></li>
+        </ul>
+      </div>
+      <div class="footer__col">
+        <h4>Company</h4>
+        <ul>
+          <li><a href="about.html">About FoodCost AI</a></li>
+          <li><a href="blog.html">Blog &amp; Resources</a></li>
+          <li><a href="contact.html">Contact Us</a></li>
+          <li><a href="advertise.html">Advertise With Us</a></li>
+          <li><a href="privacy.html">Privacy Policy</a></li>
+          <li><a href="terms.html">Terms of Service</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer__bottom">
+      <p>© 2026 FoodCost AI. All rights reserved. | Built for food businesses worldwide.</p>
+      <p>Calculations are for guidance only. Consult a food technologist or chartered accountant for business-critical decisions.</p>
+    </div>
+  </div>
+</footer>
+
+<script src="js/currency.js"></script>
+<script src="js/core.js"></script>
+<script>
+// ── Homepage demo calculator ──
+(function(){
+  const rawCostEl=document.getElementById('d_rawCost');
+  const batchEl=document.getElementById('d_batch');
+  const yieldEl=document.getElementById('d_yield');
+  const yieldLbl=document.getElementById('d_yieldLbl');
+  const mrpEl=document.getElementById('d_mrp');
+  const r1=document.getElementById('d_r1');
+  const r2=document.getElementById('d_r2');
+  const r3=document.getElementById('d_r3');
+  const r4=document.getElementById('d_r4');
+
+  function calc(){
+    const raw=parseFloat(rawCostEl?.value)||40;
+    const batch=parseFloat(batchEl?.value)||100;
+    const yPct=parseFloat(yieldEl?.value)||32;
+    const mrp=parseFloat(mrpEl?.value)||40;
+    // Get current currency symbol
+    const sym = (window.FC && window.FC.Fmt) ? window.FC.Fmt.symbol() : '₹';
+    // Update demo symbol spans
+    document.querySelectorAll('.demo-sym').forEach(el => el.textContent = sym);
+
+    if(yieldLbl) yieldLbl.textContent=yPct+'% yield';
+    const mn=10,mx=60,pct=(yPct-mn)/(mx-mn)*100;
+    if(yieldEl) yieldEl.style.background=`linear-gradient(to right,#00c896 ${pct}%,#26384f ${pct}%)`;
+
+    const finished=batch*yPct/100;
+    const rawCostPerKgChips=(raw*batch)/Math.max(finished,0.01);
+    const factoryPerKg=mrp*10*0.58;
+    const totalRevenue=factoryPerKg*finished;
+    const grossMargin=((factoryPerKg-rawCostPerKgChips)/factoryPerKg*100);
+    const fmt = n => sym + Math.round(n).toLocaleString();
+
+    function pop(el,val){
+      if(!el)return;
+      el.textContent=val;
+      el.style.animation='none';void el.offsetWidth;
+      el.style.animation='pop .25s ease';
+    }
+    pop(r1,finished.toFixed(1)+' kg');
+    pop(r2,sym+rawCostPerKgChips.toFixed(0)+'/kg');
+    pop(r3,sym+Math.round(totalRevenue).toLocaleString());
+    const gm=Math.max(-99,Math.min(99,grossMargin));
+    pop(r4,(gm>0?'~':'')+gm.toFixed(0)+'%');
+    if(r4) r4.style.color=gm>25?'#00c896':gm>10?'#f59e0b':'#f43f5e';
+  }
+
+  [rawCostEl,batchEl,mrpEl].forEach(el=>el?.addEventListener('input',calc));
+  yieldEl?.addEventListener('input',calc);
+  // Re-run when locale changes
+  document.addEventListener('fc:locale-changed', calc);
+  // Add pop keyframe
+  const sty=document.createElement('style');
+  sty.textContent='@keyframes pop{0%{transform:scale(1)}50%{transform:scale(1.05)}100%{transform:scale(1)}}';
+  document.head.appendChild(sty);
+  calc();
+})();
+</script>
+</body>
+</html>

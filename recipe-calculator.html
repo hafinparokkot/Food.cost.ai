@@ -1,0 +1,561 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Recipe Cost Calculator – FoodCost AI | Free Food Costing Tool India</title>
+<meta name="description" content="Calculate the exact ingredient cost of any food recipe. Add ingredients, get cost per kg, cost per unit, and visual cost breakdowns. Free for Indian food businesses."/>
+<meta name="keywords" content="recipe cost calculator, food costing India, ingredient cost calculator, food cost per kg, bakery cost calculator"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+<script src="js/currency.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="nav" id="mainNav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__logo"><div class="nav__logo-mark">🍃</div><span class="nav__logo-text">FoodCost <em>AI</em></span></a>
+    <div class="nav__links" id="navLinks">
+      <a href="recipe-calculator.html" class="nav__link">Recipe Cost</a>
+      <a href="yield-calculator.html" class="nav__link">Yield Loss</a>
+      <a href="price-calculator.html" class="nav__link">Selling Price</a>
+      <a href="simulator.html" class="nav__link">What-If Simulator</a>
+      <a href="blog.html" class="nav__link">Resources</a>
+    </div>
+    <div class="nav__actions">
+      <button class="nav__theme" id="themeBtn" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span></button>
+      <button class="nav__burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="calc-page">
+  <div class="calc-hero">
+    <div class="wrap">
+      <div class="s-tag" style="margin-bottom:14px">📋 Recipe Cost Calculator</div>
+      <h1>Calculate True Recipe Cost</h1>
+      <p>Add every ingredient with purchase price, get instant cost per batch, cost per kg, cost per unit — with a visual breakdown of your biggest cost drivers. No spreadsheets needed.</p>
+    </div>
+  </div>
+
+  <div class="calc-body">
+    <div class="wrap">
+      <div class="calc-layout">
+
+        <!-- ── LEFT: INPUT ── -->
+        <div>
+
+          <!-- Recipe Info -->
+          <div class="card">
+            <div class="card__head">
+              <div class="card__title">📋 Recipe Information</div>
+              <button class="btn btn-surface btn-sm" id="tplBtn">📂 Load Example</button>
+            </div>
+            <div class="inp-grid inp-grid--3">
+              <div class="fg">
+                <label>Recipe / Product Name</label>
+                <input type="text" id="recipeName" class="inp" value="Banana Chips" placeholder="e.g. Banana Chips"/>
+              </div>
+              <div class="fg">
+                <label>Output Batch Size (kg) <i class="tt" title="Total finished product weight from this batch. e.g. 32 kg chips from 100 kg raw banana">?</i></label>
+                <input type="number" id="batchKg" class="inp" value="32" min="0.001" step="0.1"/>
+              </div>
+              <div class="fg">
+                <label>Units per Batch <i class="tt" title="How many packets/units does this batch produce? e.g. 320 packets of 100g">?</i></label>
+                <input type="number" id="batchUnits" class="inp" value="320" min="1"/>
+              </div>
+            </div>
+          </div>
+
+          <!-- Ingredients -->
+          <div class="card">
+            <div class="card__head">
+              <div class="card__title">🥗 Ingredients</div>
+            </div>
+            <div class="callout callout--info" style="margin-bottom:16px">
+              <span>💡</span>
+              <span><strong>Tip:</strong> Enter how much you <em>buy</em> (purchase qty &amp; cost) and how much you <em>use</em> in this recipe. We calculate the exact cost per ingredient automatically.</span>
+            </div>
+            <div class="ing-table-wrap">
+              <table class="ing-table" id="ingTable">
+                <thead>
+                  <tr>
+                    <th style="min-width:130px">Ingredient</th>
+                    <th style="min-width:80px">Use Qty</th>
+                    <th style="min-width:70px">Unit</th>
+                    <th style="min-width:80px">Buy Qty</th>
+                    <th style="min-width:70px">Unit</th>
+                    <th style="min-width:90px">Buy Cost (<span data-currency-symbol>₹</span>)</th>
+                    <th style="min-width:80px">Cost</th>
+                    <th style="min-width:44px">Share</th>
+                    <th style="width:36px"></th>
+                  </tr>
+                </thead>
+                <tbody id="ingBody"></tbody>
+              </table>
+            </div>
+            <button class="btn-add" id="addIngBtn" style="margin-top:10px">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              Add Ingredient
+            </button>
+          </div>
+
+          <!-- Overhead Costs -->
+          <div class="card">
+            <div class="card__head">
+              <div class="card__title">⚙️ Overhead Costs <span style="font-size:11px;color:var(--tx-4);font-weight:400">(per batch)</span></div>
+              <button class="btn btn-surface btn-sm" id="ohToggle">▼ Show</button>
+            </div>
+            <div id="ohPanel" style="display:none;margin-top:16px">
+              <div class="callout callout--info" style="margin-bottom:12px">
+                <span>💡</span>
+                <span>Add any overhead cost — electricity, packaging, labor, rent, marketing, etc. Name each item freely and enter the total cost per batch.</span>
+              </div>
+              <div class="ing-table-wrap" style="margin-bottom:10px">
+                <table class="ing-table" id="ohTable">
+                  <thead>
+                    <tr>
+                      <th style="min-width:40px">#</th>
+                      <th style="min-width:160px">Overhead Item</th>
+                      <th style="min-width:120px">Cost per Batch (<span data-currency-symbol></span>)</th>
+                      <th style="min-width:80px">% of Total</th>
+                      <th style="width:36px"></th>
+                    </tr>
+                  </thead>
+                  <tbody id="ohBody"></tbody>
+                  <tfoot>
+                    <tr style="background:var(--surface-2)">
+                      <td colspan="2" style="padding:10px 12px;font-size:12.5px;font-weight:700;color:var(--tx-2)">Total Overheads</td>
+                      <td style="padding:10px 12px;font-weight:800;color:var(--green);font-size:14px" id="ohTotalCell">₹0.00</td>
+                      <td colspan="2"></td>
+                    </tr>
+                  </tfoot>
+                </table>
+              </div>
+              <button class="btn-add" id="addOhBtn">
+                <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+                Add Overhead Item
+              </button>
+            </div>
+          </div>
+
+          <!-- Chart -->
+          <div class="card">
+            <div class="card__title" style="margin-bottom:16px">📊 Cost Breakdown</div>
+            <div class="chart-box"><canvas id="costChart"></canvas></div>
+            <div id="pctBars" class="pct-bars" style="margin-top:18px"></div>
+          </div>
+
+        </div>
+
+        <!-- ── RIGHT: RESULTS ── -->
+        <div>
+          <div class="res-panel">
+            <div class="card__title" style="margin-bottom:18px">📈 Cost Summary</div>
+            <div id="rName" style="font-size:11px;color:var(--tx-4);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:10px">Banana Chips</div>
+
+            <div class="res-row">
+              <span class="res-row__label">Ingredients Cost</span>
+              <span class="res-row__val" id="rIng">₹0.00</span>
+            </div>
+            <div class="res-row">
+              <span class="res-row__label">Overhead Cost</span>
+              <span class="res-row__val" id="rOh">₹0.00</span>
+            </div>
+            <div class="res-highlight">
+              <span class="res-row__label" style="font-weight:700">Total Batch Cost</span>
+              <span class="res-row__val res-row__val--big" id="rTotal">₹0.00</span>
+            </div>
+
+            <div class="res-row">
+              <span class="res-row__label">Cost per kg</span>
+              <span class="res-row__val" id="rPerKg">₹0.00 / kg</span>
+            </div>
+            <div class="res-row">
+              <span class="res-row__label">Cost per unit</span>
+              <span class="res-row__val" id="rPerUnit">₹0.00</span>
+            </div>
+            <div class="res-row">
+              <span class="res-row__label">Cost per 100g</span>
+              <span class="res-row__val" id="rPer100g">₹0.00</span>
+            </div>
+
+            <div class="insight" id="insightBox">
+              <strong>💡 Key Insight</strong>
+              <p id="insightTxt">Enter ingredients above to see your cost analysis.</p>
+            </div>
+
+            <div class="divider">Quick Profit Check</div>
+
+            <div class="fg">
+              <label>Your Selling Price (<span data-currency-symbol>₹</span>/unit) <i class="tt" title="What you charge per unit (packet, piece, etc.)">?</i></label>
+              <input type="number" id="sp" class="inp" placeholder="e.g. 40" min="0"/>
+            </div>
+
+            <div id="profitBlock" style="display:none">
+              <div class="res-row">
+                <span class="res-row__label">Profit per unit</span>
+                <span class="res-row__val" id="rProfit">₹0</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Profit margin %</span>
+                <span class="res-row__val" id="rProfitPct">0%</span>
+              </div>
+              <div class="profit-bar-wrap">
+                <div class="profit-bar-track"><div id="profitBar" class="profit-bar-fill profit-good" style="width:0%"></div></div>
+                <div class="profit-bar-labels"><span>0%</span><span>25%</span><span>50%</span></div>
+              </div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px;margin-top:20px">
+              <a href="price-calculator.html" class="btn btn-primary" style="justify-content:center">Set Selling Price &amp; MRP →</a>
+              <button onclick="window.print()" class="btn btn-ghost" style="justify-content:center">🖨️ Print Report</button>
+            </div>
+
+            <div class="callout callout--warn" style="margin-top:16px">
+              <span>📊</span>
+              <span><strong>Industry target:</strong> Food cost should be 28–35% of selling price. Above 40% needs attention.</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- SEO Content -->
+<section style="background:var(--surface-2);padding:56px 0">
+  <div class="wrap-narrow">
+    <h2 style="font-size:1.4rem;margin-bottom:14px">How to Use the Recipe Cost Calculator</h2>
+    <p style="color:var(--tx-3);margin-bottom:12px;line-height:1.72">The FoodCost AI Recipe Cost Calculator helps food manufacturers, bakeries, and home food businesses calculate the exact cost of any food product. Unlike simple food cost tools, this calculator accounts for the difference between your purchase quantity and the quantity actually used in a recipe.</p>
+    <h3 style="font-size:1rem;margin:18px 0 8px">Why This Matters for Indian Food Businesses</h3>
+    <p style="color:var(--tx-3);line-height:1.72">You buy oil in 15L tins but use only 5L per batch. You buy sugar in 50 kg bags but use 2 kg per recipe. By entering both purchase quantity and usage quantity, we calculate your exact cost per unit used — eliminating the most common pricing error in Indian food businesses.</p>
+    <h3 style="font-size:1rem;margin:18px 0 8px">Food Cost Benchmarks for India</h3>
+    <p style="color:var(--tx-3);line-height:1.72">Indian food industry benchmarks suggest food cost (ingredients only) should be 28–35% of selling price for full-service restaurants, 30–40% for packaged food manufacturers, and 35–45% for cloud kitchens and delivery businesses.</p>
+  </div>
+</section>
+
+<footer class="footer"><div class="wrap"><div class="footer__bottom">
+  <p>© 2026 FoodCost AI | <a href="index.html" style="color:var(--green)">Home</a> | <a href="yield-calculator.html" style="color:var(--green)">Yield Calculator</a> | <a href="price-calculator.html" style="color:var(--green)">Price Calculator</a></p>
+</div></div></footer>
+
+<script src="js/core.js"></script>
+<script>
+'use strict';
+// ════════════════════════════════════
+// RECIPE CALCULATOR ENGINE
+// ════════════════════════════════════
+const RC = {
+  id: 1,
+  chart: null,
+  COLORS: ['#00c896','#f59e0b','#6366f1','#f43f5e','#8b5cf6','#0ea5e9','#14b8a6','#ec4899','#84cc16','#f97316'],
+
+  TEMPLATES: {
+    banana: {
+      name:'Banana Chips', batchKg:32, batchUnits:320,
+      rows:[
+        {n:'Raw Banana',   uq:100, uu:'kg', bq:100, bu:'kg', bc:4000},
+        {n:'Coconut Oil',  uq:15,  uu:'L',  bq:15,  bu:'L',  bc:2250},
+        {n:'Salt',         uq:0.5, uu:'kg', bq:1,   bu:'kg', bc:25},
+        {n:'Turmeric',     uq:0.1, uu:'kg', bq:0.5, bu:'kg', bc:80},
+        {n:'Spice Mix',    uq:0.3, uu:'kg', bq:1,   bu:'kg', bc:180},
+      ]
+    },
+    bread: {
+      name:'Whole Wheat Bread', batchKg:20, batchUnits:20,
+      rows:[
+        {n:'Whole Wheat Flour', uq:20, uu:'kg', bq:50, bu:'kg', bc:2200},
+        {n:'Yeast',             uq:0.2,uu:'kg', bq:0.5,bu:'kg', bc:120},
+        {n:'Sugar',             uq:1,  uu:'kg', bq:50, bu:'kg', bc:2000},
+        {n:'Salt',              uq:0.3,uu:'kg', bq:1,  bu:'kg', bc:25},
+        {n:'Butter',            uq:1.5,uu:'kg', bq:5,  bu:'kg', bc:1200},
+        {n:'Water',             uq:12, uu:'L',  bq:12, bu:'L',  bc:0},
+      ]
+    },
+    jackfruit: {
+      name:'Jackfruit Chips', batchKg:25, batchUnits:250,
+      rows:[
+        {n:'Raw Jackfruit',  uq:100, uu:'kg', bq:100, bu:'kg', bc:5000},
+        {n:'Coconut Oil',    uq:12,  uu:'L',  bq:15,  bu:'L',  bc:2250},
+        {n:'Salt',           uq:0.5, uu:'kg', bq:1,   bu:'kg', bc:25},
+        {n:'Chilli Powder',  uq:0.2, uu:'kg', bq:0.5, bu:'kg', bc:150},
+      ]
+    }
+  },
+
+  ohId: 1,
+
+  init() {
+    document.getElementById('addIngBtn')?.addEventListener('click', () => this.addRow());
+    document.getElementById('addOhBtn')?.addEventListener('click', () => this.addOhRow());
+    document.getElementById('tplBtn')?.addEventListener('click', (e) => this.showMenu(e.currentTarget));
+    ['recipeName','batchKg','batchUnits'].forEach(id => document.getElementById(id)?.addEventListener('input', () => this.calc()));
+    document.getElementById('sp')?.addEventListener('input', () => this.calcProfit());
+
+    // Overhead toggle
+    const ohp = document.getElementById('ohPanel');
+    const oht = document.getElementById('ohToggle');
+    let ohOpen = false;
+    oht?.addEventListener('click', () => {
+      ohOpen = !ohOpen;
+      ohp.style.display = ohOpen ? 'block' : 'none';
+      oht.textContent = ohOpen ? '▲ Hide' : '▼ Show';
+    });
+
+    this.loadTemplate('banana');
+  },
+
+  // Add an overhead row dynamically
+  addOhRow(d = {}) {
+    const id = this.ohId++;
+    const tbody = document.getElementById('ohBody');
+    const tr = document.createElement('tr');
+    tr.id = 'oh_' + id;
+    tr.innerHTML = `
+      <td style="padding:8px 10px;font-size:12px;color:var(--tx-4);font-weight:700;text-align:center">${id}</td>
+      <td class="td-inp">
+        <input type="text" value="${d.name || ''}" placeholder="e.g. Electricity, Packaging…"
+          style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;
+                 background:var(--surface);color:var(--tx-1);font-size:13px;font-family:var(--font);
+                 transition:border-color .13s;"
+          id="ohn_${id}"
+          oninput="RC.calcOhRow(${id})"
+          onfocus="this.style.borderColor='var(--green)'"
+          onblur="this.style.borderColor='var(--border)'"/>
+      </td>
+      <td class="td-inp">
+        <input type="number" value="${d.cost !== undefined ? d.cost : ''}" min="0" step="0.01" placeholder="0.00"
+          style="width:100%;padding:7px 10px;border:1.5px solid var(--border);border-radius:6px;
+                 background:var(--surface);color:var(--tx-1);font-size:13px;font-family:var(--font);
+                 transition:border-color .13s;"
+          id="ohc_${id}"
+          oninput="RC.calcOhRow(${id})"
+          onfocus="this.style.borderColor='var(--green)'"
+          onblur="this.style.borderColor='var(--border)'"/>
+      </td>
+      <td style="padding:0 8px;font-size:12px;color:var(--tx-3);font-weight:600;white-space:nowrap" id="ohp_${id}">—</td>
+      <td><button class="btn-del" onclick="RC.delOhRow(${id})">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+    this.calc();
+  },
+
+  delOhRow(id) {
+    document.getElementById('oh_' + id)?.remove();
+    this.calc();
+  },
+
+  calcOhRow(id) {
+    this.calc();
+  },
+
+  showMenu(btn) {
+    const ex = document.getElementById('tplMenu'); if(ex){ex.remove();return;}
+    const m = document.createElement('div');
+    m.id = 'tplMenu';
+    m.style.cssText = 'position:absolute;z-index:200;background:var(--surface);border:1px solid var(--border);border-radius:12px;box-shadow:0 12px 32px rgba(0,0,0,.2);padding:8px;min-width:200px;margin-top:6px';
+    [['banana','🍌 Banana Chips'],['bread','🍞 Whole Wheat Bread'],['jackfruit','🌿 Jackfruit Chips']].forEach(([k,l]) => {
+      const it = document.createElement('button');
+      it.style.cssText = 'display:block;width:100%;text-align:left;padding:9px 14px;font-size:13.5px;border-radius:8px;cursor:pointer;background:none;border:none;color:var(--tx-1);font-family:Inter,sans-serif;transition:background .1s';
+      it.textContent = l;
+      it.onmouseenter = () => it.style.background='var(--surface-2)';
+      it.onmouseleave = () => it.style.background='none';
+      it.onclick = () => { this.loadTemplate(k); m.remove(); FC.Toast.show('Loaded: '+l,'success'); };
+      m.appendChild(it);
+    });
+    btn.style.position = 'relative';
+    btn.appendChild(m);
+    setTimeout(() => document.addEventListener('click',()=>m.remove(),{once:true}),0);
+  },
+
+  // Default overhead rows to seed when loading a template
+  DEFAULT_OH: [
+    { name: '🔌 Electricity / Gas',  cost: 0 },
+    { name: '📦 Packaging',           cost: 0 },
+    { name: '👷 Labor',               cost: 0 },
+    { name: '🏭 Rent / Factory',      cost: 0 },
+    { name: '💧 Water / Misc',        cost: 0 },
+    { name: '🚗 Transport',           cost: 0 },
+  ],
+
+  loadTemplate(key) {
+    const t = this.TEMPLATES[key]; if(!t) return;
+    document.getElementById('recipeName').value = t.name;
+    document.getElementById('batchKg').value = t.batchKg;
+    document.getElementById('batchUnits').value = t.batchUnits;
+    // Reset ingredients
+    document.getElementById('ingBody').innerHTML = '';
+    this.id = 1;
+    t.rows.forEach(r => this.addRow(r));
+    // Reset overheads to defaults
+    document.getElementById('ohBody').innerHTML = '';
+    this.ohId = 1;
+    this.DEFAULT_OH.forEach(oh => this.addOhRow(oh));
+    this.calc();
+  },
+
+  addRow(d={}) {
+    const id = this.id++;
+    const tbody = document.getElementById('ingBody');
+    const tr = document.createElement('tr');
+    tr.id = 'ir_'+id;
+    tr.innerHTML = `
+      <td class="td-inp"><input type="text" value="${d.n||''}" placeholder="Ingredient" data-id="${id}" data-f="n"/></td>
+      <td class="td-inp" style="min-width:74px"><input type="number" value="${d.uq||''}" min="0" step="0.01" placeholder="0" data-id="${id}" data-f="uq" style="min-width:64px"/></td>
+      <td class="td-inp"><select data-id="${id}" data-f="uu">${FC.Units.options(d.uu||'kg')}</select></td>
+      <td class="td-inp" style="min-width:74px"><input type="number" value="${d.bq||''}" min="0" step="0.01" placeholder="0" data-id="${id}" data-f="bq" style="min-width:64px"/></td>
+      <td class="td-inp"><select data-id="${id}" data-f="bu">${FC.Units.options(d.bu||'kg')}</select></td>
+      <td class="td-inp" style="min-width:84px"><input type="number" value="${d.bc||''}" min="0" step="0.01" placeholder="0" data-id="${id}" data-f="bc" style="min-width:74px"/></td>
+      <td class="td-cost" id="ic_${id}">₹0</td>
+      <td class="td-pct" id="ip_${id}">0%</td>
+      <td><button class="btn-del" data-del="${id}">✕</button></td>
+    `;
+    tbody.appendChild(tr);
+    tr.querySelectorAll('[data-id]').forEach(el => el.addEventListener('input', () => this.calc()));
+    tr.querySelectorAll('[data-id]').forEach(el => el.addEventListener('change', () => this.calc()));
+    tr.querySelector('[data-del]').addEventListener('click', e => {
+      document.getElementById('ir_'+e.currentTarget.dataset.del)?.remove(); this.calc();
+    });
+  },
+
+  getRows() {
+    return Array.from(document.querySelectorAll('#ingBody tr')).map(tr => {
+      const g = f => tr.querySelector(`[data-f="${f}"]`)?.value;
+      const uq = parseFloat(g('uq'))||0, bq = parseFloat(g('bq'))||1, bc = parseFloat(g('bc'))||0;
+      const uqBase = FC.Units.toBase(uq, g('uu')||'kg');
+      const bqBase = FC.Units.toBase(bq, g('bu')||'kg');
+      const cpb = bqBase>0 ? bc/bqBase : 0;
+      const cost = uqBase * cpb;
+      return { id: tr.id.replace('ir_',''), name: g('n')||'Ingredient', cost };
+    });
+  },
+
+  getOhRows() {
+    return Array.from(document.querySelectorAll('#ohBody tr')).map(tr => {
+      const id = tr.id.replace('oh_', '');
+      return {
+        id,
+        name: document.getElementById('ohn_' + id)?.value || 'Overhead',
+        cost: parseFloat(document.getElementById('ohc_' + id)?.value) || 0
+      };
+    });
+  },
+
+  getOH() {
+    return this.getOhRows().reduce((s, r) => s + r.cost, 0);
+  },
+
+  calc() {
+    const rows = this.getRows();
+    const ohRows = this.getOhRows();
+    const ingTotal = rows.reduce((s,r) => s+r.cost, 0);
+    const oh = ohRows.reduce((s,r) => s+r.cost, 0);
+    const total = ingTotal + oh;
+    const bkg = parseFloat(document.getElementById('batchKg')?.value)||1;
+    const bku = parseFloat(document.getElementById('batchUnits')?.value)||1;
+    const cpkg = total/bkg, cpu = total/bku, cp100 = cpkg*0.1;
+
+    // Update ingredient row cells
+    rows.forEach(r => {
+      const ce = document.getElementById('ic_'+r.id), pe = document.getElementById('ip_'+r.id);
+      if(ce) ce.textContent = '₹'+r.cost.toFixed(2);
+      if(pe) pe.textContent = total>0 ? (r.cost/total*100).toFixed(1)+'%' : '0%';
+    });
+
+    // Update overhead row % cells and footer total
+    ohRows.forEach(r => {
+      const pe = document.getElementById('ohp_'+r.id);
+      if(pe) pe.textContent = total>0 ? (r.cost/total*100).toFixed(1)+'%' : '—';
+    });
+    const ohCell = document.getElementById('ohTotalCell');
+    if(ohCell) ohCell.textContent = '₹'+oh.toFixed(2);
+
+    const s = (id,v) => { const e=document.getElementById(id); if(e) e.textContent=v; };
+    s('rName', document.getElementById('recipeName')?.value || 'Recipe');
+    s('rIng', '₹'+ingTotal.toFixed(2));
+    s('rOh',  '₹'+oh.toFixed(2));
+    s('rTotal', '₹'+total.toFixed(2));
+    s('rPerKg', '₹'+cpkg.toFixed(2)+' / kg');
+    s('rPerUnit', '₹'+cpu.toFixed(2));
+    s('rPer100g', '₹'+cp100.toFixed(2));
+
+    // Insight — find biggest cost across ingredients + overheads
+    const allCosts = [
+      ...rows.map(r => ({ name: r.name, cost: r.cost })),
+      ...ohRows.filter(r => r.cost > 0).map(r => ({ name: r.name.replace(/^[^ ]+ /, ''), cost: r.cost }))
+    ];
+    if(allCosts.length && total>0) {
+      const big = allCosts.reduce((a,b) => a.cost>b.cost?a:b);
+      const pct = (big.cost/total*100).toFixed(0);
+      document.getElementById('insightTxt').textContent =
+        `"${big.name}" is your biggest cost at ₹${big.cost.toFixed(2)} — ${pct}% of total batch cost. Consider bulk purchasing or substitution to reduce this.`;
+    }
+
+    this.updateChart(rows, ohRows);
+    this.updateBars(rows, ohRows, total);
+    this.calcProfit();
+  },
+
+  calcProfit() {
+    const sp = parseFloat(document.getElementById('sp')?.value);
+    const bku = parseFloat(document.getElementById('batchUnits')?.value)||1;
+    const total = (this.getRows().reduce((s,r)=>s+r.cost,0) + this.getOH());
+    const cpu = total/bku;
+    const pb = document.getElementById('profitBlock');
+    if(!sp || isNaN(sp)) { if(pb) pb.style.display='none'; return; }
+    if(pb) pb.style.display='block';
+    const profit = sp-cpu, pct = profit/sp*100;
+    const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    s('rProfit', (profit>=0?'₹':'-₹')+Math.abs(profit).toFixed(2));
+    s('rProfitPct', pct.toFixed(1)+'%');
+    const profitEl = document.getElementById('rProfit');
+    if(profitEl) profitEl.style.color = profit >= 0 ? 'var(--green)' : 'var(--rose)';
+    const bar=document.getElementById('profitBar');
+    if(bar){
+      bar.style.width=Math.max(0,Math.min(100,pct))+'%';
+      bar.className='profit-bar-fill '+(pct>=25?'profit-good':pct>=10?'profit-ok':'profit-bad');
+    }
+  },
+
+  updateChart(rows, ohRows) {
+    const ctx=document.getElementById('costChart')?.getContext('2d');
+    if(!ctx) return;
+    // Each overhead item gets its own slice if it has a cost
+    const labels = rows.filter(r=>r.cost>0).map(r=>r.name);
+    const data   = rows.filter(r=>r.cost>0).map(r=>r.cost);
+    ohRows.filter(r=>r.cost>0).forEach(r => {
+      // Strip emoji prefix for cleaner label
+      labels.push(r.name.replace(/^\S+ /, '') || 'Overhead');
+      data.push(r.cost);
+    });
+    if(!labels.length) return;
+    if(this.chart){this.chart.destroy();this.chart=null;}
+    this.chart = FC.Charts.doughnut(ctx, labels, data);
+  },
+
+  updateBars(rows, ohRows, total) {
+    const c=document.getElementById('pctBars');
+    if(!c||!total) return;
+    // Combine ingredients + overhead items, sort by cost descending
+    const all = [
+      ...rows.map(r => ({ name: r.name, cost: r.cost })),
+      ...ohRows.filter(r=>r.cost>0).map(r => ({ name: r.name.replace(/^\S+ /, '') || 'Overhead', cost: r.cost }))
+    ].filter(r=>r.cost>0).sort((a,b)=>b.cost-a.cost);
+    c.innerHTML=all.map((r,i)=>{
+      const pct=(r.cost/total*100).toFixed(1);
+      const col=this.COLORS[i%this.COLORS.length];
+      return `<div class="pct-row">
+        <span class="pct-row__label" title="${r.name}">${r.name}</span>
+        <div class="pct-row__track"><div class="pct-row__fill" style="width:${pct}%;background:${col}"></div></div>
+        <span class="pct-row__val">${pct}%</span>
+      </div>`;
+    }).join('');
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => RC.init());
+document.addEventListener('fc:locale-changed', () => RC.recalculate());
+</script>
+</body>
+</html>

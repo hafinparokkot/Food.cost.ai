@@ -1,0 +1,315 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Privacy Policy – FoodCost AI</title>
+<meta name="description" content="FoodCost AI Privacy Policy. We respect your privacy. All food cost calculations happen entirely in your browser — no data is sent to our servers."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+<style>
+/* ── LEGAL PAGE LAYOUT ── */
+.legal-layout{display:grid;grid-template-columns:240px 1fr;gap:48px;align-items:start;padding:60px 0 100px}
+.legal-toc{
+  position:sticky;top:calc(var(--nav-h) + 24px);
+  background:var(--surface);border:1px solid var(--border);
+  border-radius:var(--r-xl);padding:22px;
+}
+.legal-toc__title{
+  font-size:11px;font-weight:700;text-transform:uppercase;
+  letter-spacing:.08em;color:var(--tx-4);margin-bottom:14px;
+}
+.legal-toc__list{display:flex;flex-direction:column;gap:4px}
+.legal-toc__link{
+  display:block;padding:7px 10px;border-radius:var(--r-sm);
+  font-size:13px;color:var(--tx-3);
+  transition:color var(--fast),background var(--fast);
+  line-height:1.4;
+}
+.legal-toc__link:hover{color:var(--green);background:var(--green-pale)}
+.legal-toc__link.active{color:var(--green);background:var(--green-pale);font-weight:600}
+.legal-content{max-width:740px}
+.legal-section{
+  padding:40px 0;border-bottom:1px solid var(--border);
+}
+.legal-section:last-child{border-bottom:none;padding-bottom:0}
+.legal-section h2{
+  font-size:1.3rem;letter-spacing:-.3px;margin-bottom:16px;
+  display:flex;align-items:center;gap:10px;
+}
+.legal-section h2 .legal-num{
+  width:30px;height:30px;border-radius:50%;flex-shrink:0;
+  background:var(--green-pale);border:1px solid rgba(0,200,150,.22);
+  color:var(--green);font-size:12px;font-weight:800;
+  display:flex;align-items:center;justify-content:center;
+}
+.legal-section p{
+  font-size:.95rem;color:var(--tx-3);line-height:1.82;margin-bottom:14px;
+}
+.legal-section p:last-child{margin-bottom:0}
+.legal-section ul{
+  display:flex;flex-direction:column;gap:9px;
+  margin:14px 0;padding-left:4px;
+}
+.legal-section ul li{
+  font-size:.93rem;color:var(--tx-3);line-height:1.7;
+  display:flex;align-items:flex-start;gap:10px;padding-left:4px;
+}
+.legal-section ul li::before{
+  content:'·';color:var(--green);font-weight:900;
+  font-size:1.2rem;line-height:1.4;flex-shrink:0;
+}
+.legal-highlight{
+  background:var(--green-pale);border:1px solid rgba(0,200,150,.2);
+  border-radius:var(--r-lg);padding:18px 20px;
+  display:flex;gap:12px;align-items:flex-start;
+  margin:20px 0;
+}
+.legal-highlight__icon{font-size:22px;flex-shrink:0}
+.legal-highlight p{font-size:.9rem;color:var(--tx-2);margin-bottom:0 !important;line-height:1.7}
+.legal-highlight p strong{color:var(--green)}
+.legal-chip{
+  display:inline-flex;align-items:center;gap:6px;
+  padding:3px 10px;border-radius:var(--r-full);
+  font-size:11px;font-weight:700;
+  background:rgba(99,102,241,.08);color:var(--indigo);
+  border:1px solid rgba(99,102,241,.2);margin:2px 3px;
+}
+@media(max-width:900px){.legal-layout{grid-template-columns:1fr}.legal-toc{display:none}}
+</style>
+</head>
+<body>
+<nav class='nav' id='mainNav'><div class='nav__inner'><a href='index.html' class='nav__logo'><div class='nav__logo-mark'>🍃</div><span class='nav__logo-text'>FoodCost <em>AI</em></span></a><div class='nav__links' id='navLinks'><a href='recipe-calculator.html' class='nav__link'>Recipe Cost</a><a href='yield-calculator.html' class='nav__link'>Yield Loss</a><a href='price-calculator.html' class='nav__link'>Selling Price</a><a href='simulator.html' class='nav__link'>What-If Simulator</a><a href='blog.html' class='nav__link'>Resources</a></div><div class='nav__actions'><button class='nav__theme' id='themeBtn' aria-label='Toggle dark mode'><span id='themeIcon'>🌙</span></button><button class='nav__burger' id='navBurger' aria-label='Menu'><span></span><span></span><span></span></button></div></div></nav>
+
+<div style="padding-top:var(--nav-h)">
+
+  <!-- Hero -->
+  <div style="background:linear-gradient(135deg,var(--surface-2) 0%,var(--surface) 100%);padding:60px 0 44px;border-bottom:1px solid var(--border);position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 50% 70% at 50% 0%,rgba(0,200,150,.08) 0%,transparent 60%)"></div>
+    <div class="wrap" style="position:relative;z-index:1">
+      <div style="display:flex;align-items:center;gap:10px;margin-bottom:12px">
+        <a href="index.html" style="font-size:13px;color:var(--tx-4);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-4)'">Home</a>
+        <span style="color:var(--tx-4)">/</span>
+        <span style="font-size:13px;color:var(--tx-3)">Privacy Policy</span>
+      </div>
+      <div class="s-tag" style="margin-bottom:14px">Legal</div>
+      <h1 style="font-size:clamp(1.8rem,4vw,2.8rem);letter-spacing:-1px;margin-bottom:12px">Privacy Policy</h1>
+      <p style="font-size:.95rem;color:var(--tx-3)">Effective date: <strong style="color:var(--tx-2)">June 1, 2026</strong> &nbsp;·&nbsp; Last updated: <strong style="color:var(--tx-2)">June 14, 2026</strong></p>
+    </div>
+  </div>
+
+  <!-- Content -->
+  <div class="wrap">
+    <div class="legal-layout">
+
+      <!-- Table of Contents -->
+      <nav class="legal-toc" aria-label="Table of contents">
+        <div class="legal-toc__title">On this page</div>
+        <div class="legal-toc__list">
+          <a href="#overview" class="legal-toc__link">Overview</a>
+          <a href="#information" class="legal-toc__link">Information We Collect</a>
+          <a href="#how-we-use" class="legal-toc__link">How We Use Information</a>
+          <a href="#cookies" class="legal-toc__link">Cookies</a>
+          <a href="#third-party" class="legal-toc__link">Third-Party Services</a>
+          <a href="#data-security" class="legal-toc__link">Data Security</a>
+          <a href="#changes" class="legal-toc__link">Changes to Policy</a>
+          <a href="#contact" class="legal-toc__link">Contact Us</a>
+        </div>
+      </nav>
+
+      <!-- Main Content -->
+      <div class="legal-content">
+
+        <!-- Overview -->
+        <div class="legal-section" id="overview">
+          <div class="legal-highlight">
+            <span class="legal-highlight__icon">🔒</span>
+            <p><strong>Privacy-First Design:</strong> FoodCost AI is built so that <strong>all food cost calculations happen entirely within your browser</strong>. The numbers you enter — ingredient costs, quantities, recipes — are <strong>never transmitted to our servers</strong>. We do not store, process, or retain your calculation data. This page explains what limited information we do collect through standard web analytics.</p>
+          </div>
+          <p>FoodCost AI ("we", "our", or "us") is committed to protecting your privacy. This Privacy Policy explains how we collect, use, and safeguard information when you visit our website at <strong>foodcostai.com</strong> (the "Site"). By using the Site, you agree to the practices described in this policy.</p>
+        </div>
+
+        <!-- 1. Information We Collect -->
+        <div class="legal-section" id="information">
+          <h2><span class="legal-num">1</span> Information We Collect</h2>
+          <p>We collect minimal information necessary to understand how our tools are used and to improve them. We do <strong>not</strong> collect personally identifiable information unless you voluntarily provide it (e.g., via our contact form).</p>
+
+          <p><strong style="color:var(--tx-2)">Analytics Data (Automatically Collected)</strong></p>
+          <ul>
+            <li>Pages visited and time spent on each page</li>
+            <li>General geographic region (country/city level — not precise location)</li>
+            <li>Browser type, operating system, and device category</li>
+            <li>Referring website (how you found us)</li>
+            <li>Interactions with calculator tools (e.g., which calculator was used) — but <strong>not</strong> the values you enter</li>
+          </ul>
+
+          <p><strong style="color:var(--tx-2)">Information You Voluntarily Provide</strong></p>
+          <ul>
+            <li>Name and email address when you submit our contact form</li>
+            <li>Message content you send us</li>
+          </ul>
+
+          <div class="callout callout--success" style="margin-top:16px">
+            <span>✅</span>
+            <div><strong>What we do NOT collect:</strong> We do not collect, store, or process any ingredient data, recipe data, cost figures, or any numbers you enter into our calculators. All calculations run locally in your browser and are discarded when you close the tab.</div>
+          </div>
+        </div>
+
+        <!-- 2. How We Use Information -->
+        <div class="legal-section" id="how-we-use">
+          <h2><span class="legal-num">2</span> How We Use Information</h2>
+          <p>We use the limited information we collect for the following purposes:</p>
+          <ul>
+            <li>To understand which calculators and content are most useful to our users</li>
+            <li>To improve the performance, design, and functionality of the Site</li>
+            <li>To respond to your enquiries when you contact us</li>
+            <li>To detect and fix technical issues</li>
+            <li>To comply with legal obligations</li>
+          </ul>
+          <p>We do <strong>not</strong> sell, rent, or share your information with third parties for marketing purposes. We do not use your data to build advertising profiles.</p>
+        </div>
+
+        <!-- 3. Cookies -->
+        <div class="legal-section" id="cookies">
+          <h2><span class="legal-num">3</span> Cookies</h2>
+          <p>We use cookies and similar tracking technologies for the following purposes:</p>
+
+          <p><strong style="color:var(--tx-2)">Essential Cookies</strong></p>
+          <ul>
+            <li>Storing your dark/light mode preference (saved in <code style="font-size:12px;background:var(--surface-2);padding:2px 6px;border-radius:4px;color:var(--green)">localStorage</code>)</li>
+            <li>Remembering any calculator preferences you set during your session</li>
+          </ul>
+
+          <p><strong style="color:var(--tx-2)">Analytics Cookies</strong></p>
+          <ul>
+            <li>Google Analytics cookies to track aggregate, anonymous usage statistics</li>
+            <li>These cookies do not identify you personally</li>
+          </ul>
+
+          <p><strong style="color:var(--tx-2)">Advertising Cookies</strong></p>
+          <ul>
+            <li>Google AdSense may set cookies to show relevant advertisements</li>
+            <li>These are controlled by Google's own privacy policy</li>
+          </ul>
+
+          <p>You can control cookies through your browser settings. Disabling cookies may affect some Site functionality, but will not prevent you from using any of our calculators.</p>
+        </div>
+
+        <!-- 4. Third-Party Services -->
+        <div class="legal-section" id="third-party">
+          <h2><span class="legal-num">4</span> Third-Party Services</h2>
+          <p>FoodCost AI uses the following third-party services. Each has its own privacy policy that governs how they handle data:</p>
+
+          <div style="display:flex;flex-direction:column;gap:14px;margin-top:16px">
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                <span style="font-size:22px">📊</span>
+                <strong style="font-size:.97rem">Google Analytics</strong>
+                <span class="legal-chip">Analytics</span>
+              </div>
+              <p style="font-size:.88rem;margin-bottom:8px">We use Google Analytics 4 to collect anonymous usage data. Google Analytics uses cookies to track session data, page views, and user interactions in aggregate form. IP addresses are anonymised. No personal food cost data is shared.</p>
+              <a href="https://policies.google.com/privacy" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--green)">Google Privacy Policy →</a>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                <span style="font-size:22px">💡</span>
+                <strong style="font-size:.97rem">Google AdSense</strong>
+                <span class="legal-chip">Advertising</span>
+              </div>
+              <p style="font-size:.88rem;margin-bottom:8px">We display advertisements through Google AdSense to support the free operation of this site. Google may use cookies to serve personalised ads based on your browsing history. You can opt out of personalised ads via Google's Ad Settings.</p>
+              <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--green)">Manage Google Ad Settings →</a>
+            </div>
+            <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px">
+              <div style="display:flex;align-items:center;gap:10px;margin-bottom:10px">
+                <span style="font-size:22px">🖋️</span>
+                <strong style="font-size:.97rem">Google Fonts</strong>
+                <span class="legal-chip">Typography</span>
+              </div>
+              <p style="font-size:.88rem;margin-bottom:8px">We load fonts (Inter and Outfit) from Google Fonts. This may result in Google receiving your IP address and browser information when fonts are loaded. Google Fonts does not set cookies or track users for advertising.</p>
+              <a href="https://fonts.google.com/about" target="_blank" rel="noopener" style="font-size:12.5px;color:var(--green)">Google Fonts Privacy →</a>
+            </div>
+          </div>
+        </div>
+
+        <!-- 5. Data Security -->
+        <div class="legal-section" id="data-security">
+          <h2><span class="legal-num">5</span> Data Security</h2>
+          <p>We take the security of your information seriously. Our approach to data security includes:</p>
+          <ul>
+            <li>All traffic to this site is served over HTTPS (encrypted in transit)</li>
+            <li>All calculator computations happen locally in your browser — no calculation data is ever transmitted</li>
+            <li>Contact form submissions are handled securely and stored only as long as necessary to respond</li>
+            <li>We do not maintain databases of user calculation history</li>
+          </ul>
+          <p>No method of data transmission over the internet is 100% secure. While we take commercially reasonable steps to protect your information, we cannot guarantee absolute security. If you believe your information has been compromised, please contact us immediately.</p>
+        </div>
+
+        <!-- 6. Children's Privacy -->
+        <div class="legal-section">
+          <h2><span class="legal-num">6</span> Children's Privacy</h2>
+          <p>FoodCost AI is designed for food business professionals and is not directed at children under 13. We do not knowingly collect personal information from children. If you believe we have inadvertently collected information from a child, please contact us and we will delete it promptly.</p>
+        </div>
+
+        <!-- 7. Changes to Policy -->
+        <div class="legal-section" id="changes">
+          <h2><span class="legal-num">7</span> Changes to This Policy</h2>
+          <p>We may update this Privacy Policy from time to time to reflect changes in our practices, technology, or legal requirements. When we make material changes, we will update the "Last updated" date at the top of this page.</p>
+          <p>We encourage you to review this policy periodically. Continued use of FoodCost AI after changes are posted constitutes your acceptance of the updated policy.</p>
+        </div>
+
+        <!-- 8. Contact -->
+        <div class="legal-section" id="contact">
+          <h2><span class="legal-num">8</span> Contact Us</h2>
+          <p>If you have questions about this Privacy Policy or how your information is handled, please contact us:</p>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:24px;display:flex;flex-direction:column;gap:12px;margin-top:8px">
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:18px">📧</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-4);margin-bottom:2px">Email</div>
+                <a href="mailto:hello@foodcostai.com" style="font-size:15px;font-weight:600;color:var(--green)">hello@foodcostai.com</a>
+              </div>
+            </div>
+            <div style="display:flex;align-items:center;gap:10px">
+              <span style="font-size:18px">📋</span>
+              <div>
+                <div style="font-size:11.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--tx-4);margin-bottom:2px">Contact Form</div>
+                <a href="contact.html" style="font-size:15px;font-weight:600;color:var(--green)">Send us a message →</a>
+              </div>
+            </div>
+          </div>
+          <p style="margin-top:16px">We aim to respond to all privacy-related enquiries within 5 business days.</p>
+        </div>
+
+      </div><!-- /.legal-content -->
+    </div><!-- /.legal-layout -->
+  </div><!-- /.wrap -->
+
+</div>
+
+<footer class="footer" style="border-top:1px solid var(--border);background:var(--surface-2);padding:28px 0">
+  <div class="wrap">
+    <div class="footer__bottom" style="border-top:none;padding-top:0">
+      <p>© 2026 FoodCost AI. All rights reserved. Built for 🇮🇳 India. &nbsp;·&nbsp; <a href="privacy.html" style="color:var(--green)">Privacy</a> &nbsp;·&nbsp; <a href="terms.html" style="color:var(--tx-3);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-3)'">Terms</a> &nbsp;·&nbsp; <a href="contact.html" style="color:var(--tx-3);transition:color var(--fast)" onmouseover="this.style.color='var(--green)'" onmouseout="this.style.color='var(--tx-3)'">Contact</a></p>
+    </div>
+  </div>
+</footer>
+
+<script>
+// Table of contents active link tracking
+const sections = document.querySelectorAll('.legal-section');
+const tocLinks = document.querySelectorAll('.legal-toc__link');
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const id = entry.target.id;
+      tocLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + id);
+      });
+    }
+  });
+}, { rootMargin: '-30% 0px -60% 0px' });
+sections.forEach(s => { if (s.id) observer.observe(s); });
+</script>
+<script src="js/core.js"></script>
+</body>
+</html>

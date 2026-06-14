@@ -1,0 +1,439 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Selling Price Calculator – FoodCost AI | Tax &amp; MRP Calculator</title>
+<meta name="description" content="Calculate the correct selling price for your food product. Includes GST, distributor margins, retailer margins and MRP calculation. Reverse pricing calculator — enter target MRP and find maximum allowable cost."/>
+<meta name="keywords" content="selling price calculator India, MRP calculator, GST food calculator, distributor margin calculator, food product pricing India"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+<script src="js/currency.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="nav" id="mainNav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__logo"><div class="nav__logo-mark">🍃</div><span class="nav__logo-text">FoodCost <em>AI</em></span></a>
+    <div class="nav__links" id="navLinks">
+      <a href="recipe-calculator.html" class="nav__link">Recipe Cost</a>
+      <a href="yield-calculator.html" class="nav__link">Yield Loss</a>
+      <a href="price-calculator.html" class="nav__link">Selling Price</a>
+      <a href="simulator.html" class="nav__link">What-If Simulator</a>
+      <a href="blog.html" class="nav__link">Resources</a>
+    </div>
+    <div class="nav__actions">
+      <button class="nav__theme" id="themeBtn" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span></button>
+      <button class="nav__burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="calc-page">
+  <div class="calc-hero">
+    <div class="wrap">
+      <div class="s-tag s-tag--indigo" style="margin-bottom:14px">💰 Selling Price Calculator</div>
+      <h1>Calculate Correct Selling Price &amp; MRP</h1>
+      <p>Build your complete pricing stack — from factory cost to consumer price. Includes configurable tax, C&amp;F agent, distributor, and retailer margins. Supports both forward (cost → price) and reverse (target price → max cost) calculation.</p>
+    </div>
+  </div>
+
+  <div class="calc-body">
+    <div class="wrap">
+
+      <!-- Mode Toggle -->
+      <div style="display:flex;gap:9px;margin-bottom:28px;flex-wrap:wrap">
+        <button class="btn btn-primary btn-sm" id="modeForward">Forward: Cost → MRP</button>
+        <button class="btn btn-ghost btn-sm" id="modeReverse">Reverse: MRP → Max Cost</button>
+      </div>
+
+      <div class="calc-layout">
+        <!-- ── LEFT ── -->
+        <div>
+
+          <!-- Forward mode -->
+          <div id="forwardPanel">
+            <div class="card">
+              <div class="card__head">
+                <div class="card__title">🏭 Product &amp; Manufacturing Cost</div>
+              </div>
+              <div class="inp-grid inp-grid--2">
+                <div class="fg">
+                  <label>Product Name</label>
+                  <input type="text" id="pName" class="inp" value="Banana Chips (100g)"/>
+                </div>
+                <div class="fg">
+                  <label>Manufacturing Cost per Unit (<span data-currency-symbol>₹</span>) <i class="tt" title="Total cost to make one unit — ingredients + packaging + labor + overheads">?</i></label>
+                  <input type="number" id="mfgCost" class="inp" value="14" min="0" step="0.01"/>
+                </div>
+                <div class="fg">
+                  <label>Target Profit Margin (%) <i class="tt" title="Your desired profit on factory selling price. 25% means ₹25 profit for every ₹100 sold">?</i></label>
+                  <input type="number" id="targetMargin" class="inp" value="30" min="0" max="90" step="0.5"/>
+                </div>
+                <div class="fg">
+                  <label><span data-tax-label>Tax</span> Rate (%) <i class="tt" title="Set your applicable tax rate. Use the ⚙️ settings button to configure your tax system.">?</i></label>
+                  <select id="gstRate" class="sel" data-tax-select>
+                    <option value="0">0% — Exempt</option>
+                    <option value="5" selected>5% — GST</option>
+                    <option value="12">12% — GST</option>
+                    <option value="18">18% — GST</option>
+                    <option value="28">28% — GST</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+
+            <div class="card">
+              <div class="card__head">
+                <div class="card__title">🚚 Distribution Channel Margins</div>
+              </div>
+              <div class="callout callout--info" style="margin-bottom:16px">
+                <span>ℹ️</span>
+                <span>Set each margin to 0 if you sell directly without that channel. E.g., if you sell directly to retailers, set C&amp;F Agent to 0.</span>
+              </div>
+              <div class="inp-grid inp-grid--2">
+                <div class="fg">
+                  <label>C&amp;F Agent Margin (%) <i class="tt" title="Carrying and Forwarding agent margin. Typically 3–5%. Set to 0 if not applicable.">?</i></label>
+                  <input type="number" id="cnfMargin" class="inp" value="0" min="0" max="50" step="0.5"/>
+                </div>
+                <div class="fg">
+                  <label>Distributor Margin (%) <i class="tt" title="Distributor takes 10–15% typically in India. They buy from you and sell to retailers.">?</i></label>
+                  <input type="number" id="distMargin" class="inp" value="10" min="0" max="50" step="0.5"/>
+                </div>
+                <div class="fg">
+                  <label>Retailer Margin (%) <i class="tt" title="Retailer markup is typically 20–30% in India. Modern trade (supermarkets) may be 15–25%.">?</i></label>
+                  <input type="number" id="retailMargin" class="inp" value="20" min="0" max="60" step="0.5"/>
+                </div>
+                <div class="fg">
+                  <label>Other Costs per Unit (<span data-currency-symbol>₹</span>) <i class="tt" title="Any additional per-unit costs like sales commission, breakage allowance, etc.">?</i></label>
+                  <input type="number" id="otherCosts" class="inp" value="0" min="0" step="0.01"/>
+                </div>
+              </div>
+            </div>
+
+            <!-- Price Stack Viz -->
+            <div class="card">
+              <div class="card__title" style="margin-bottom:16px">📊 Price Stack Visualization</div>
+              <div id="priceStackViz" class="price-stack"></div>
+            </div>
+
+            <div class="card">
+              <div class="card__title" style="margin-bottom:14px">📈 Margin Contribution Chart</div>
+              <div class="chart-box"><canvas id="priceChart"></canvas></div>
+            </div>
+          </div>
+
+          <!-- Reverse mode -->
+          <div id="reversePanel" style="display:none">
+            <div class="card">
+              <div class="card__head">
+                <div class="card__title">🎯 Reverse Pricing — MRP to Max Cost</div>
+              </div>
+              <div class="callout callout--info" style="margin-bottom:16px">
+                <span>💡</span>
+                <span>Enter your target MRP (the consumer price on the label) and your channel margins. We'll calculate the maximum manufacturing cost that still delivers your desired profit.</span>
+              </div>
+              <div class="inp-grid inp-grid--2">
+                <div class="fg">
+                  <label>Target Retail Price (<span data-currency-symbol>₹</span> per unit) <i class="tt" title="The retail price printed on your label. This is the price consumers pay.">?</i></label>
+                  <input type="number" id="rTargetMRP" class="inp" value="40" min="0.01" step="0.5"/>
+                </div>
+                <div class="fg">
+                  <label><span data-tax-label>Tax</span> Rate (%)</label>
+                  <select id="rGst" class="sel" data-tax-select>
+                    <option value="0">0% Exempt</option>
+                    <option value="5" selected>5%</option>
+                    <option value="12">12%</option>
+                    <option value="18">18%</option>
+                    <option value="28">28%</option>
+                  </select>
+                </div>
+                <div class="fg">
+                  <label>Retailer Margin (%)</label>
+                  <input type="number" id="rRetail" class="inp" value="20" min="0" step="0.5"/>
+                </div>
+                <div class="fg">
+                  <label>Distributor Margin (%)</label>
+                  <input type="number" id="rDist" class="inp" value="10" min="0" step="0.5"/>
+                </div>
+                <div class="fg">
+                  <label>C&amp;F Agent Margin (%)</label>
+                  <input type="number" id="rCnf" class="inp" value="0" min="0" step="0.5"/>
+                </div>
+                <div class="fg">
+                  <label>Your Target Profit Margin (%)</label>
+                  <input type="number" id="rMargin" class="inp" value="25" min="0" step="0.5"/>
+                </div>
+              </div>
+            </div>
+            <div class="card">
+              <div class="card__title" style="margin-bottom:16px">📊 Reverse Price Stack</div>
+              <div id="reverseStackViz" class="price-stack"></div>
+            </div>
+          </div>
+
+        </div>
+
+        <!-- ── RIGHT: RESULTS ── -->
+        <div>
+          <div class="res-panel">
+            <div class="card__title" style="margin-bottom:18px">💰 Pricing Results</div>
+            <div id="pRName" style="font-size:11px;color:var(--tx-4);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:10px">Banana Chips</div>
+
+            <!-- Forward results -->
+            <div id="fwdResults">
+              <div class="res-row">
+                <span class="res-row__label">Manufacturing Cost</span>
+                <span class="res-row__val" id="r_mfg">₹14.00</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Factory Selling Price</span>
+                <span class="res-row__val" id="r_fsp">₹20.00</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">C&amp;F Price</span>
+                <span class="res-row__val" id="r_cnf">₹20.00</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Distributor Price</span>
+                <span class="res-row__val" id="r_dist">₹22.00</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Retailer Price (ex-GST)</span>
+                <span class="res-row__val" id="r_retail">₹26.40</span>
+              </div>
+              <div class="res-highlight">
+                <span class="res-row__label" style="font-weight:700">Recommended MRP</span>
+                <span class="res-row__val res-row__val--big" id="r_mrp">₹27.72</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Your profit per unit</span>
+                <span class="res-row__val res-row__val--big" id="r_profit">₹6.00</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Profit margin</span>
+                <span class="res-row__val" id="r_profitPct">30%</span>
+              </div>
+              <div class="profit-bar-wrap">
+                <div class="profit-bar-track"><div id="fwdProfitBar" class="profit-bar-fill profit-good" style="width:30%"></div></div>
+                <div class="profit-bar-labels"><span>0%</span><span>25%</span><span>50%+</span></div>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Total markup (cost→MRP)</span>
+                <span class="res-row__val" id="r_totalMarkup">+98%</span>
+              </div>
+            </div>
+
+            <!-- Reverse results -->
+            <div id="revResults" style="display:none">
+              <div class="res-row">
+                <span class="res-row__label">Target MRP</span>
+                <span class="res-row__val" id="rr_mrp">₹40</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Price ex-GST</span>
+                <span class="res-row__val" id="rr_exgst">₹38.10</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Distributor Price</span>
+                <span class="res-row__val" id="rr_dist">₹31.75</span>
+              </div>
+              <div class="res-row">
+                <span class="res-row__label">Factory Price</span>
+                <span class="res-row__val" id="rr_factory">₹28.86</span>
+              </div>
+              <div class="res-highlight">
+                <span class="res-row__label" style="font-weight:700">Max Manufacturing Cost</span>
+                <span class="res-row__val res-row__val--big" id="rr_maxCost">₹21.64</span>
+              </div>
+              <div class="insight">
+                <strong>💡 What This Means</strong>
+                <p id="rr_insight">To sell at ₹40 MRP with 25% profit margin, your total manufacturing cost must stay below ₹21.64 per unit.</p>
+              </div>
+            </div>
+
+            <div class="divider">Quick Analysis</div>
+            <div class="insight">
+              <strong>📊 Channel Economics</strong>
+              <p id="channelInsight">Enter your costs above to see channel economics.</p>
+            </div>
+
+            <div class="callout callout--warn" style="margin-top:14px">
+              <span>⚠️</span>
+              <span><strong>Tip:</strong> Most food businesses need their retail price to be 1.8× to 2.5× their manufacturing cost to remain profitable after all channel margins and tax.</span>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px;margin-top:20px">
+              <a href="simulator.html" class="btn btn-primary" style="justify-content:center">Simulate Price Changes →</a>
+              <button onclick="window.print()" class="btn btn-ghost" style="justify-content:center">🖨️ Print Report</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section style="background:var(--surface-2);padding:56px 0">
+  <div class="wrap-narrow">
+    <h2 style="font-size:1.4rem;margin-bottom:14px">How to Price Your Food Products</h2>
+    <p style="color:var(--tx-3);margin-bottom:12px;line-height:1.72">Pricing a food product requires accounting for the full distribution chain. A product that costs <span data-currency-symbol>₹</span>14 to manufacture typically needs a retail price of 2×2.5× to remain profitable after distributor (10–15%) and retailer (20–30%) margins plus applicable taxes.</p>
+    <h3 style="font-size:1rem;margin:18px 0 8px">The Distribution Chain Explained</h3>
+    <p style="color:var(--tx-3);line-height:1.72"><strong>Factory → C&amp;F Agent (3–5%) → Distributor (10–15%) → Retailer (20–30%) → Consumer (price inc. tax).</strong> Many small food businesses skip the C&amp;F agent and sell directly to distributors. Modern trade (supermarkets, ecommerce) may have different margin structures but follow similar economics.</p>
+  </div>
+</section>
+
+<footer class="footer"><div class="wrap"><div class="footer__bottom">
+  <p>© 2026 FoodCost AI | <a href="index.html" style="color:var(--green)">Home</a> | <a href="recipe-calculator.html" style="color:var(--green)">Recipe Cost</a> | <a href="simulator.html" style="color:var(--green)">Simulator</a></p>
+</div></div></footer>
+
+<script src="js/currency.js"></script>
+<script src="js/core.js"></script>
+<script>
+'use strict';
+const PC = {
+  mode: 'forward',
+  chart: null,
+  COLORS: ['#00c896','#6366f1','#f59e0b','#f43f5e','#0ea5e9'],
+
+  init() {
+    document.getElementById('modeForward')?.addEventListener('click', () => this.setMode('forward'));
+    document.getElementById('modeReverse')?.addEventListener('click', () => this.setMode('reverse'));
+
+    ['pName','mfgCost','targetMargin','gstRate','cnfMargin','distMargin','retailMargin','otherCosts'].forEach(id =>
+      document.getElementById(id)?.addEventListener('input', () => this.calcForward())
+    );
+    ['rTargetMRP','rGst','rRetail','rDist','rCnf','rMargin'].forEach(id =>
+      document.getElementById(id)?.addEventListener('input', () => this.calcReverse())
+    );
+    this.calcForward();
+  },
+
+  setMode(m) {
+    this.mode = m;
+    document.getElementById('forwardPanel').style.display = m==='forward' ? 'block' : 'none';
+    document.getElementById('reversePanel').style.display = m==='reverse' ? 'block' : 'none';
+    document.getElementById('fwdResults').style.display = m==='forward' ? 'block' : 'none';
+    document.getElementById('revResults').style.display = m==='reverse' ? 'block' : 'none';
+    document.getElementById('modeForward').className = 'btn btn-sm '+(m==='forward'?'btn-primary':'btn-ghost');
+    document.getElementById('modeReverse').className = 'btn btn-sm '+(m==='reverse'?'btn-primary':'btn-ghost');
+    if(m==='forward') this.calcForward(); else this.calcReverse();
+  },
+
+  calcForward() {
+    const mfg = parseFloat(document.getElementById('mfgCost')?.value)||14;
+    const margin = parseFloat(document.getElementById('targetMargin')?.value)||30;
+    const gst = parseFloat(document.getElementById('gstRate')?.value)||5;
+    const cnf = parseFloat(document.getElementById('cnfMargin')?.value)||0;
+    const dist = parseFloat(document.getElementById('distMargin')?.value)||10;
+    const retail = parseFloat(document.getElementById('retailMargin')?.value)||20;
+    const other = parseFloat(document.getElementById('otherCosts')?.value)||0;
+    const name = document.getElementById('pName')?.value || 'Product';
+
+    const totalCost = mfg + other;
+    const fsp = totalCost / (1 - margin/100);  // Factory selling price after desired margin
+    const chain = FC.Chain.fromFactory(fsp, { cnf, dist: cnf>0?dist:dist, retail, gst });
+
+    const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    s('pRName', name.toUpperCase());
+    s('r_mfg',   FC.Fmt.money(totalCost));
+    s('r_fsp',   FC.Fmt.money(chain.factory));
+    s('r_cnf',   FC.Fmt.money(chain.cnf));
+    s('r_dist',  FC.Fmt.money(chain.dist));
+    s('r_retail',FC.Fmt.money(chain.retail));
+    s('r_mrp',   FC.Fmt.money(chain.mrp));
+    const profit = chain.factory - totalCost;
+    s('r_profit', FC.Fmt.money(profit));
+    s('r_profitPct', FC.Fmt.pct(margin));
+    const totalMarkup = ((chain.mrp/totalCost - 1)*100).toFixed(0);
+    s('r_totalMarkup', '+'+totalMarkup+'%');
+
+    const bar = document.getElementById('fwdProfitBar');
+    if(bar){
+      bar.style.width=Math.min(100,margin*2)+'%';
+      bar.className='profit-bar-fill '+(margin>=25?'profit-good':margin>=10?'profit-ok':'profit-bad');
+    }
+
+    // Channel insight
+    const ci = document.getElementById('channelInsight');
+    const sym = FC.Fmt.symbol ? FC.Fmt.symbol() : '\u20b9';
+    const taxLabel = FC.GST.LABEL || 'Tax';
+    if(ci) ci.textContent = `For every ${FC.Fmt.money(chain.mrp)} paid by consumers, you receive ${FC.Fmt.money(chain.factory)} (${(chain.factory/chain.mrp*100).toFixed(0)}% of retail price). Channel margins consume ${FC.Fmt.money(chain.mrp-chain.factory)}.`;
+
+    this.updatePriceStack([
+      { label:'Manufacturing Cost', val:totalCost, fill:this.COLORS[0] },
+      { label:'Your Profit',        val:profit,    fill:this.COLORS[1] },
+      { label:'Channel Margins',    val:chain.mrp-chain.factory, fill:this.COLORS[2] },
+      { label:taxLabel,             val:FC.GST.amount(chain.retail,gst), fill:this.COLORS[3] },
+    ], chain.mrp, 'priceStackViz');
+
+    this.updateChart(
+      ['Mfg Cost','Profit','Dist','Retailer',taxLabel],
+      [totalCost, profit, chain.dist-chain.cnf, chain.retail-chain.dist, chain.mrp-chain.retail],
+      'priceChart'
+    );
+  },
+
+  calcReverse() {
+    const mrp = parseFloat(document.getElementById('rTargetMRP')?.value)||40;
+    const gst = parseFloat(document.getElementById('rGst')?.value)||5;
+    const retail = parseFloat(document.getElementById('rRetail')?.value)||20;
+    const dist = parseFloat(document.getElementById('rDist')?.value)||10;
+    const cnf = parseFloat(document.getElementById('rCnf')?.value)||0;
+    const margin = parseFloat(document.getElementById('rMargin')?.value)||25;
+
+    const chain = FC.Chain.fromMRP(mrp, { cnf, dist, retail, gst });
+    const maxCost = chain.factory * (1 - margin/100);
+
+    const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    s('rr_mrp',     FC.Fmt.money(mrp));
+    s('rr_exgst',   FC.Fmt.money(chain.retail));
+    s('rr_dist',    FC.Fmt.money(chain.dist));
+    s('rr_factory', FC.Fmt.money(chain.factory));
+    s('rr_maxCost', FC.Fmt.money(maxCost));
+
+    const taxLbl = FC.GST.LABEL || 'Tax';
+    const ins = document.getElementById('rr_insight');
+    if(ins) ins.textContent = `To sell at ${FC.Fmt.money(mrp)} retail price with ${margin}% profit, your total manufacturing cost must stay below ${FC.Fmt.money(maxCost)} per unit. Factory receives ${FC.Fmt.money(chain.factory)} from distributor.`;
+
+    this.updatePriceStack([
+      { label:'Max Manufacturing Cost', val:maxCost, fill:this.COLORS[0] },
+      { label:'Your Profit (at factory)', val:chain.factory-maxCost, fill:this.COLORS[1] },
+      { label:'Channel Margins', val:mrp-chain.factory-FC.GST.amount(chain.retail,gst), fill:this.COLORS[2] },
+      { label:taxLbl, val:FC.GST.amount(chain.retail,gst), fill:this.COLORS[3] },
+    ], mrp, 'reverseStackViz');
+  },
+
+  updatePriceStack(items, total, containerId) {
+    const c = document.getElementById(containerId);
+    if(!c) return;
+    c.innerHTML = items.map(it => {
+      const pct = total>0 ? (it.val/total*100).toFixed(0) : 0;
+      return `<div class="price-level">
+        <span class="price-level__label">${it.label}</span>
+        <div class="price-level__bar"><div class="price-level__fill" style="width:${pct}%;background:${it.fill}"></div></div>
+        <span class="price-level__val">${FC.Fmt.money(it.val)} (${pct}%)</span>
+      </div>`;
+    }).join('');
+  },
+
+  updateChart(labels, data, canvasId) {
+    const ctx = document.getElementById(canvasId)?.getContext('2d');
+    if(!ctx) return;
+    if(this.chart){this.chart.destroy();this.chart=null;}
+    this.chart = FC.Charts.bar(ctx, labels, [{
+      label: (FC.Fmt.symbol ? FC.Fmt.symbol() : '\u20b9') + ' per unit',
+      data,
+      backgroundColor: this.COLORS.slice(0,data.length),
+      borderRadius: 6, barThickness: 44
+    }]);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => PC.init());
+document.addEventListener('fc:locale-changed', () => {
+  if (PC.mode === 'forward') PC.calcForward(); else PC.calcReverse();
+});
+</script>
+</body>
+</html>

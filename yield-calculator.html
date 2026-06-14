@@ -1,0 +1,430 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Yield Loss Calculator – FoodCost AI | Food Processing Yield Calculator India</title>
+<meta name="description" content="Calculate yield loss in food processing. Track raw to finished product weight across multiple processing stages. Essential for banana chips, jackfruit chips, meat, fish and vegetable processing in India."/>
+<meta name="keywords" content="yield loss calculator, food yield calculator, banana chips yield, food processing loss calculator India, yield percentage"/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+<script src="js/currency.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"></script>
+</head>
+<body>
+<nav class="nav" id="mainNav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__logo"><div class="nav__logo-mark">🍃</div><span class="nav__logo-text">FoodCost <em>AI</em></span></a>
+    <div class="nav__links" id="navLinks">
+      <a href="recipe-calculator.html" class="nav__link">Recipe Cost</a>
+      <a href="yield-calculator.html" class="nav__link">Yield Loss</a>
+      <a href="price-calculator.html" class="nav__link">Selling Price</a>
+      <a href="simulator.html" class="nav__link">What-If Simulator</a>
+      <a href="blog.html" class="nav__link">Resources</a>
+    </div>
+    <div class="nav__actions">
+      <button class="nav__theme" id="themeBtn" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span></button>
+      <button class="nav__burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div class="calc-page">
+  <div class="calc-hero">
+    <div class="wrap">
+      <div class="s-tag s-tag--amber" style="margin-bottom:14px">🏆 Flagship Feature · Yield Loss Calculator</div>
+      <h1>Calculate Processing Yield Loss</h1>
+      <p>The most important — and most ignored — cost factor in food manufacturing. Track your product's true cost through every processing stage from raw material to finished product.</p>
+    </div>
+  </div>
+
+  <div class="calc-body">
+    <div class="wrap">
+
+      <!-- Template bar -->
+      <div style="display:flex;gap:9px;flex-wrap:wrap;margin-bottom:28px;align-items:center">
+        <span style="font-size:12.5px;font-weight:600;color:var(--tx-3)">Quick Start:</span>
+        <button class="btn btn-surface btn-sm" data-tpl="banana">🍌 Banana Chips</button>
+        <button class="btn btn-surface btn-sm" data-tpl="jackfruit">🌿 Jackfruit Chips</button>
+        <button class="btn btn-surface btn-sm" data-tpl="fish">🐟 Fish Fillet</button>
+        <button class="btn btn-surface btn-sm" data-tpl="chicken">🍗 Chicken Processing</button>
+        <button class="btn btn-surface btn-sm" data-tpl="vegetables">🥦 Vegetables</button>
+        <button class="btn btn-surface btn-sm" data-tpl="custom">✏️ Custom</button>
+      </div>
+
+      <div class="calc-layout">
+
+        <!-- ── LEFT ── -->
+        <div>
+
+          <!-- Raw Material -->
+          <div class="card" style="border-top:3px solid var(--green)">
+            <div class="card__head">
+              <div class="card__title">🌱 Starting Raw Material</div>
+            </div>
+            <div class="inp-grid inp-grid--3">
+              <div class="fg">
+                <label>Product Name</label>
+                <input type="text" id="yProd" class="inp" value="Banana Chips"/>
+              </div>
+              <div class="fg">
+                <label>Raw Quantity (kg) <i class="tt" title="Total raw material weight you start with, e.g. 100 kg of raw unpeeled bananas">?</i></label>
+                <input type="number" id="yRawKg" class="inp" value="100" min="0.01" step="0.1"/>
+              </div>
+              <div class="fg">
+                <label>Raw Cost (<span data-currency-symbol>₹</span> / kg) <i class="tt" title="Purchase cost per kg of raw material">?</i></label>
+                <input type="number" id="yRawCpk" class="inp" value="40" min="0" step="0.5"/>
+              </div>
+            </div>
+            <div class="insight" style="margin-top:14px">
+              <strong>Starting Position</strong>
+              <p id="yRawDesc">100 kg raw banana @ ₹40/kg = ₹4,000 total raw material investment</p>
+            </div>
+          </div>
+
+          <!-- Processing Stages -->
+          <div style="margin:4px 0 4px">
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+              <h3 style="font-size:1rem;font-weight:700">Processing Stages</h3>
+              <span style="font-size:12px;color:var(--tx-4)">Add each step where weight is lost</span>
+            </div>
+            <div id="stagesContainer"></div>
+            <button class="btn-add" id="addStageBtn">
+              <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M12 5v14M5 12h14"/></svg>
+              Add Processing Stage
+            </button>
+          </div>
+
+          <!-- Flow Visualization -->
+          <div class="card" style="margin-top:18px">
+            <div class="card__title" style="margin-bottom:14px">🔄 Processing Flow</div>
+            <div class="flow-wrap"><div id="flowViz" class="flow"></div></div>
+          </div>
+
+          <!-- Chart -->
+          <div class="card" style="margin-top:14px">
+            <div class="card__title" style="margin-bottom:14px">📊 Weight at Each Stage</div>
+            <div class="chart-box"><canvas id="yieldChart"></canvas></div>
+          </div>
+        </div>
+
+        <!-- ── RIGHT: RESULTS ── -->
+        <div>
+          <div class="res-panel">
+            <div class="card__title" style="margin-bottom:18px">📊 Yield Analysis</div>
+            <div id="yRName" style="font-size:11px;color:var(--tx-4);text-transform:uppercase;letter-spacing:.07em;font-weight:700;margin-bottom:10px">Banana Chips</div>
+
+            <div class="res-row">
+              <span class="res-row__label">Raw Input</span>
+              <span class="res-row__val" id="yR_raw">100 kg</span>
+            </div>
+            <div class="res-row">
+              <span class="res-row__label">Finished Output</span>
+              <span class="res-row__val" id="yR_out">32 kg</span>
+            </div>
+            <div class="res-highlight">
+              <span class="res-row__label" style="font-weight:700">Overall Yield</span>
+              <span class="res-row__val res-row__val--big" id="yR_yield">32%</span>
+            </div>
+            <div class="res-row">
+              <span class="res-row__label">Total Weight Lost</span>
+              <span class="res-row__val res-row__val--warn" id="yR_lost">68 kg</span>
+            </div>
+            <div class="res-row">
+              <span class="res-row__label">Loss %</span>
+              <span class="res-row__val res-row__val--danger" id="yR_lostPct">68%</span>
+            </div>
+
+            <div class="divider">Cost Impact of Yield Loss</div>
+
+            <div class="res-row">
+              <span class="res-row__label">Total raw material cost</span>
+              <span class="res-row__val" id="yR_rawCost">₹4,000</span>
+            </div>
+            <div class="res-row">
+              <span class="res-row__label">Effective cost / kg (finished)</span>
+              <span class="res-row__val res-row__val--big" id="yR_effCost">₹125/kg</span>
+            </div>
+            <div class="res-row">
+              <span class="res-row__label">Cost multiplier</span>
+              <span class="res-row__val res-row__val--warn" id="yR_mult">3.13×</span>
+            </div>
+
+            <div class="insight">
+              <strong>💰 What This Means</strong>
+              <p id="yInsight">Every ₹1 spent on raw material becomes ₹3.13 in effective raw material cost after processing losses.</p>
+            </div>
+
+            <div class="divider">Stage-by-Stage Breakdown</div>
+            <div id="stageSummary" style="font-size:12.5px;color:var(--tx-3);line-height:1.8"></div>
+
+            <div class="divider">Industry Benchmarks</div>
+            <div style="font-size:12.5px;color:var(--tx-3)">
+              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span>🍌 Banana Chips</span><span style="font-weight:700;color:var(--tx-2)">30–35% yield</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span>🌿 Jackfruit Chips</span><span style="font-weight:700;color:var(--tx-2)">25–32% yield</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span>🐟 Fish Fillet</span><span style="font-weight:700;color:var(--tx-2)">40–55% yield</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0;border-bottom:1px solid var(--border)"><span>🍗 Whole Chicken</span><span style="font-weight:700;color:var(--tx-2)">65–75% yield</span></div>
+              <div style="display:flex;justify-content:space-between;padding:7px 0"><span>🥦 Vegetables (trimmed)</span><span style="font-weight:700;color:var(--tx-2)">70–85% yield</span></div>
+            </div>
+
+            <div style="display:flex;flex-direction:column;gap:9px;margin-top:20px">
+              <a href="recipe-calculator.html" class="btn btn-primary" style="justify-content:center">Add to Recipe Calculator →</a>
+              <a href="price-calculator.html" class="btn btn-ghost" style="justify-content:center">Calculate Selling Price →</a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<section style="background:var(--surface-2);padding:56px 0">
+  <div class="wrap-narrow">
+    <h2 style="font-size:1.4rem;margin-bottom:14px">Understanding Yield Loss in Food Manufacturing</h2>
+    <p style="color:var(--tx-3);margin-bottom:12px;line-height:1.72">Yield loss is the single most underestimated cost factor in food manufacturing. When 100 kg of raw banana becomes only 32 kg of finished chips, every overhead — oil, electricity, labor, packaging — must be calculated against those 32 kg, not the original 100 kg. This 3× cost multiplier is why many food businesses price their products incorrectly and lose money without realizing it.</p>
+    <h3 style="font-size:1rem;margin:18px 0 8px">Banana Chips: Real Yield Data from India</h3>
+    <p style="color:var(--tx-3);line-height:1.72">According to NIFTEM research and KVIC project reports, raw Nendran banana yields approximately 30–35% as finished chips. Peeling accounts for 40–50% of the loss, with the remainder from slicing wastage and moisture loss during frying. You need 3–3.5 kg of raw banana to produce 1 kg of banana chips.</p>
+  </div>
+</section>
+
+<footer class="footer"><div class="wrap"><div class="footer__bottom">
+  <p>© 2026 FoodCost AI | <a href="index.html" style="color:var(--green)">Home</a> | <a href="recipe-calculator.html" style="color:var(--green)">Recipe Cost</a> | <a href="price-calculator.html" style="color:var(--green)">Price Calculator</a></p>
+</div></div></footer>
+
+<script src="js/core.js"></script>
+<script>
+'use strict';
+const YC = {
+  id: 1,
+  chart: null,
+
+  TEMPLATES: {
+    banana: {
+      prod:'Banana Chips', raw:100, cpk:40,
+      stages:[
+        {name:'Peeling',     emoji:'🍌', outPct:60, note:'Remove peel — 40% weight loss'},
+        {name:'Slicing',     emoji:'🔪', outPct:96, note:'Trim ends — 4% trim loss'},
+        {name:'Frying',      emoji:'🍳', outPct:55, note:'Moisture evaporation in hot oil — 45% loss'},
+        {name:'De-oiling',   emoji:'🫙', outPct:92, note:'Oil drains off — 8% loss'},
+      ]
+    },
+    jackfruit: {
+      prod:'Jackfruit Chips', raw:100, cpk:50,
+      stages:[
+        {name:'Cleaning',    emoji:'🌿', outPct:90, note:'Remove outer skin, dirt — 10% loss'},
+        {name:'Core Removal',emoji:'✂️', outPct:75, note:'Remove seeds and core — 25% loss'},
+        {name:'Peeling',     emoji:'🍈', outPct:80, note:'Remove remaining skin — 20% loss'},
+        {name:'Frying',      emoji:'🍳', outPct:55, note:'Moisture evaporation — 45% loss'},
+      ]
+    },
+    fish: {
+      prod:'Fish Fillet', raw:100, cpk:180,
+      stages:[
+        {name:'Gutting',     emoji:'🐟', outPct:85, note:'Remove innards — 15% loss'},
+        {name:'De-heading',  emoji:'✂️', outPct:90, note:'Remove head — 10% loss'},
+        {name:'Filleting',   emoji:'🔪', outPct:72, note:'Remove bones and skin — 28% loss'},
+        {name:'Trimming',    emoji:'🧹', outPct:95, note:'Trim edges — 5% loss'},
+      ]
+    },
+    chicken: {
+      prod:'Dressed Chicken', raw:100, cpk:130,
+      stages:[
+        {name:'Slaughter',   emoji:'🐔', outPct:90, note:'Blood loss — 10%'},
+        {name:'De-feathering',emoji:'🪶',outPct:95, note:'Remove feathers — 5%'},
+        {name:'Evisceration',emoji:'🫀', outPct:82, note:'Remove organs — 18% loss'},
+        {name:'Trimming',    emoji:'✂️', outPct:97, note:'Final trim — 3% loss'},
+      ]
+    },
+    vegetables: {
+      prod:'Cut Vegetables', raw:100, cpk:30,
+      stages:[
+        {name:'Washing',     emoji:'🚿', outPct:99, note:'Wash and drain — 1% moisture loss'},
+        {name:'Peeling',     emoji:'🥕', outPct:88, note:'Remove peel — 12% loss'},
+        {name:'Trimming',    emoji:'✂️', outPct:94, note:'Remove tops, bad parts — 6% loss'},
+        {name:'Cutting',     emoji:'🔪', outPct:97, note:'Trim loss from cutting — 3%'},
+      ]
+    },
+    custom: {
+      prod:'My Product', raw:100, cpk:50,
+      stages:[{name:'Stage 1', emoji:'⚙️', outPct:80, note:'Enter yield percentage'}]
+    }
+  },
+
+  init() {
+    document.querySelectorAll('[data-tpl]').forEach(btn => btn.addEventListener('click', () => this.load(btn.dataset.tpl)));
+    document.getElementById('addStageBtn')?.addEventListener('click', () => this.addStage());
+    ['yProd','yRawKg','yRawCpk'].forEach(id => document.getElementById(id)?.addEventListener('input', () => this.calc()));
+    this.load('banana');
+  },
+
+  load(key) {
+    const t = this.TEMPLATES[key]; if(!t) return;
+    document.getElementById('yProd').value = t.prod;
+    document.getElementById('yRawKg').value = t.raw;
+    document.getElementById('yRawCpk').value = t.cpk;
+    document.getElementById('stagesContainer').innerHTML = '';
+    this.id = 1;
+    t.stages.forEach(s => this.addStage(s));
+    this.calc();
+    FC.Toast.show('Loaded: '+t.prod, 'success');
+  },
+
+  addStage(d={}) {
+    const id = this.id++;
+    const container = document.getElementById('stagesContainer');
+    const el = document.createElement('div');
+    el.id = 'st_'+id;
+    el.className = 'stage-card';
+    el.innerHTML = `
+      <div class="stage-head">
+        <div style="display:flex;align-items:center;gap:10px">
+          <div class="stage-num">${id}</div>
+          <div>
+            <div style="font-size:13.5px;font-weight:600;color:var(--tx-1)" id="stLabel_${id}">${d.name||'Processing Stage'}</div>
+            <div style="font-size:11.5px;color:var(--tx-4)" id="stNote_${id}">${d.note||''}</div>
+          </div>
+        </div>
+        <button class="btn-del" data-del="${id}">✕</button>
+      </div>
+      <div class="inp-grid inp-grid--3" style="gap:12px">
+        <div class="fg" style="margin:0">
+          <label>Stage Name</label>
+          <input type="text" class="inp" id="stName_${id}" value="${d.name||''}" placeholder="e.g. Peeling"/>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Emoji 
+            <i class="tt" title="Pick an emoji that represents this stage visually">?</i>
+          </label>
+          <input type="text" class="inp" id="stEmoji_${id}" value="${d.emoji||'⚙️'}" maxlength="2" style="font-size:22px;text-align:center"/>
+        </div>
+        <div class="fg" style="margin:0">
+          <label>Output Weight % <i class="tt" title="What percentage of input weight comes OUT of this stage? e.g. Peeling bananas: enter 60 if you lose 40%">?</i></label>
+          <input type="number" class="inp" id="stOut_${id}" value="${d.outPct||80}" min="1" max="100" step="0.1"/>
+        </div>
+      </div>
+      <div id="stResult_${id}" style="margin-top:10px;font-size:12.5px;color:var(--tx-3)"></div>
+    `;
+    container.appendChild(el);
+    el.querySelector('[data-del]').addEventListener('click', () => { el.remove(); this.calc(); });
+    ['stName_'+id,'stEmoji_'+id,'stOut_'+id].forEach(i => document.getElementById(i)?.addEventListener('input', () => this.calc()));
+    this.calc();
+  },
+
+  getStages() {
+    return Array.from(document.querySelectorAll('#stagesContainer .stage-card')).map(el => {
+      const id = el.id.replace('st_','');
+      return {
+        id,
+        name:  document.getElementById('stName_'+id)?.value || 'Stage',
+        emoji: document.getElementById('stEmoji_'+id)?.value || '⚙️',
+        outPct: parseFloat(document.getElementById('stOut_'+id)?.value) || 80
+      };
+    });
+  },
+
+  calc() {
+    const rawKg = parseFloat(document.getElementById('yRawKg')?.value)||100;
+    const rawCpk = parseFloat(document.getElementById('yRawCpk')?.value)||40;
+    const rawTotal = rawKg * rawCpk;
+    const prod = document.getElementById('yProd')?.value || 'Product';
+
+    // Update desc
+    const rd = document.getElementById('yRawDesc');
+    const fmt = n => (window.FC && window.FC.Fmt) ? window.FC.Fmt.money(n) : ('\u20b9' + n.toFixed(2));
+    const sym = (window.FC && window.FC.Fmt && window.FC.Fmt.symbol) ? window.FC.Fmt.symbol() : '\u20b9';
+    if(rd) rd.textContent = `${rawKg} kg raw ${prod.toLowerCase().split(' ')[0]} @ ${sym}${rawCpk}/kg = ${fmt(rawTotal)} total raw material investment`;
+
+    const stages = this.getStages();
+    let curKg = rawKg;
+    const nodes = [{ label:'Raw', emoji:'🌱', kg:rawKg, cost:rawCpk, first:true }];
+    const labels = ['Raw ('+rawKg+'kg)'];
+    const weights = [rawKg];
+    let summary = '';
+
+    stages.forEach((st, i) => {
+      const outKg = curKg * st.outPct / 100;
+      const lostKg = curKg - outKg;
+      const lostPct = 100 - st.outPct;
+      const effCpk = outKg > 0 ? rawTotal / outKg : 0;
+
+      // Update stage result display
+      const res = document.getElementById('stResult_'+st.id);
+      if(res) res.innerHTML = `<span style="color:var(--tx-3)">Input: <strong>${curKg.toFixed(2)} kg</strong></span> → <span style="color:var(--rose)">Lost: <strong>${lostKg.toFixed(2)} kg (${lostPct.toFixed(1)}%)</strong></span> → <span style="color:var(--green)">Output: <strong>${outKg.toFixed(2)} kg</strong></span>`;
+      const lbl = document.getElementById('stLabel_'+st.id);
+      if(lbl) lbl.textContent = st.name;
+
+      nodes.push({ label:st.name, emoji:st.emoji, kg:outKg, cost:effCpk, lostPct, last: i===stages.length-1 });
+      labels.push(st.name+' ('+outKg.toFixed(1)+'kg)');
+      weights.push(outKg);
+      summary += `${i+1}. <strong>${st.name}</strong>: ${curKg.toFixed(1)}kg → ${outKg.toFixed(1)}kg (<span style="color:var(--rose)">−${lostKg.toFixed(1)}kg / ${lostPct.toFixed(1)}% lost</span>)<br/>`;
+      curKg = outKg;
+    });
+
+    const finishedKg = curKg;
+    const effCpk = finishedKg > 0 ? rawTotal / finishedKg : 0;
+    const overallYield = (finishedKg / rawKg) * 100;
+    const lostTotal = rawKg - finishedKg;
+    const mult = rawKg / Math.max(finishedKg, 0.01);
+
+    // Update results
+    const s=(id,v)=>{const e=document.getElementById(id);if(e)e.textContent=v;};
+    s('yRName', prod.toUpperCase());
+    s('yR_raw', rawKg.toFixed(1)+' kg');
+    s('yR_out', finishedKg.toFixed(2)+' kg');
+    s('yR_yield', overallYield.toFixed(1)+'%');
+    s('yR_lost', lostTotal.toFixed(2)+' kg');
+    s('yR_lostPct', (100-overallYield).toFixed(1)+'%');
+    s('yR_rawCost', fmt(rawTotal));
+    s('yR_effCost', fmt(effCpk)+'/kg');
+    s('yR_mult', mult.toFixed(2)+'×');
+    const ins = document.getElementById('yInsight');
+    if(ins) ins.textContent = `Every ${sym}1 spent on raw ${prod.split(' ')[0].toLowerCase()} becomes ${sym}${mult.toFixed(2)} in effective raw material cost after all processing losses. Your finished ${prod.toLowerCase()} costs ${fmt(effCpk)}/kg in raw material alone.`;
+    const ss = document.getElementById('stageSummary');
+    if(ss) ss.innerHTML = summary || '<em style="color:var(--tx-4)">No stages added yet</em>';
+
+    this.updateFlow(nodes);
+    this.updateChart(labels, weights);
+  },
+
+  updateFlow(nodes) {
+    const viz = document.getElementById('flowViz');
+    if(!viz) return;
+    viz.innerHTML = '';
+    nodes.forEach((n, i) => {
+      const nd = document.createElement('div');
+      nd.className = 'flow-node' + (n.first?' first':'') + (n.last?' last':'');
+      nd.innerHTML = `
+        <div class="flow-node__emoji">${n.emoji}</div>
+        <div class="flow-node__label">${n.label}</div>
+        <div class="flow-node__wt">${n.kg.toFixed(1)}kg</div>
+        <div class="flow-node__cost">${n.first ? (window.FC&&window.FC.Fmt?window.FC.Fmt.money(n.cost,0):('\u20b9'+n.cost.toFixed(0)))+'/kg raw' : (window.FC&&window.FC.Fmt?window.FC.Fmt.money(n.cost,0):('\u20b9'+n.cost.toFixed(0)))+'/kg'}</div>
+      `;
+      viz.appendChild(nd);
+      if(i < nodes.length-1 && nodes[i+1].lostPct !== undefined) {
+        const conn = document.createElement('div');
+        conn.className = 'flow-conn';
+        conn.innerHTML = `<div class="flow-conn__line"></div><div class="flow-conn__loss">−${nodes[i+1].lostPct.toFixed(0)}%</div>`;
+        viz.appendChild(conn);
+      }
+    });
+  },
+
+  updateChart(labels, weights) {
+    const ctx = document.getElementById('yieldChart')?.getContext('2d');
+    if(!ctx) return;
+    if(this.chart){this.chart.destroy();this.chart=null;}
+    this.chart = FC.Charts.bar(ctx, labels, [{
+      label:'Weight (kg)',
+      data: weights,
+      backgroundColor: weights.map((_,i) => i===0 ? '#00c896' : i===weights.length-1 ? '#f59e0b' : '#6366f1'),
+      borderRadius: 6,
+      barThickness: 40
+    }]);
+  }
+};
+
+document.addEventListener('DOMContentLoaded', () => YC.init());
+document.addEventListener('fc:locale-changed', () => YC.calc());
+</script>
+</body>
+</html>

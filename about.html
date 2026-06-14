@@ -1,0 +1,198 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/><meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>About FoodCost AI – Food Profitability Platform for Indian Food Businesses</title>
+<meta name="description" content="FoodCost AI is built to help Indian food manufacturers, bakeries, cloud kitchens and food startups calculate true product costs and build profitable food businesses."/>
+<link rel="preconnect" href="https://fonts.googleapis.com"/><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Outfit:wght@400;600;700;800;900&display=swap" rel="stylesheet"/>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+<nav class="nav" id="mainNav">
+  <div class="nav__inner">
+    <a href="index.html" class="nav__logo"><div class="nav__logo-mark">🍃</div><span class="nav__logo-text">FoodCost <em>AI</em></span></a>
+    <div class="nav__links" id="navLinks">
+      <a href="recipe-calculator.html" class="nav__link">Recipe Cost</a>
+      <a href="yield-calculator.html" class="nav__link">Yield Loss</a>
+      <a href="price-calculator.html" class="nav__link">Selling Price</a>
+      <a href="simulator.html" class="nav__link">What-If Simulator</a>
+      <a href="blog.html" class="nav__link">Resources</a>
+    </div>
+    <div class="nav__actions">
+      <button class="nav__theme" id="themeBtn" aria-label="Toggle dark mode"><span id="themeIcon">🌙</span></button>
+      <button class="nav__burger" id="navBurger" aria-label="Menu"><span></span><span></span><span></span></button>
+    </div>
+  </div>
+</nav>
+
+<div style="padding-top:calc(var(--nav-h) + 36px)">
+
+  <!-- Hero -->
+  <div style="background:linear-gradient(135deg,var(--surface-2) 0%,var(--surface) 100%);padding:80px 0;border-bottom:1px solid var(--border);position:relative;overflow:hidden">
+    <div style="position:absolute;inset:0;background:radial-gradient(ellipse 60% 60% at 50% 0%,rgba(0,200,150,.1) 0%,transparent 60%)"></div>
+    <div class="wrap" style="position:relative;z-index:1;text-align:center;max-width:720px;margin:0 auto">
+      <div class="s-tag" style="margin-bottom:18px">About FoodCost AI</div>
+      <h1 style="font-size:clamp(2rem,5vw,3.5rem);letter-spacing:-1.5px;margin-bottom:18px">Built for India's Food Entrepreneurs</h1>
+      <p style="font-size:1.12rem;color:var(--tx-3);line-height:1.75">FoodCost AI exists because too many food businesses in India fail — not because of bad food, but because of bad pricing. We're changing that with free, accessible, India-specific food costing tools.</p>
+    </div>
+  </div>
+
+  <!-- Mission -->
+  <section class="section">
+    <div class="wrap-narrow">
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:48px;align-items:center">
+        <div>
+          <div class="s-tag" style="margin-bottom:14px">Our Mission</div>
+          <h2 style="font-size:2rem;letter-spacing:-.8px;margin-bottom:16px">Every Food Business Deserves to Know Its True Costs</h2>
+          <p style="color:var(--tx-3);line-height:1.75;margin-bottom:16px">India has millions of food entrepreneurs — home bakers, banana chips makers, cloud kitchen founders, traditional snack manufacturers — and most of them lose money without understanding why.</p>
+          <p style="color:var(--tx-3);line-height:1.75;margin-bottom:16px">The existing tools don't work for them. Excel spreadsheets are too complex. Restaurant costing apps ignore manufacturing yield. ERP systems cost ₹50,000+ per year.</p>
+          <p style="color:var(--tx-3);line-height:1.75">FoodCost AI fills this gap with tools specifically designed for the Indian food manufacturing context — complete with yield loss tracking, GST, distribution chain margins, and India-specific benchmarks. Free. Always.</p>
+        </div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px">
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;text-align:center">
+            <div style="font-size:2.4rem;font-weight:900;font-family:Outfit,sans-serif;color:var(--green);margin-bottom:6px">4</div>
+            <div style="font-size:13px;color:var(--tx-3)">Free calculators, always available</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;text-align:center">
+            <div style="font-size:2.4rem;font-weight:900;font-family:Outfit,sans-serif;color:var(--amber);margin-bottom:6px">₹0</div>
+            <div style="font-size:13px;color:var(--tx-3)">Cost to use all core tools</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;text-align:center">
+            <div style="font-size:2.4rem;font-weight:900;font-family:Outfit,sans-serif;color:var(--indigo);margin-bottom:6px">10+</div>
+            <div style="font-size:13px;color:var(--tx-3)">Food categories covered</div>
+          </div>
+          <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:24px;text-align:center">
+            <div style="font-size:2.4rem;font-weight:900;font-family:Outfit,sans-serif;color:var(--rose);margin-bottom:6px">3min</div>
+            <div style="font-size:13px;color:var(--tx-3)">From zero to full cost clarity</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- What makes us different -->
+  <section class="section section--alt">
+    <div class="wrap">
+      <div class="s-head">
+        <div class="s-tag">What Makes FoodCost AI Different</div>
+        <h2>Not Another Generic Food Cost Calculator</h2>
+      </div>
+      <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:20px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px">
+          <div style="font-size:2.2rem;margin-bottom:14px">🇮🇳</div>
+          <h3 style="font-size:1rem;margin-bottom:10px">India-First Design</h3>
+          <p style="font-size:.875rem;color:var(--tx-3);line-height:1.62">Built for Indian Rupees, Indian GST rates, Indian distribution channels (C&amp;F → Distributor → Retailer), and Indian food products — banana chips, jackfruit, traditional snacks, masalas.</p>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px">
+          <div style="font-size:2.2rem;margin-bottom:14px">⚖️</div>
+          <h3 style="font-size:1rem;margin-bottom:10px">Yield-First Thinking</h3>
+          <p style="font-size:.875rem;color:var(--tx-3);line-height:1.62">We're the only free tool with multi-stage processing yield tracking — the most critical and most ignored cost factor in food manufacturing. Know your true ₹/kg of finished product.</p>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px">
+          <div style="font-size:2.2rem;margin-bottom:14px">🧠</div>
+          <h3 style="font-size:1rem;margin-bottom:10px">Education Built-In</h3>
+          <p style="font-size:.875rem;color:var(--tx-3);line-height:1.62">Every field has a tooltip. Every result has an explanation. Every calculation shows its logic. No accounting or finance background needed — designed for food people, not finance people.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Roadmap -->
+  <section class="section">
+    <div class="wrap-narrow">
+      <div class="s-head">
+        <div class="s-tag">What's Coming</div>
+        <h2>Product Roadmap</h2>
+      </div>
+      <div style="display:grid;gap:14px">
+        <div style="background:var(--surface);border:1px solid var(--green);border-radius:var(--r-lg);padding:20px 24px;display:flex;align-items:center;gap:16px">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--green),var(--green-dim));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">✓</div>
+          <div><div style="font-weight:700;margin-bottom:3px">V1 — Core Calculators (Live Now)</div><div style="font-size:13px;color:var(--tx-3)">Recipe Cost, Yield Loss, Selling Price, What-If Simulator</div></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 24px;display:flex;align-items:center;gap:16px">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--amber),var(--amber-dim));color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">2</div>
+          <div><div style="font-weight:700;margin-bottom:3px">V2 — Save &amp; Share (Coming Soon)</div><div style="font-size:13px;color:var(--tx-3)">Save calculations, share with partners, PDF export reports</div></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 24px;display:flex;align-items:center;gap:16px">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--indigo),#4f46e5);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">3</div>
+          <div><div style="font-weight:700;margin-bottom:3px">V3 — Business Dashboard</div><div style="font-size:13px;color:var(--tx-3)">Multi-product portfolio, cost tracking over time, profit analytics</div></div>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-lg);padding:20px 24px;display:flex;align-items:center;gap:16px">
+          <div style="width:36px;height:36px;border-radius:50%;background:linear-gradient(135deg,var(--rose),#e11d48);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;flex-shrink:0">4</div>
+          <div><div style="font-weight:700;margin-bottom:3px">V4 — GCC &amp; Middle East Expansion</div><div style="font-size:13px;color:var(--tx-3)">Localization for UAE, Saudi Arabia, Oman with VAT and regional distribution channels</div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Advertise -->
+  <section class="section section--alt" id="advertise">
+    <div class="wrap-narrow">
+      <div class="s-head">
+        <div class="s-tag">Advertising Opportunities</div>
+        <h2>Reach Indian Food Entrepreneurs</h2>
+        <p>FoodCost AI attracts highly targeted food industry professionals — manufacturers, buyers, founders, and food technologists — making it an ideal platform for relevant B2B advertising.</p>
+      </div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px">
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px">
+          <h3 style="font-size:1rem;margin-bottom:12px">🏪 Supplier Listings</h3>
+          <p style="font-size:.875rem;color:var(--tx-3);line-height:1.62;margin-bottom:14px">Get your packaging suppliers, ingredient suppliers, and equipment listed prominently on our calculator pages where food manufacturers are actively researching costs.</p>
+          <a href="contact.html" class="btn btn-primary btn-sm">Enquire →</a>
+        </div>
+        <div style="background:var(--surface);border:1px solid var(--border);border-radius:var(--r-xl);padding:28px">
+          <h3 style="font-size:1rem;margin-bottom:12px">📢 Display Advertising</h3>
+          <p style="font-size:.875rem;color:var(--tx-3);line-height:1.62;margin-bottom:14px">Google AdSense and direct advertising opportunities available. Our audience is food manufacturers and food business owners — a niche, high-intent audience.</p>
+          <a href="contact.html" class="btn btn-primary btn-sm">Enquire →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="section">
+    <div class="wrap">
+      <div class="cta-band">
+        <div class="cta-band__inner">
+          <h2>Start Calculating Your True Food Costs</h2>
+          <p>Free tools. No signup. Works on mobile. Made for Indian food businesses.</p>
+          <div class="cta-band__btns">
+            <a href="recipe-calculator.html" class="btn btn-white btn-xl">Open Recipe Calculator →</a>
+            <a href="yield-calculator.html" class="btn btn-outline-white btn-xl">Open Yield Calculator →</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+</div>
+
+<footer class="footer"><div class="wrap">
+  <div class="footer__grid">
+    <div class="footer__brand">
+      <a href="index.html" class="nav__logo"><div class="nav__logo-mark">🍃</div><span class="nav__logo-text">FoodCost <em>AI</em></span></a>
+      <p>The most complete food profitability platform for Indian food businesses.</p>
+    </div>
+    <div class="footer__col"><h4>Calculators</h4><ul>
+      <li><a href="recipe-calculator.html">Recipe Cost Calculator</a></li>
+      <li><a href="yield-calculator.html">Yield Loss Calculator</a></li>
+      <li><a href="price-calculator.html">Selling Price Calculator</a></li>
+      <li><a href="simulator.html">What-If Simulator</a></li>
+    </ul></div>
+    <div class="footer__col"><h4>Company</h4><ul>
+      <li><a href="about.html">About</a></li>
+      <li><a href="blog.html">Blog</a></li>
+      <li><a href="contact.html">Contact</a></li>
+      <li><a href="about.html#advertise">Advertise</a></li>
+    </ul></div>
+    <div class="footer__col"><h4>Legal</h4><ul>
+      <li><a href="privacy.html">Privacy Policy</a></li>
+      <li><a href="terms.html">Terms of Service</a></li>
+    </ul></div>
+  </div>
+  <div class="footer__bottom"><p>© 2026 FoodCost AI. All rights reserved. Built for 🇮🇳 India.</p></div>
+</div></footer>
+
+<script src="js/core.js"></script>
+</body>
+</html>
